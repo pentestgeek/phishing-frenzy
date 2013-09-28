@@ -1,0 +1,15 @@
+<% @page_title = "IP Address Details" %>
+
+<h2>IP Addresses: <%= @campaign.name %></h2>
+
+<% counter = 1 %>
+<% @ip_addresses.each do |ip| %>
+	<table>
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td width="150">
+				<p><%= simple_format(ip) %></p>
+				<% counter += 1 %>
+			</td>
+		</tr>
+	</table>
+<% end %>

@@ -1,0 +1,16 @@
+<%= error_messages_for(@campaign) %>
+
+<table summary="Campaign Form fields">
+	<tr>
+		<th>Name</th>
+		<td><%= f.text_field(:name) %></td>
+	</tr>
+	<tr>
+		<th>Description</th>
+		<td><%= f.text_field(:description) %></td>
+	</tr>
+	<tr>
+		<th>Scope</th>
+		<td><%= f.text_field(:scope) %></td>
+	</tr>
+</table>

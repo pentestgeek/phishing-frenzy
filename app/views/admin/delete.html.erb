@@ -1,0 +1,35 @@
+<% @page_title = "Delete Admin" %>
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="Admin delete">
+	<h2>Delete Admin</h2>
+	
+	<%= form_for(:admin, :url => {:action => 'destroy', :id => @admin.id}) do |f| -%>
+
+		<p>Are you sure you want to permanently delete this Admin?</p>
+		
+		<table summary="Admin detail view">
+			<tr>
+				<th>Name</th>
+				<td><%= @admin.name %></td>
+			</tr>
+			<tr>
+				<th>Username</th>
+				<td><%= @admin.username %></td>
+			</tr>
+			<tr>
+				<th>Created</th>
+				<td><%= @admin.created_at %></td>
+			</tr>
+			<tr>
+				<th>Updated</th>
+				<td><%= @admin.updated_at %></td>
+			</tr>
+		</table>
+	
+		<div class="form-buttons">
+			<%= submit_tag("Delete Admin") %>
+		</div>
+		
+	<% end %>
+</div>

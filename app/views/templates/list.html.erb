@@ -1,0 +1,36 @@
+<% @page_title = "Phishing Templates" %>
+
+<div class="template list">
+	<h2>Templates</h2>
+	
+	<%= link_to("Create", {:action => 'new', :class => 'action new'}) %> | <%= link_to("Restore", {:action => 'restore', :class => 'action restore'}) %>
+
+	<div ><%= pluralize(@templates.size, 'template') %> found</div>
+	<table class="listing" summary="Templates">
+		<tr class="header">
+			<th>&nbsp;</th>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Location</th>
+			<th>Actions</th>
+
+		</tr>
+		<% @templates.each do |template| %>
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td><%= image_tag('template.png', :size => '35x35') %></td>      
+			<td><%= template.name %></td>
+			<td width="200"><%= template.description %></td>
+			<td width="200"><%= template.location %></td>
+			<td class="actions">
+				<%= link_to("Show", {:action => 'show', :id => template.id}, :class => 'action show') %>
+				<%= link_to("Edit", {:action => 'edit', :id => template.id}, :class => 'action edit') %>
+				<%= link_to("Copy", {:action => 'copy', :id => template.id}, :class => 'action copy') %>
+				<%= link_to("Delete", {:action => 'delete', :id => template.id}, :class => 'action delete') %>
+				<%= link_to("Backup", {:action => 'backup', :id => template.id}, :class => 'action backup') %>
+			</td>
+
+		</tr>
+		<% end %>
+	</table>
+
+</div>

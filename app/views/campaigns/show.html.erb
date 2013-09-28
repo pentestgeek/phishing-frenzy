@@ -1,0 +1,46 @@
+<% @page_title = "Campaign Details" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="campaign show">
+	<h2>Show Campaign</h2>
+
+	<table summary="Campaign detail view">
+		<tr>
+			<th><%= image_tag('fishing_pole.png', :size => '35x35') %></th>
+		</tr>
+		<tr>
+			<th>ID</th>
+			<td><%= @campaign.id %></td>
+		</tr>
+		<tr>
+			<th>Client</th>
+			<td><%= @campaign.name %></td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td><%= @campaign.description %></td>
+		</tr>
+		<tr>
+			<th>Scope</th>
+			<td><%= @campaign.scope %></td>
+		</tr>
+		<tr>
+			<th>Active</th>
+			<td><%= @campaign.active %></td>
+		</tr>
+		<tr>
+			<th>Emails</th>
+			<td><%= @campaign.emails %></td>
+		</tr>
+		<tr>
+			<th>Created</th>
+			<td><%= @campaign.created_at %></td>
+		</tr>
+		<tr>
+			<th>Updated</th>
+			<td><%= @campaign.updated_at %></td>
+		</tr>
+	</table>
+	
+</div>

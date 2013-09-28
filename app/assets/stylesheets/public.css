@@ -1,0 +1,340 @@
+/*Public stylesheet
+Colors
+red:          #993120
+green:        #94B26F
+light green:  #B6D491
+yellow:       #F2DC87
+dark brown:   #332318
+light brown:  #4C2516
+black:            #000000
+*/
+HTML
+{
+  height: 100%;
+  width: 100%;
+  background: #000000;
+}
+BODY
+{
+  width: 100%;
+  min-width: 980px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font: 14px Verdana, Lucida, Arial, Helvetica, sans-serif;
+  color: #000000;
+}
+P, TD, UL, OL, LI, DL, DT, DD
+{
+  font-family: Verdana, Lucida, Arial, Helvetica, sans-serif;
+}
+IMG
+{
+  border: none;
+}
+TABLE
+{
+  border-collapse: collapse;
+}
+TABLE TR TH, TABLE TR TD
+{
+  vertical-align: top;
+  text-align: left;
+  padding: 3px;
+}
+A, A:visited
+{
+  color: #000000;
+}
+A:hover
+{
+  color: #A41400;
+}
+.clear
+{
+  clear: both;
+}
+.center
+{
+  text-align: center;
+}
+/*Structure*/
+#header
+{
+  height: 4em;
+  padding-top: 1em;
+  text-align: center;
+  background: url(#00000);
+  color: #FFFFFF;
+}
+#header H1
+{
+  margin: 0;
+  padding: 0;
+}
+#navigation
+{
+  height: 26px;
+  background: #A40303;
+}
+#main
+{
+  min-height: 650px;
+  background: #FFFFFF;
+}
+#content
+{
+  min-width: 200px;
+  float: left;
+  padding: 10px;
+}
+#footer
+{
+  clear: both;
+  height: 30px;
+  text-align: right;
+  background: #A40303;
+  color: #000000;
+}
+#footer P
+{
+  margin: 0;
+  padding: 0.5em 1em;
+}
+/*Navigation*/
+#navigation UL
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#navigation UL LI
+{
+  margin-bottom: 0.5em;
+}
+#navigation UL UL
+{
+  margin: 0.5em 0 0 1em;
+  font-size: 0.9em;
+}
+#navigation A
+{
+  text-decoration: none;
+  padding: 0px;
+  margin: 12px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+#navigation A:hover
+{
+  background: #FD0808;
+}
+/*Content*/
+#content H2
+{
+  color: #000000;
+  text-align: left;
+}
+#logout
+{
+  float: right;
+  padding: 2px;
+}
+/*CRUD*/
+.odd
+{
+  background: #E5E5E4;
+}
+.even
+{
+  background: none;
+}
+.notice
+{
+  height: 1.25em;
+  padding: 0.5em;
+  text-align: center;
+  background: #A41400;
+  color: #FFFFFF;
+}
+.form-buttons
+{
+  text-align: center;
+  margin: 1em 0;
+}
+.back-link
+{
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+/*large action buttons*/
+.action
+{
+  float: center;
+  padding: 2px 5px;
+  margin: 0 0 1em 1em;
+  background: #FFFFFF;
+  color: #4C2516;
+  border: 1px solid #4C2516;
+  text-decoration: none;
+  font-size: 0.8em;
+  text-align: center;
+}
+.action:hover
+{
+  background: #A41400;
+  color: #FFFFFF;
+}
+/*
+a.action { float: right; padding: 2px 5px; margin: 0 0 1em 1em;
+background: #FFFFFF; color: #4C2516;  border: 1px solid #4C2516;
+text-decoration: none; font-size: 0.8em; text-align: center; }
+a.action:hover { background: #993120; color: #FFFFFF; }
+
+small action buttons*/
+.actions
+{
+  width: 200px;
+}
+.actions A.action
+{
+  float: left;
+  min-width: 3.5em;
+  padding: 1px 2px;
+  margin: 2px 5px;
+  font-size: 0.7em;
+}
+/*Errors*/
+.fieldWithErrors
+{
+}
+.fieldWithErrors LABEL
+{
+  color: #AA0000;
+}
+.fieldWithErrors INPUT
+{
+}
+#errorExplanation
+{
+  width: 400px;
+  padding: 0;
+  margin: 0 auto 1.5em;
+  border: 1px solid #AA0000;
+  background-color: #FFFFFF;
+  font-size: 12px;
+}
+#errorExplanation H2
+{
+  font-weight: bold;
+  font-size: 12px;
+  padding: 5px 5px 5px 15px;
+  margin: 0;
+  width: 380px;
+  background-color: #AA0000;
+  color: #FFFFFF;
+}
+#errorExplanation P
+{
+  color: #333333;
+  margin: 0;
+  padding: 3px 0.5em;
+}
+#errorExplanation UL
+{
+  margin-top: 0;
+}
+#errorExplanation UL LI
+{
+  list-style: square;
+}
+.popup
+{
+  text-align: left;
+  vertical-align: middle;
+  color: #000000;
+  display: none;
+  padding-top: 8px;
+  position: absolute;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #E5E5E4;
+  z-index: 1;
+}
+.style_image
+{
+  border: 3px solid #000;
+}
+#listContainer
+{
+  margin-top: 15px;
+}
+#expList UL, LI
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+#expList P
+{
+  margin: 0;
+  display: block;
+}
+#expList P:hover
+{
+  background-color: #121212;
+}
+#expList LI
+{
+  line-height: 140%;
+  text-indent: 0px;
+  background-position: 1px 8px;
+  padding-left: 20px;
+  background-repeat: no-repeat;
+}
+/*Collapsed state for list element*/
+#expList .collapsed
+{
+  background-image: url(../img/collapsed.png);
+}
+/*Expanded state for list element
+/* NOTE: This class must be located UNDER the collapsed one*/
+#expList .expanded
+{
+  background-image: url(../img/expanded.png);
+}
+.listControl
+{
+  margin-bottom: 15px;
+}
+.listControl A
+{
+  border: 1px solid #555555;
+  color: #555555;
+  cursor: pointer;
+  height: 1.5em;
+  line-height: 1.5em;
+  margin-right: 5px;
+  padding: 4px 10px;
+}
+.listControl A:hover
+{
+  background-color: #555555;
+  color: #222222;
+  font-weight: normal;
+}
+
+/*
+#accordion
+{
+        width: 510px;
+        background: #F7F7F7;
+}
+#accordion TABLE TD, TH
+{
+        width: 500px;
+        min-height: 650px;
+        background: #FFFFFF;
+}
+*/

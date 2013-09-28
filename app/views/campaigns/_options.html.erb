@@ -1,0 +1,128 @@
+<%= error_messages_for(@campaign) %>
+<%= error_messages_for(@email_settings) %>
+
+<script>
+	$(function() {
+		$( "#accordion" ).accordion({collapsible:true, active:false});
+	});
+</script>
+
+<div id="accordion">
+	<h2>Campaign Settings</h2>
+	<table summary="Campaign Settings">
+		<tr>
+			<th width="200">Name</th>
+			<td><%= f.text_field(:name) %></td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td><%= f.text_field(:description) %></td>
+		</tr>
+		<tr>
+			<th>Scope</th>
+			<td><%= f.text_field(:scope, :size => "3") %></td>
+		</tr>
+		<tr>
+			<th>Active</th>
+			<td><%= f.check_box(:active) %></td>
+		</tr>
+		<tr>
+			<th width="200">
+				<% if Victims.where("campaign_id = #{@campaign.id}").size != 0 %>
+				Victims (<%= link_to(Victims.where("campaign_id = #{@campaign.id}").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>)
+				<% else %>
+				Victims (<%= Victims.where("campaign_id = #{@campaign.id}").size %>)        
+				<% end %>
+			</th>
+				<td><%= f.text_area(:emails, :size => "35x2", :value => '') %>
+			</td>
+		</tr>
+	</table>
+
+	<h2>Template Selection</h2>
+	<table summary="Campaign Settings">
+		<tr>
+			<th width="200">Phishing Scenario</th>
+			<td><%= f.select :template_id, options_for_select(@templates.map{|p| [p.name, p.id]}, @campaign.template_id) %></td>
+		</tr>
+	</table>
+
+	<h2>SMTP Settings</h2>
+	<table summary="Campaign Settings">
+		<%= fields_for @email_settings do |es| %>
+		<tr>
+			<th width="200">STMP Server:</th>
+			<td><%= es.text_field(:smtp_server) %></td>
+		</tr>
+		<tr>
+			<th>SMTP Outbound Server:</th>
+			<td><%= es.text_field(:smtp_server_out) %></td>
+		</tr>
+		<tr>
+			<th>STMP Username:</th>
+			<td><%= es.text_field(:smtp_username) %></td>
+		</tr>
+		<tr>
+			<th>SMTP Password:</th>
+			<td><%= es.password_field(:smtp_password, :value => @email_settings.smtp_password) %></td>
+		</tr>
+		<tr>
+			<th>SMTP Port:</th>
+			<td><%= es.text_field(:smtp_port) %></td>
+		</tr>
+		<% end %>
+	</table>
+
+	<h2>Email Settings</h2>
+	<table summary="Campaign Settings">
+		<%= fields_for @email_settings do |es| %>
+		<tr>
+			<th width="200">Subject:</th>
+			<td><%= es.text_field(:subject) %></td>
+		</tr>
+		<tr>
+			<th>From:</th>
+			<td><%= es.text_field(:from) %></td>
+		</tr>
+		<tr>
+			<th>Display From:</th>
+			<td><%= es.text_field(:display_from) %></td>
+		</tr>
+		<tr>
+			<th>Phishing URL:</th>
+			<td><%= es.text_field(:phishing_url) %></td>
+		</tr>
+		<% end %>
+		<%= fields_for @campaign_settings do |cs| %>
+		<tr>
+			<th>FQDN</th>
+			<td><%= cs.text_field(:fqdn) %></td>
+		</tr>
+	</table>
+
+	<h2>Phishing Options</h2>
+	<table summary="Campaign Settings">	
+
+		<tr>
+			<th width="200">Track User Clicks?</th>
+			<td><%= cs.check_box(:track_uniq_visitors) %></td>
+		</tr>
+		<tr>
+			<th>Track Number of Hits?</th>
+			<td><%= cs.check_box(:track_hits) %></td>
+		</tr>
+		<tr>
+			<th>Use BeeF?</th>
+			<td><%= cs.check_box(:use_beef) %></td>
+		</tr>
+		<tr>
+			<th>Iptables Restrictions?</th>
+			<td><%= cs.check_box(:iptable_restrictions) %></td>
+		</tr>
+		<tr>
+			<th>Schedule Campaign?</th>
+			<td><%= cs.check_box(:schedule_campaign) %></td>
+		</tr>
+		<% end %>
+	</table>
+</div>

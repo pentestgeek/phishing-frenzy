@@ -1,0 +1,62 @@
+<% @page_title = "Template Details" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="template show">
+	<h2>Template Details</h2>
+
+	<table summary="template detail view">
+		<tr>
+			<th><%= image_tag('template.png', :size => '35x35') %></th>
+		</tr>
+		<tr>
+			<th>ID</th>
+			<td><%= @template.id %></td>
+		</tr>
+		<tr>
+			<th>Name</th>
+			<td><%= @template.name %></td>
+		</tr>
+		<tr>
+			<th>Location</th>
+			<td>
+				<%= File.join(Rails.root.to_s, 'public', 'templates', @template.location) %>
+
+				<% if !@template_exists %><br>
+					<%= image_tag('red-light.png', :size => '11x11') %><b> Folder does not exist<b>
+				<% end %>
+			</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td><%= @template.description %></td>
+		</tr>
+		<tr>
+			<th>Notes</th>
+			<td><%= @template.notes %></td>
+		</tr>
+		<tr>
+			<th>Created</th>
+			<td><%= @template.created_at %></td>
+		</tr>
+		<tr>
+			<th>Updated</th>
+			<td><%= @template.updated_at %></td>
+		</tr>
+		<tr>
+			<th>Preview</th>
+			<td>
+				<% if @images.any? %>
+					<% @images.sort.each do |image| %>
+						<%= File.basename(image) %><br />
+						<%= link_to(image_tag("/templates/#{@template.location}/" + File.basename(image), :size => '400x400'), "/templates/#{@template.location}/" + File.basename(image)) %><br /><br />
+					<% end %>
+				<% else %>
+					No preview images<br />
+					Add images to <%= @template.location %>
+				<% end %>
+			</td>
+		</tr>
+	</table>
+	
+</div>

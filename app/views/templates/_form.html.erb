@@ -1,0 +1,24 @@
+<%= error_messages_for(@template) %>
+
+<table summary="Template Form fields">
+	<tr>
+		<th>Name</th>
+		<td><%= f.text_field(:name) %></td>
+		<td>[Citrix Login Portal] </td>
+	</tr>
+	<tr>
+		<th>Location</th>
+		<td><%= f.text_field(:location) %></td>
+		<td>[citrix_login_portal] </td>
+	</tr>
+	<tr>
+		<th>Description</th>
+		<td><%= f.text_area(:description, :size => "35x2") %></td>
+		<td>[Users Attempt to login to Citrix Portal] </td>
+	</tr>
+	<tr>
+		<th>Notes</th>
+		<td><%= f.text_area(:notes, :size => "35x10") %></td>
+		<td>[Login Portal] </td>
+	</tr>
+</table>

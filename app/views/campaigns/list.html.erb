@@ -1,0 +1,45 @@
+<% @page_title = "Phishing Campaigns" %>
+
+<div class="campaign list">
+	<h2>Campaigns</h2>
+	
+	<%= link_to("Add New Campaign", {:action => 'new', :class => 'action new'}) %>
+
+	<div ><%= pluralize(@campaigns.size, 'campaign') %> found</div>
+	<table class="listing" summary="Campiagn list">
+		<tr class="header">
+			<th>&nbsp;</th>
+			<th>Client</th>
+			<th>Description</th>
+			<th>Scope</th>
+			<th>Active</th>
+			<th>Emails</th>
+			<th>Actions</th>
+		</tr>
+
+		<% @campaigns.each do |campaign| %>
+		
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td><%= image_tag('fishing_pole.png', :size => '35x35') %></td>      
+			<td><%= campaign.name %></td>
+			<td><%= campaign.description %></td>
+			<td><%= campaign.scope %></td>
+			<td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
+			<td>
+				<% if Victims.where("campaign_id = ?", campaign.id).size != 0 %>
+					<%= image_tag('green-light.png', :size => '11x11') %>
+				<% else %>
+					<%= image_tag('red-light.png', :size => '11x11') %>
+				<% end %>
+			</td>
+			<td class="actions">
+				<%= link_to("Show", {:action => 'show', :id => campaign.id}, :class => 'action show') %>
+				<%= link_to("Options", {:action => 'options', :id => campaign.id}, :class => 'action delete') %>
+				<%= link_to("Delete", {:action => 'delete', :id => campaign.id}, :class => 'action delete') %> 
+			</td>
+
+		</tr>
+		<% end %>
+	</table>
+
+</div>

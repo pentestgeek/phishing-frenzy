@@ -1,0 +1,15 @@
+<% @page_title = "Update Template" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="template update">
+	<h2>Update Phishing Template</h2>
+	
+	<%= form_for(:template, :url => {:action => 'update', :id => @template.id}) do |f| %>
+		<%= render(:partial => "form", :locals => {:f => f}) %>
+		
+		<div class="form-buttons">
+			<%= submit_tag("Update Template") %>
+		</div>
+	<% end %>
+</div>

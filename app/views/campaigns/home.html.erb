@@ -1,0 +1,75 @@
+<% @page_title = "Home" %>
+<h2>Dashboard</h2>
+<h3>Active Phishing Campaigns</h3>
+
+<div ><%= pluralize(@campaigns.size, 'campaign') %> active</div>
+	<% if @campaigns.size > 0 %>
+		<table class="listing" summary="Campiagn list">
+			<tr class="header">
+				<th>&nbsp;</th>
+				<th>Client</th>
+				<th>Description</th>
+				<th>Scope</th>
+				<th>Active</th>
+				<th>Emails</th>
+				<th>Actions</th>
+			</tr>
+
+			<% @campaigns.each do |campaign| %>
+			
+			<tr class="<%= cycle('odd', 'even') %>">
+				<td><%= image_tag('fishing_pole.png', :size => '35x35') %></td>      
+				<td><%= campaign.name %></td>
+				<td><%= campaign.description %></td>
+				<td><%= campaign.scope %></td>
+				<td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
+				<td>
+					<% if Victims.where("campaign_id = ?", campaign.id).size != 0 %>
+						<%= image_tag('green-light.png', :size => '11x11') %>
+					<% else %>
+						<%= image_tag('red-light.png', :size => '11x11') %>
+					<% end %>
+				</td>
+				<td class="actions">
+					<%= link_to("Options", {:action => 'options', :id => campaign.id}, :class => 'action delete') %>
+				</td>
+
+			</tr>
+			<% end %>
+		</table>
+	<% end %>
+
+	<h3>Status</h3>
+
+	<% if @apache %>
+		<%= image_tag('green-light.png', :size => '11x11') %>
+		Apache is running<br>
+	<% else %>
+		<%= image_tag('red-light.png', :size => '11x11') %>
+		Apache is not running<br>
+	<% end %>
+
+	<% if @beef %>
+		<%= image_tag('green-light.png', :size => '11x11') %>
+		BeeF is running<br>
+	<% else %>
+		<%= image_tag('red-light.png', :size => '11x11') %>
+		BeeF is not running<br>
+	<% end %>
+
+	<% if @msf %>
+		<%= image_tag('green-light.png', :size => '11x11') %>
+		Metasploit is running<br>
+	<% else %>
+		<%= image_tag('red-light.png', :size => '11x11') %>
+		Metasploit is not running<br>
+	<% end %>
+
+	<%= image_tag('green-light.png', :size => '11x11') %>
+	Virtual Hosts Configured:
+	<UL TYPE="square">
+	<% @vhosts.each do |vhost| %>
+		<LI><%= vhost %>
+	<% end %>
+	</UL>
+</div>
