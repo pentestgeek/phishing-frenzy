@@ -1,0 +1,46 @@
+<% @page_title = "Delete Template" %>
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="template delete">
+	<h2>Delete Template</h2>
+	
+	<%= form_for(:template, :url => {:action => 'destroy', :id => @template.id}) do |f| -%>
+
+		<p>Are you sure you want to permanently delete this template?</p>
+		
+		<table summary="template detail view">
+		<tr>
+			<th>ID</th>
+			<td><%= @template.id %></td>
+		</tr>
+		<tr>
+			<th>Name</th>
+			<td><%= @template.name %></td>
+		</tr>
+		<tr>
+			<th>Location</th>
+			<td><%= @template.location %></td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td><%= @template.description %></td>
+		</tr>
+		<tr>
+			<th>Notes</th>
+			<td><%= @template.notes %></td>
+		</tr>
+		<tr>
+			<th>Created</th>
+			<td><%= @template.created_at %></td>
+		</tr>
+		<tr>
+			<th>Updated</th>
+			<td><%= @template.updated_at %></td>
+		</tr>
+		</table>
+	
+		<div class="form-buttons">
+			<%= submit_tag("Delete template") %>
+		</div>
+	<% end %>
+</div>

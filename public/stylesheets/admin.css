@@ -1,0 +1,56 @@
+/* Admin stylesheet       */
+/* loads after public.css */
+
+/* Structure */
+#content { padding-left: 100px; padding-right: 100px; }
+#content h2 { width: 760px; text-align: center; }
+
+.login form { margin: 100px 250px; }
+.menu .identity { text-align: center; }
+.menu ul { margin: 3em 250px; list-style: none; }
+.menu ul li { margin-bottom: 1em; }
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* large action buttons */
+a.action { float: right; padding: 2px 5px; margin: 0 0 1em 1em; 
+  background: #94B26F; color: #4C2516;  border: 1px solid #4C2516;
+  text-decoration: none; font-size: 0.8em; text-align: center; }
+a.action:hover { background: #B6D491; }
+
+/* small action buttons */
+.actions { width: 200px; }
+.actions a.action { float: left; min-width: 3.5em; 
+  padding: 1px 2px; margin: 2px 5px; font-size: 0.7em; }
+
+/* CRUD */
+.notice { height: 1.25em; padding: 0.5em; text-align: center;
+  background: #B6D491; color: #4C2516; }
+.back-link { font-size: 0.8em; margin-bottom: 1em; }
+.form-buttons { text-align: center; margin: 1em 0; }
+
+.list table { clear: both; width: 100%; }
+.list table tr td { border: 1px solid #666666; }
+.show table { clear: both; margin: 0 200px; width: 300px; }
+.show table.wide { width: 600px; margin: 0 50px; }
+.show table tr th { white-space: nowrap; padding-right: 5px;}
+.show table tr td { border: 1px solid #666666; }
+.edit table, .new table { margin: 0 auto; }
+
+.odd { background: #E5CE69; }
+.even { background: none; }
+
+.section + .section { padding-top: 0.5em; margin-top: 0.5em; 
+  border-top: 1px dotted #666666; }
+
+/* Errors */
+.fieldWithErrors { display: table; padding: 2px; background-color: #AA0000; }
+#errorExplanation { width: 400px; padding: 0; margin: 0 auto 1.5em; 
+  border: 1px solid #AA0000; background-color: #FFFFFF; font-size: 12px; }
+#errorExplanation h2 { font-weight: bold; font-size: 12px;
+  padding: 5px 5px 5px 15px; margin: 0; width: 380px;
+  background-color: #AA0000; color: #FFFFFF; }
+#errorExplanation p { color: #333333; margin: 0; padding: 3px 0.5em; }
+#errorExplanation ul { margin-top: 0; }
+#errorExplanation ul li { list-style: square; }

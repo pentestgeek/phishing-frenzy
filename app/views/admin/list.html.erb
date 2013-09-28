@@ -1,0 +1,31 @@
+<% @page_title = "Admins" %>
+<%= link_to("<< Back to Admin Menu", {:controller => 'access', :action => 'menu'}, :class => 'back-link') %>
+<div class="Admin list">
+	<h2>Users</h2>
+	
+	<%= link_to("Add New Admin", {:action => 'new', :class => 'action new'}) %>
+
+	<div ><%= pluralize(@admin.size, 'admin') %> found</div>
+	<table class="listing" summary="Campiagn list">
+		<tr class="header">
+			<th>&nbsp;</th>
+			<th>Name</th>
+			<th>Username</th>
+			<th>Actions</th>
+		</tr>
+
+		<% @admin.each do |admin| %>
+		
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td><%= image_tag('administrator.png', :size => '35x35') %></td>      
+			<td><%= admin.name %></td>
+			<td><%= admin.username %></td>
+			<td class="actions">
+				<%= link_to("Edit", {:action => 'edit', :id => admin.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => admin.id}, :class => 'action delete') %>
+			</td>
+		</tr>
+		<% end %>
+	</table>
+
+</div>

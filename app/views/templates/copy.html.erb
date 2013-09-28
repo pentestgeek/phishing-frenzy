@@ -1,0 +1,33 @@
+<%= error_messages_for(@template) %>
+<% @page_title = "Copy Template" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="template update">
+	<h2>Copy Phishing Template</h2>
+	
+	<%= form_for(:template, :url => {:action => 'copy_template', :id => @template.id}) do |f| %>
+		<table summary="Template Form fields">
+			<tr>
+				<th>Name</th>
+				<td><%= @template.name %></td>
+			</tr>
+			<tr>
+				<th>Location</th>
+				<td><%= @template.location %></td>
+			</tr>
+			<tr>
+				<th>New Name</th>
+				<td><%= text_field_tag(:new_name) %></td>
+			</tr>
+			<tr>
+				<th>Copy To</th>
+				<td><%= text_field_tag(:new_location) %></td>
+			</tr>
+		</table>
+		
+		<div class="form-buttons">
+			<%= submit_tag("Copy Template") %>
+		</div>
+	<% end %>
+</div>

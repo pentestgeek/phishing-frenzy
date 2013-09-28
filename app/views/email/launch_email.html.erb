@@ -1,0 +1,7 @@
+<h3>Launch Emails...</h3>
+
+<% if @email_settings.to.blank? %>
+	<p>No emails assigned to the <b>To</b> field</p>
+<% else %>
+	<%= @email_settings.to %>
+<% end %>

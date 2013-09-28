@@ -1,0 +1,15 @@
+<% @page_title = "Browser Details" %>
+
+<h2>Browser Types: <%= @campaign.name %></h2>
+
+<% counter = 1 %>
+<% @browsers.each do |browser| %>
+	<table>
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td width="800">
+				<p><%= simple_format(browser) %></p>
+				<% counter += 1 %>
+			</td>
+		</tr>
+	</table>
+<% end %>

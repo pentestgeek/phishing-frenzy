@@ -1,0 +1,39 @@
+<% @page_title = "Delete Campaign" %>
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="campaign delete">
+	<h2>Delete Subject</h2>
+	
+	<%= form_for(:campaign, :url => {:action => 'destroy', :id => @campaign.id}) do |f| -%>
+
+		<p>Are you sure you want to permanently delete this Campaign?</p>
+		
+		<table summary="Campaign detail view">
+			<tr>
+				<th>ID</th>
+				<td><%= @campaign.id %></td>
+			</tr>
+			<tr>
+				<th>Client</th>
+				<td><%= @campaign.name %></td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td><%= @campaign.description %></td>
+			</tr>
+			<tr>
+				<th>Created</th>
+				<td><%= @campaign.created_at %></td>
+			</tr>
+			<tr>
+				<th>Updated</th>
+				<td><%= @campaign.updated_at %></td>
+			</tr>
+		</table>
+	
+		<div class="form-buttons">
+			<%= submit_tag("Delete Campaign") %>
+		</div>
+		
+	<% end %>
+</div>

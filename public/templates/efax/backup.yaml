@@ -1,0 +1,10 @@
+--- !ruby/object:Template 
+attributes: 
+  id: 2
+  campaign_id: 
+  name: Efax
+  description: User received a efax which requires them to open the PDF
+  location: efax
+  notes: 
+  created_at: 2013-08-25 17:58:45 Z
+  updated_at: 2013-08-25 17:58:45 Z

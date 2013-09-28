@@ -1,0 +1,104 @@
+<% @page_title = "About" %>
+
+<script>
+	function prepareList() {
+			$('#expList').find('li:has(ul)')
+			.click( function(event) {
+					if (this == event.target) {
+							$(this).toggleClass('expanded');
+							$(this).children('ul').toggle('medium');
+					}
+					return false;
+			})
+			.addClass('collapsed')
+			.children('ul').hide();
+	};
+	 
+	$(document).ready( function() {
+			prepareList()
+	});
+</script>
+
+<h2>FAQ</h2>
+
+<div id="listContainer">
+	<ul id="expList">
+		<li>
+			+ How to Create a new Campaign
+			<ul>
+				<li>
+				Navigate to the Campaigns page and select 'Add New Campaign'
+				</br>
+				<%=  image_tag('create-campaign.jpg') %>
+				</br>
+				Once a Phishing Campaign has been created it can be customized using the 'Campaign Options'
+				</li>
+			</ul>
+		</li>
+		<li>
+			+ How to Create a new Template
+			<ul>
+				<li>
+				Navigate to the Templates page and select 'Create'. 
+				</br>
+				<%=  image_tag('create-template.jpg') %>
+				</br>
+				Once a Template has been created it can be assisgned to any future campaign within the 'Campaign Options'
+				</li>
+			</ul>
+		</li>
+		<li>
+			+ What is an Active Campaign?
+			<ul>
+				<li>
+					An Active campaign means that the website is live and configured using Apache's virtual hosts.
+					</br>
+					<%=  image_tag('active-campaign.jpg') %>
+					</br>
+					A campaigns website can be taken offline by simply making the campaign Inactive.
+				</li>
+			</ul>
+		</li>
+		<li>
+			+ What is a Launched Campaign?
+			<ul>
+				<li>
+					A Launched campaign means that emails were sent to victims and Phishing Frenzy will start to generate statistics based on the results of the email phishing.
+					</br>
+					<%=  image_tag('launch-campaign.jpg') %>
+					</br>
+					Once a campaign has been launched, this process cannnot be reversed.
+				</li>
+			</ul>
+		</li>
+		<li>
+			+ Reports are not showing any Campaigns
+			<ul>
+				<li>
+					This occurs because a Phishing Campaign has not actually been launched. A Phishing Campaing must be launched in order to generate statistics regarding the Phishing Campaign.
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<h2>Resources</h2>
+
+<div id="listContainer">
+	<ul>
+		<li>
+			<a href="www.pentestgeek.com">www.pentestgeek.com</a>
+		</li>
+		<li>
+			<a href="github.com/pentestgeek/phishing-frenzy.git">github.com/pentestgeek/phishing-frenzy.git</a>
+		</li>
+	</ul>
+</div>
+
+<h2>Founder</h2>
+	<table summary="about table">
+		<tr>
+			<th><%= image_tag('knoxville.jpg', :size => '75x75') %></th>
+			<td><a href="https://twitter.com/zeknox">zeknox</a></td>
+		</tr>
+	</table>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Phishing Frenzy | <%= @page_title || '' %></title>
+		<%= stylesheet_link_tag    "application", :media => "all" %>
+		<%= javascript_include_tag "application" %>
+		<%= csrf_meta_tags %>
+	</head>
+	<body>
+		<div id="header">
+				<h1><%=  image_tag('fish2.png', :size => '42x42') %> Phishing Frenzy <%=  image_tag('fish2.png', :size => '42x42') %></h1>
+			</div>
+			<div id="navigation">
+				<%= link_to("Home", {:controller => 'campaigns', :action => 'home'}) %> | <%= link_to("Campaigns", {:controller => 'campaigns'}) %> | <%= link_to("Templates", {:controller => 'templates'}) %> | <%= link_to("Reports", {:controller => 'reports', :action => 'list'}) %> | <%= link_to("About", {:controller => 'campaigns', :action => 'aboutus'}) %> | <%= link_to("Admin", {:controller => 'admin'}) %> | <%= link_to("Logout", :controller => 'access', :action => 'logout') %>
+			</div>
+			<div id="main" style="overflow:auto;">
+				<div id="content">
+				<% if !flash[:notice].blank? %>
+					<div class="notice">
+						<%= flash[:notice] %>
+					</div>
+				<% end %>
+				<%= yield %>
+			</div>
+		</div>
+		<div id="footer">
+			<p>&#169; <a href="http://www.pentestgeek.com">www.pentestgeek.com</p>
+		</div>
+	</body>
+</html>

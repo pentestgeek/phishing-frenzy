@@ -1,0 +1,17 @@
+<% @page_title = "New Template" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="template show">
+	<h2>New Phishing Template</h2>
+	<%= image_tag('template.png', :size => '50x50') %>
+	<%= form_for(:template, :url => {:action => 'create'}) do |f| %>
+
+	<%= render(:partial => "form", :locals => {:f => f}) %>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create Template", :class => 'action') %>
+	</div>
+
+	<% end %>
+</div>

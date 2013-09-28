@@ -1,0 +1,33 @@
+<% @page_title = "Email Settings" %>
+<%= link_to("<< Back to Options", {:action => 'options'}, :class => 'back-link') %>
+
+<h2>Email Settings</h2>
+<form>
+	<table>
+		<tr class="header">
+		<tr>
+			<th>To:</th>
+			<td><input type="text" name="to"></td>
+			</tr>
+			<tr>
+				<th>CC:</th>
+				<td><input type="text" name="cc"></td>
+			</tr>
+			<tr>
+				<th>BCC:</th>
+				<td><input type="text" name="bcc"></td>
+			</tr>
+			<tr>
+				<th>From:</th>
+				<td><input type="text" name="from"></td>
+			</tr>
+			<tr>
+				<th>Display From:</th>
+				<td><input type="text" name="display_from"></td>
+			</tr>
+	</table>
+
+	<div class="form-buttons">
+		<%= submit_tag("Save Changes") %>
+	</div>
+</form>

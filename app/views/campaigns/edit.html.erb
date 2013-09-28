@@ -1,0 +1,17 @@
+<% @page_title = "Update Campaign" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="campaign update">
+	<h2>Update Phishing Campaign</h2>
+	
+	<%= form_for(:campaign, :url => {:action => 'update', :id => @campaign.id}) do |f| %>
+
+	<%= render(:partial => "form", :locals => {:f => f}) %>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update Campaign") %>
+	</div>
+
+	<% end %>
+</div>
