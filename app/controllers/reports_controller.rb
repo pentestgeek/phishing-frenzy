@@ -69,7 +69,8 @@ class ReportsController < ApplicationController
 	end
 
 	def passwords
-		@template = Template.find_by_id(params[:id])
+		@campaign = Campaign.find_by_id(params[:id])
+		@template = Template.find_by_id(@campaign.template_id)
 		passwd_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", "passwd.txt")
 		if File.exist?(passwd_location)
 			# read passwd file
