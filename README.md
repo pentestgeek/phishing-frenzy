@@ -1,4 +1,4 @@
-phishing-frenzy
+Phishing Frenzy
 ===============
 
 Ruby on Rails Phishing Framework
@@ -10,6 +10,9 @@ Upload Phishing Frenzy to the webroot of your webserver (/var/www/*)
 
 ### Apache Configuration
 
+Source:
+http://nathanhoad.net/how-to-ruby-on-rails-ubuntu-apache-with-passenger
+
 Configure Apache to always run Phishing Frenzy by adding the following line to the apache configuration file (/etc/apache2/apache2.conf).
 
 	Include pf.conf
@@ -17,11 +20,11 @@ Configure Apache to always run Phishing Frenzy by adding the following line to t
 Now that Apache is configured to run the pf.conf configuration file, create and add the following content to pf.conf.
 
 	<VirtualHost *:80>
-		ServerName knox.pentestgeek.com
+		ServerName phishing-frenzy.com
 		# !!! Be sure to point DocumentRoot to 'public'!
-		DocumentRoot /var/www/phishing-framework/public
+		DocumentRoot /var/www/phishing-frenzy/public
 		RailsEnv development
-		<Directory /var/www/phishing-framework/public>
+		<Directory /var/www/phishing-frenzy/public>
 			# This relaxes Apache security settings.
 			AllowOverride all
 			# MultiViews must be turned off.
