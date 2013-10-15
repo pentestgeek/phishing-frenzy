@@ -51,7 +51,7 @@
 	<table summary="Campaign Settings">
 		<%= fields_for @email_settings do |es| %>
 		<tr>
-			<th width="200">STMP Server:</th>
+			<th width="200">SMTP Server:</th>
 			<td><%= es.text_field(:smtp_server) %></td>
 		</tr>
 		<tr>
@@ -59,7 +59,7 @@
 			<td><%= es.text_field(:smtp_server_out) %></td>
 		</tr>
 		<tr>
-			<th>STMP Username:</th>
+			<th>SMTP Username:</th>
 			<td><%= es.text_field(:smtp_username) %></td>
 		</tr>
 		<tr>
