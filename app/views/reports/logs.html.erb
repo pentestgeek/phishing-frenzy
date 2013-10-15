@@ -5,11 +5,11 @@
 <% counter = 1 %>
 <% @logs.each do |log| %>
 	<table>
-	 <tr class="<%= cycle('odd', 'even') %>">
-	 	<td width="800">
-			<p><%= simple_format(log) %></p>
-			<% counter += 1 %>
-		</td>
-	 </tr>
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td width="800">
+				<p><%= simple_format(log) %></p>
+				<% counter += 1 %>
+			</td>
+		</tr>
 	</table>
 <% end %>

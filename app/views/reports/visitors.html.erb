@@ -5,11 +5,11 @@
 <% counter = 1 %>
 <% @visitors.each do |visitor| %>
 	<table>
-	 <tr class="<%= cycle('odd', 'even') %>">
-	 	<td width="350">
+		<tr class="<%= cycle('odd', 'even') %>">
+			<td width="350">
 			<p><%= simple_format(visitor) %></p>
 			<% counter += 1 %>
 		</td>
-	 </tr>
+	</tr>
 	</table>
 <% end %>
