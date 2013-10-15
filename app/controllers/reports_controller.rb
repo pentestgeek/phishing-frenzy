@@ -17,8 +17,20 @@ class ReportsController < ApplicationController
 		@campaign_settings = CampaignSettings.find_by_id(params[:id])
 		@email_settings = EmailSettings.find_by_id(params[:id])
 		@template = Template.find_by_id(@campaign.template_id)
-		@logs, @visitors, @location, @browsers, @ip_addresses = parse_apache_logs(@campaign_settings, @campaign)
 		@victims = Victims.where(:campaign_id => params[:id])
+
+		@apache_data = parse_apache_logs(@campaign_settings, @campaign)
+
+		# catch if an error was thrown on parse_apache_logs
+		if @apache_data[:error]
+			flash[:notice] = "#{@apache_data[:error]}"
+			redirect_to(:action => 'list')
+			return false
+		end
+
+		@ip_addresses = @apache_data[:ip_addresses]
+
+		# display password if it exists
 		passwd_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", "passwd.txt")
 		if File.exist?(passwd_location)
 			# read passwd file
@@ -28,44 +40,21 @@ class ReportsController < ApplicationController
 		end
 
 		@location_object = []
-		#@ip_addresses = ['4.4.4.4', '98.139.183.24', '74.113.233.95']
-		@ip_addresses.each do |ip_address|
+		@apache_data[:ip_addresses].each do |ip_address|
 			@location_object << Geokit::Geocoders::MultiGeocoder.geocode(ip_address).ll
 		end
-
-		if @refresh
-			return true
-		else
-			return false
-		end
 	end
 
-	def logs
+	def logs; prepare_details; end
+	def ip_addresses; prepare_details; end
+	def browsers; prepare_details; end
+	def visitors; prepare_details; end
+
+	def prepare_details
 		# generate statistics
 		@campaign = Campaign.find_by_id(params[:id])
 		@campaign_settings = CampaignSettings.find_by_id(params[:id])
-		@logs, @visitors, @location, @browsers, @ip_addresses = parse_apache_logs(@campaign_settings, @campaign)
-	end
-
-	def ip_addresses
-		# generate statistics
-		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_id(params[:id])
-		@logs, @visitors, @location, @browsers, @ip_addresses = parse_apache_logs(@campaign_settings, @campaign)
-	end
-
-	def browsers
-		# generate statistics
-		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_id(params[:id])
-		@logs, @visitors, @location, @browsers, @ip_addresses = parse_apache_logs(@campaign_settings, @campaign)
-	end
-
-	def visitors
-		# generate statistics
-		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_id(params[:id])
-		@logs, @visitors, @location, @browsers, @ip_addresses = parse_apache_logs(@campaign_settings, @campaign)
+		@apache_data = parse_apache_logs(@campaign_settings, @campaign)
 	end
 
 	def passwords
@@ -119,9 +108,12 @@ class ReportsController < ApplicationController
 				uniq_ip_addresses = ip_addresses.uniq
 			#end
 
-			return logs, uniq_visitors, location, uniq_browsers, ip_addresses.uniq
-		rescue
-			return false
+			#return logs, uniq_visitors, location, uniq_browsers, ip_addresses.uniq
+			apache_data = { :logs => logs, :visitors => uniq_visitors, :browsers => uniq_browsers, :ip_addresses => ip_addresses.uniq }
+			return apache_data
+		rescue => e
+			apache_data = {:error => e}
+			return apache_data
 		end
 	end
 

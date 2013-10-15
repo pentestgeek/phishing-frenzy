@@ -3,7 +3,7 @@
 <h2>Visitors: <%= @campaign.name %></h2>
 
 <% counter = 1 %>
-<% @visitors.each do |visitor| %>
+<% @apache_data[:visitors].each do |visitor| %>
 	<table>
 		<tr class="<%= cycle('odd', 'even') %>">
 			<td width="350">

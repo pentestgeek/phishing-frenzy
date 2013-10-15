@@ -47,8 +47,8 @@
 		data.addColumn('string', 'Description');
 		data.addColumn('number', 'Count');
 		data.addRows([
-			['User Clicked', <%= @visitors.length %>],
-			['No Action', <%= @email_settings.emails_sent %> - <%= @visitors.length %> ],
+			['User Clicked', <%= @apache_data[:visitors].length %>],
+			['No Action', <%= @email_settings.emails_sent %> - <%= @apache_data[:visitors].length %> ],
 		]);
 
 		// Set chart options
@@ -68,25 +68,25 @@
 	<tr>
 		<th width="200">
 			<h3>Email Sent (<%= @email_settings.emails_sent %>)</h3>
-			<h3>Clicks (<%= @visitors.length %>)</h3>
+			<h3>Clicks (<%= @apache_data[:visitors].length %>)</h3>
 			<div id="visitors">
-				<h3>Visitors: (<%= link_to(@visitors.length, {:action => 'visitors', :id => @campaign.id}, :target => "_blank") %>) </h3>
+				<h3>Visitors: (<%= link_to(@apache_data[:visitors].length, {:action => 'visitors', :id => @campaign.id}, :target => "_blank") %>) </h3>
 			</div>
 			<div id="visitors_popup" class="popup">
 				<% visitor_counter = 1 %>
-				<% @visitors.each do |visitor| %>
+				<% @apache_data[:visitors].each do |visitor| %>
 					<%= simple_format("#{visitor_counter} #{visitor}") %>
 					<% visitor_counter += 1 %>
 				<% end %>
 			</div>
-			<h3>Logs: (<%= link_to(@logs.length, {:action => 'logs', :id => @campaign.id}, :target => "_blank") %>)</h3>
-			<h3>IP Addresses: (<%= link_to(@ip_addresses.length, {:action => 'ip_addresses', :id => @campaign.id}, :target => "_blank") %>)</h3>
+			<h3>Logs: (<%= link_to(@apache_data[:logs].length, {:action => 'logs', :id => @campaign.id}, :target => "_blank") %>)</h3>
+			<h3>IP Addresses: (<%= link_to(@apache_data[:ip_addresses].length, {:action => 'ip_addresses', :id => @campaign.id}, :target => "_blank") %>)</h3>
 			<div id="browsers">
-				<h3>Browsers (<%= link_to(@browsers.length, {:action => 'browsers', :id => @campaign.id}, :target => "_blank") %>)</h3>
+				<h3>Browsers (<%= link_to(@apache_data[:browsers].length, {:action => 'browsers', :id => @campaign.id}, :target => "_blank") %>)</h3>
 			</div>
 			<div id="browsers_popup" class="popup">
 				<% counter = 1 %>
-				<% @browsers.each do |browser| %>
+				<% @apache_data[:browsers].each do |browser| %>
 					<table>
 						<tr class="<%= cycle('odd', 'even') %>">
 							<td width="450">
@@ -112,4 +112,3 @@
 		</td>
 	</tr>
 </table>
-

@@ -3,7 +3,7 @@
 <h2>Browser Types: <%= @campaign.name %></h2>
 
 <% counter = 1 %>
-<% @browsers.each do |browser| %>
+<% @apache_data[:browsers].each do |browser| %>
 	<table>
 		<tr class="<%= cycle('odd', 'even') %>">
 			<td width="800">
