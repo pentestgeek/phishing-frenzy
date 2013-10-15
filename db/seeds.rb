@@ -1,13 +1,9 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
 
 # Create initial admin account with password of funtime
-Admin.find_or_create_by_name({ name: 'admin', username: 'admin', password: '25290094b52f4dd1af5be269481a9de412590a0d', salt: 'c2e395561aeaee9160d0d49196aad9d9bd449a9f', active: 'true' })
+connection = ActiveRecord::Base.connection();
+connection.execute("INSERT INTO admins ( name, username, password, salt, active ) VALUES ( 'admin', 'admin', '25290094b52f4dd1af5be269481a9de412590a0d', 'c2e395561aeaee9160d0d49196aad9d9bd449a9f', '1')")
 
 # Create intial phishing templates
 Template.create([
