@@ -313,7 +313,6 @@ class TemplatesController < ApplicationController
 			f.write(params[:email_content])
 		end
 
-
 		flash[:notice] = "Email Message Updated"
 		redirect_to(:controlloer => 'templates', :action => 'edit_email', :id => params[:id])
 	end	
