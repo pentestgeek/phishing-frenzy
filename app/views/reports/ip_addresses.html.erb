@@ -3,7 +3,7 @@
 <h2>IP Addresses: <%= @campaign.name %></h2>
 
 <% counter = 1 %>
-<% @ip_addresses.each do |ip| %>
+<% @apache_data[:ip_addresses].each do |ip| %>
 	<table>
 		<tr class="<%= cycle('odd', 'even') %>">
 			<td width="150">

@@ -3,7 +3,7 @@
 <h2>Apache Logs: <%= @campaign.name %></h2>
 
 <% counter = 1 %>
-<% @logs.each do |log| %>
+<% @apache_data[:logs].each do |log| %>
 	<table>
 		<tr class="<%= cycle('odd', 'even') %>">
 			<td width="800">
