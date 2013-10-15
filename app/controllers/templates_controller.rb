@@ -203,9 +203,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def restore
-		# load yaml file
-		#location = File.join(Rails.root.to_s, 'public', 'templates', 'microsoft_update', 'backup.yaml')
-		#backup = YAML.load(File.read(location))
+
 	end
 
 	def upload
