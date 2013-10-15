@@ -2,13 +2,14 @@ require 'digest/sha1'
 
 class Admin < ActiveRecord::Base
 	attr_accessible :password, :salt, :name, :username, :passwd, :active
-	#attr_protected :password, :salt
+	attr_protected :password, :salt
+	
 	# adding non-db attribute
 	attr_accessor :passwd
 
 	validates :name, :presence => true, :length => { :maximum => 255 }
 	validates :username, :presence => true, :length => { :maximum => 255 }
-	#validates :passwd, :presence => true, :length => { :maximum => 255 }
+	validates :passwd, :presence => true, :length => { :maximum => 255 }
 
 	before_save :create_hashed_password
 	after_save :clear_password
