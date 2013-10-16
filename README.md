@@ -8,14 +8,19 @@ Install
 
 These instructions are to install Phishing Frenzy on a Debian based OS with a MySQL database used as a backend. Different steps will need to be taken if you are running on a Windows platform or using a different database server.
 
-Upload Phishing Frenzy to the webroot of your webserver wherever that may be located (/var/www/*).
-
 ### Apache Configuration
 
-In this part of the install we will discuss how we can use Apache with mod_passenger to always serve up our Phishing Frenzy web application.
+Install LAMP server software of not already installed
 
-Source:
-http://nathanhoad.net/how-to-ruby-on-rails-ubuntu-apache-with-passenger
+	#tasksel install lamp-server
+
+Clone the Phishing Frenzy repository to your system
+
+	#git clone https://github.com/pentestgeek/phishing-frenzy.git /var/www/phishing-frenzy
+
+Make sure Phishing Frenzy is in the Apache webroot of your webserver wherever that may be located (/var/www/*).
+
+In this part of the install we will discuss how we can use Apache with mod_passenger to always serve up our Phishing Frenzy web application.
 
 Configure Apache to always run Phishing Frenzy by adding the following line to the apache configuration file (/etc/apache2/apache2.conf).
 
@@ -36,44 +41,47 @@ This addition to inclue pf.conf tells Apache to look at this file within the Apa
 		</Directory>
 	</VirtualHost>
 
-At this point you will have to reload or restart your Apache services to server up the website configured in pf.conf
+### Install Ruby on Rails
 
-	#apache2ctl reload
+We are going to use RVM to install ruby and ruby on rails. For additional details on how to install RVM please see: https://rvm.io/rvm/install
 
-Install some linux dependencies for Apache and MySQL to run ruby on rails.
+Install RVM and Ruby
 
-Install Ruby on Rails
+	curl -L https://get.rvm.io | bash -s stable --ruby
 
-	#rvm all do gem install rails
+Install Ruby on Rails. We can use rvmsudo with rvm to get the job done.
+
+	$rvmsudo rvm all do gem install rails
 
 Install mod_passenger for Apache
 
-	#rvm all do gem install passenger
+	$rvmsudo rvm all do gem install passenger
 
 Invoke passenger install script
 
-	#passenger-install-apache2-module
+	$passenger-install-apache2-module
 
-Edit your Apache configuration file, and add these lines to run Ruby on Rails:
+If you do not have the required software to install passenger, the script will let you know which additional software needs to be install. In my case I had to install the following software on my fresh install of Ubuntu.
 
-	LoadModule passenger_module /usr/local/rvm/gems/ruby-1.9.3-p392/gems/passenger-4.0.14/buildout/apache2/mod_passenger.so
-	PassengerRoot /usr/local/rvm/gems/ruby-1.9.3-p392/gems/passenger-4.0.14
-	PassengerDefaultRuby /usr/local/rvm/wrappers/ruby-1.9.3-p392/ruby
+	$sudo apt-get install libcurl4-openssl-dev apache2-threaded-dev libapr1-dev libaprutil1-dev
 
-Enable mod_rewrite for Apache:
+If you were required to install additional software, you will need to invoke the passenger-install-apache2-module once again to continue.
 
-	sudo a2enmod rewrite
+Also in my case the passenger install module did not have the proper permissions to install so I ran the following which was given to me by the install script.
 
-Add the following lines in the Phishing Frenzy Gemfile to properly deploy with Apache mod_passenger:
+	rvmsudo -E /usr/local/rvm/wrappers/ruby-2.0.0-p247/ruby /usr/local/rvm/gems/ruby-2.0.0-p247/gems/passenger-4.0.20/bin/passenger-install-apache2-module
 
-	gem 'execjs'
-	gem 'libv8'
-	gem 'therubyracer'
+Pay attention to the end of the script because it will ask you to copy a few lines into your Apache configuration file, these are what the lines looked like in my case
+
+	LoadModule passenger_module /usr/local/rvm/gems/ruby-2.0.0-p247/gems/passenger-4.0.20/buildout/apache2/mod_passenger.so
+	PassengerRoot /usr/local/rvm/gems/ruby-2.0.0-p247/gems/passenger-4.0.20
+	PassengerDefaultRuby /usr/local/rvm/wrappers/ruby-2.0.0-p247/ruby
 
 Install all the gems for the Ruby on Rails application:
 
-	#cd /var/www/phishing-framework
-	#bundle install
+	$rvmsudo gem install bundler
+	$cd /var/www/phishing-framework
+	$rvmsudo bundle install
 
 Install nodejs
 
@@ -83,20 +91,23 @@ Install nodejs
 
 Create Rails Database for Phishing Frenzy:
 
-	mysql> create database phishing_framework_production;
-	mysql> grant all privileges on phishing_framework_production.* to 'phishing_frenzy'@'localhost' identified by 'password';
+	mysql> create database phishing_framework_development;
+	mysql> grant all privileges on phishing_framework_development.* to 'phishing_frenzy'@'localhost' identified by 'password';
 
 ### Ruby on Rails Configuration
 
 Make sure app/config/database.yaml file is properly configured or the rake tasks will fail. The database.yaml file will tell your rails application how to properly authenticate to database server and access the database. If either of the rake tasks fail, it will render Phishing Frenzy worthless, so ensure the rake tasks are completed successfully before continuing on.
 
+	$sudo chmod 0666 /var/www/phishing-frenzy/log/development.log
+	$sudo chmod 0666 /var/www/phishing-frenzy/db/schema.rb
+
 Create Database schema using Rails Migrations:
 
-	#rake db:migrate
+	$rake db:migrate
 
 Poppulate database with content using Rails Seeds helper:
 
-	#rake db:seed
+	$rake db:seed
 
 Change ownership of apache config to allow Phishing Fenzy manage virtual hosts. If you currently have entries within the httpd.conf file, backup the file now because Phishing Frenzy will delete all entries in this file when managing virtual hosts for phishing campaigns.
 
@@ -121,3 +132,8 @@ Phishing Frenzy is configured with a default login of:
 	password: funtime
 
 Enjoy Phishing Frenzy and please submit all bugs.
+
+### Resources
+http://nathanhoad.net/how-to-ruby-on-rails-ubuntu-apache-with-passenger
+https://rvm.io/rvm/install
+http://rubyonrails.org/download
