@@ -108,7 +108,6 @@ class ReportsController < ApplicationController
 				uniq_ip_addresses = ip_addresses.uniq
 			#end
 
-			#return logs, uniq_visitors, location, uniq_browsers, ip_addresses.uniq
 			apache_data = { :logs => logs, :visitors => uniq_visitors, :browsers => uniq_browsers, :ip_addresses => ip_addresses.uniq }
 			return apache_data
 		rescue => e
@@ -119,9 +118,8 @@ class ReportsController < ApplicationController
 
 	def enum_visitors(line)
 		if line.include?('id=')
-			#first = line.split('id=')[0]
-			second = line.split('id=')[1]
-			junk = second.split(" ")
+			first = line.split('id=')[2]
+			junk = first.split(" ")
 			visitor = Base64.decode64(junk[0])
 			return visitor
 		else
