@@ -118,7 +118,7 @@ class ReportsController < ApplicationController
 
 	def enum_visitors(line)
 		if line.include?('id=')
-			first = line.split('id=')[2]
+			first = line.split('id=')[1]
 			junk = first.split(" ")
 			visitor = Base64.decode64(junk[0])
 			return visitor
