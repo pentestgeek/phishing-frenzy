@@ -100,14 +100,14 @@ class CampaignsController < ApplicationController
 		@campaign_settings = CampaignSettings.find_by_campaign_id(params[:id])
 		@campaign = Campaign.find(params[:id])
 
-		# ensure we have a fqdn to go active
-		#if @campaign.active
-		#  if @campaign_settings.fqdn = ""
-		#    flash[:notice] = "FQDN Cannot be blank when going Active"
-		#    redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
-		#    return false
-		#  end
-		#end
+		# ensure we have required dependencies to go active
+		if params[:campaign][:active] == "1"
+			if params[:campaign_settings][:fqdn] == ""
+				flash[:notice] = "FQDN cannot be blank when active"
+				redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
+				return false
+			end
+		end
 
 		if @campaign.update_attributes(params[:campaign]) and @email_settings.update_attributes(params[:email_settings]) and @campaign_settings.update_attributes(params[:campaign_settings])
 			flash[:notice] = "Campaign Updated"
@@ -131,8 +131,8 @@ class CampaignsController < ApplicationController
 	end
 
 	def options
-		@email_settings = EmailSettings.find_by_campaign_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_campaign_id(params[:id])
+		@email_settings = EmailSettings.find_or_create_by_campaign_id(params[:id])
+		@campaign_settings = CampaignSettings.find_or_create_by_campaign_id(params[:id])
 		@templates = Template.all
 		@campaign = Campaign.find_by_id(params[:id])
 		@victims = Victims.where("campaign_id = ?", params[:id])
