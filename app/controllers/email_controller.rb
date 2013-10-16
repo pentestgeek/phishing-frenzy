@@ -7,6 +7,38 @@ class EmailController < ApplicationController
 	end
 
 	def send_email
+		unless prepare_sending
+			flash[:notice] = "#{@flash}"
+			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+			return false
+		end
+
+		if read_email(@email_settings.emails_sent)
+			render('send')
+		else
+			flash[:notice] = "Read Email method has failed"
+			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+			return false		
+		end
+	end
+
+	def launch_email
+		unless prepare_sending
+			flash[:notice] = "#{@flash}"
+			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+			return false
+		end
+
+		emails_sent = read_email(@email_settings.emails_sent)
+		@email_settings.update_attribute(:emails_sent, emails_sent)
+
+		# update email_sent in db
+		@campaign.update_attribute(:email_sent, true)
+		flash[:notice] = "Campaign Launched"
+		render('send')
+	end
+
+	def prepare_sending
 		@email_settings = EmailSettings.find_by_campaign_id(params[:id])
 		@campaign = Campaign.find_by_id(params[:id])
 		@campaign_settings = CampaignSettings.find_by_id(params[:id])
@@ -17,61 +49,45 @@ class EmailController < ApplicationController
 		if @campaign
 			@template = Template.find_by_id(@campaign.template_id)
 		else
-			flash[:notice] = "Unable to find campaign"
-			render('email_error')
+			@flash = "No Campaign Found"
 			return false
 		end
 
 		# make sure we have victims to send to
 		if @victims.empty?
-			flash[:notice] = "No Victims to Send To"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+			@flash = "No Victims to Send To"
 			return false
 		end
 
-		if @email_settings
-			unless read_email
-				flash[:notice] = "read_mail function failed"
-				render('email_error')
-				return false
-			end
-			render('send')
-		else
-			render('email_error')
-		end
-	end
-
-	def launch_email
-		@email_settings = EmailSettings.find_by_campaign_id(params[:id])
-		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_id(params[:id])
-		@template = Template.find_by_id(@campaign.template_id)
-		@victims = Victims.where("campaign_id = ?", params[:id])
-		@messages = []
-
-		# make sure we have victims to send to
-		if @victims.empty?
-			flash[:notice] = "No Victims to Send To"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+		# make sure we have email settings
+		unless @email_settings
+			@flash = "No Email Settings Found"
 			return false
 		end
 
-		if @email_settings
-			emails_sent = read_email(@email_settings.emails_sent)
-			@email_settings.update_attribute(:emails_sent, emails_sent)
-			#else
-			#	flash[:notice] = "read_mail function failed"
-			#	render('email_error')
-			#	return false
-			#end
-
-			# update email_sent in db
-			@campaign.update_attribute(:email_sent, true)
-			flash[:notice] = "Campaign Launched"
-			render('send')
-		else
-			flash[:notice] = "Unable to find EmailSettings"
+		# ensure smtp settings are populated
+		if @email_settings.smtp_server == ""
+			@flash = "No SMTP Server to send from"
+			return false
 		end
+
+		if @email_settings.smtp_server_out == ""
+			@flash = "No Outbound SMTP Server to send from"
+			return false
+		end
+
+		if @email_settings.smtp_port == ""
+			@flash = "No SMTP Port specified"
+			return false
+		end
+
+		# ensure email settings are populated
+		if @email_settings.from == ""
+			@flash = "No From address specified"
+			return false
+		end
+
+		return true
 	end
 
 	def sendemail(username, password, from, message, email, port, smtpout, smtp)
