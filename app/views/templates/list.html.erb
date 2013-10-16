@@ -2,7 +2,8 @@
 
 <div class="template list">
 	<h2>Templates</h2>
-	
+	<%= paginate @templates %></br >
+
 	<%= link_to("Create", {:action => 'new', :class => 'action new'}) %> | <%= link_to("Restore", {:action => 'restore', :class => 'action restore'}) %>
 
 	<div ><%= pluralize(@templates.size, 'template') %> found</div>

@@ -49,5 +49,8 @@ gem 'jquery-ui-rails'
 # To use rubyzip
 gem 'rubyzip', "~>1.0.0"
 
+# To use pry for debugging
 gem 'pry'
-gem 'pry-debugger'
+
+# To assist with pagination
+gem 'kaminari'

@@ -7,7 +7,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.order("templates.id ASC")
+		@templates = Template.order("id").page(params[:page]).per(8)
 	end
 
 	def show

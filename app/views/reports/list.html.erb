@@ -1,5 +1,6 @@
 <% @page_title = "Reports" %>
 <h2>Reports</h2>
+<%= paginate @campaigns %></br >
 <h3>Launched Phishing Campaigns</h3>
 
 <div ><%= pluralize(@campaigns.size, 'campaign') %> launched</div>
