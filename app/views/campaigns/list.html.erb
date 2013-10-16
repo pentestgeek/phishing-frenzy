@@ -2,7 +2,7 @@
 
 <div class="campaign list">
 	<h2>Campaigns</h2>
-	
+	<%= paginate @campaigns %></br >
 	<%= link_to("Add New Campaign", {:action => 'new', :class => 'action new'}) %>
 
 	<div ><%= pluralize(@campaigns.size, 'campaign') %> found</div>

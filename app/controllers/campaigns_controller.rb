@@ -8,7 +8,7 @@ class CampaignsController < ApplicationController
 
 	def list
 		# grab the campaigns and sort by id
-		@campaigns = Campaign.order("campaigns.id ASC")
+		@campaigns = Campaign.order("id").page(params[:page]).per(8)
 	end
 
 	def home

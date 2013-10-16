@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
 
 	def list
 		# gather the launched campaigns
-		@campaigns = Campaign.launched
+		@campaigns = Campaign.launched.page(params[:page]).per(8)
 	end
 
 	def stats
