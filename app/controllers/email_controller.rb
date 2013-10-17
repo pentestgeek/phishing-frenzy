@@ -41,7 +41,7 @@ class EmailController < ApplicationController
 	def prepare_sending
 		@email_settings = EmailSettings.find_by_campaign_id(params[:id])
 		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_id(params[:id])
+		@campaign_settings = CampaignSettings.find_by_campaign_id(params[:id])
 		@victims = Victims.where("campaign_id = ?", params[:id])
 		@messages = []
 
