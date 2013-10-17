@@ -54,3 +54,6 @@ gem 'pry'
 
 # To assist with pagination
 gem 'kaminari'
+
+# To determine binary files
+gem 'ptools'
