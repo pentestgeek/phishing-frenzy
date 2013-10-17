@@ -91,8 +91,8 @@ Install nodejs
 
 Create Rails Database for Phishing Frenzy:
 
-	mysql> create database phishing_framework_development;
-	mysql> grant all privileges on phishing_framework_development.* to 'phishing_frenzy'@'localhost' identified by 'password';
+	mysql> create database phishing_frenzy_development;
+	mysql> grant all privileges on phishing_frenzy_development.* to 'phishing_frenzy'@'localhost' identified by 'password';
 
 ### Ruby on Rails Configuration
 
