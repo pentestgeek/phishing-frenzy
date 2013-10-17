@@ -12,4 +12,16 @@
 			<%= submit_tag("Update Template") %>
 		</div>
 	<% end %>
+
+	<h2>Phishing Website Files</h2>
+
+	<div class="buttons">
+		<%= link_to("New File", {:controller => 'templates', :action => 'new_www_file', :id => @template.id}, :class => 'action') %> 
+	</div>
+
+	<ul>
+		<% @template_files.each do |file| %>
+			<li><%= link_to(file, {:action => 'edit_www', :filename => File.basename(file), :id => @template.id}) %></li>
+		<% end %>
+	</ul>
 </div>
