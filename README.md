@@ -80,7 +80,7 @@ Pay attention to the end of the script because it will ask you to copy a few lin
 Install all the gems for the Ruby on Rails application:
 
 	$rvmsudo gem install bundler
-	$cd /var/www/phishing-framework
+	$cd /var/www/phishing-frenzy
 	$rvmsudo bundle install
 
 Install nodejs
@@ -117,8 +117,8 @@ Change ownership of apache config to allow Phishing Fenzy manage virtual hosts. 
 
 Change ownership and permissions of the web application to the same account Apache is running as. In most cases this will be the 'www-data' account.
 
-	#chown -R www-data:www-data phishing-framework/
-	#chmod a+rw /var/www/phishing-framework/public/templates/
+	#chown -R www-data:www-data phishing-frenzy/
+	#chmod a+rw /var/www/phishing-frenzy/public/templates/
 
 Edit /etc/sudoers to allow Phishing Frenzy to restart apache and manage the virtual hosts. This way Phishing Frenzy can run multiple phishing websites on one webserver.
 
