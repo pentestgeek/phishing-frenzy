@@ -66,6 +66,10 @@ class TemplatesController < ApplicationController
 			list
 			render('list')
 		end
+
+		# list of website files
+		template_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', '**')
+		@template_files = Dir["#{template_location}"]
 	end
 
 	def update
@@ -266,6 +270,29 @@ class TemplatesController < ApplicationController
 		@email_content = File.read(email_location)
 	end
 
+	def edit_www
+		@template = Template.find_by_id(params[:id])
+		if @template.nil?
+			flash[:notice] = "Template not found"
+			redirect_to(:controlloer => 'templates', :action => 'list')
+		end
+
+		# text_box displaying file contents
+		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
+
+		begin
+			if File.binary?(file_location)
+				flash[:notice] = "Cannot Edit Binary Files"
+				redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+			else
+				@file_content = File.read(file_location)	
+			end
+		rescue => e
+			flash[:notice] = "Error: #{e}"
+			redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+		end
+	end
+
 	def preview_email
 		@template = Template.find_by_id(params[:id])
 		if @template.nil?
@@ -296,7 +323,6 @@ class TemplatesController < ApplicationController
 
 	def update_email_template
 		campaign = Campaign.find_by_id(params[:id])
-		#binding.pry
 		@template = Template.find_by_id(campaign.template_id)
 		if @template.nil?
 			flash[:notice] = "Template not found"
@@ -314,4 +340,52 @@ class TemplatesController < ApplicationController
 		flash[:notice] = "Email Message Updated"
 		redirect_to(:controlloer => 'templates', :action => 'edit_email', :id => params[:id])
 	end	
+
+	def update_www_template
+		@template = Template.find_by_id(params[:id])
+		if @template.nil?
+			flash[:notice] = "Template not found"
+			redirect_to(:controller => 'templates', :action => 'list')
+			return
+		end
+
+		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
+
+		# write params[:file_content] out to a file
+		File.open(file_location, "w+") do |f|
+			f.write(params[:file_content])
+		end
+
+		flash[:notice] = "Website Updated"
+		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+	end
+
+	def new_www_file
+		@template = Template.find_by_id(params[:id])
+		if @template.nil?
+			flash[:notice] = "Template not found"
+			redirect_to(:controller => 'templates', :action => 'list')
+			return
+		end
+	end
+
+	def create_www_file
+		@template = Template.find_by_id(params[:id])
+		if @template.nil?
+			flash[:notice] = "Template not found"
+			redirect_to(:controller => 'templates', :action => 'list')
+			return
+		end
+
+		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
+
+		begin
+			FileUtils.touch(file_location)
+			flash[:notice] = "File Created"
+			redirect_to(:controller => 'templates', :action => 'edit', :id => @template.id)
+		rescue => e
+			flash[:notice] = "#{e}"
+			redirect_to(:controller => 'templates', :action => 'edit', :id => @template.id)
+		end
+	end
 end
