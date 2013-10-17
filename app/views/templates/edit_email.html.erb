@@ -1,3 +1,4 @@
+<%= link_to("<< Back to Template", {:action => 'edit', :id => @template.id}, :class => 'back-link') %>
 <h2><%= @template.name %></h2>
 
 <%= form_for(:template, :url => {:action => 'update_email_template', :id => params[:id]}) do |f| %>
@@ -7,5 +8,3 @@
 		<%= submit_tag("Save") %>
 	</div>
 <% end %>
-
-<p><%= params.inspect %></p>
