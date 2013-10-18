@@ -14,8 +14,8 @@ development:
   reconnect: false
   database: phishing_framework_development
   pool: 5
-  username: phishing_dev
-  password: phishing
+  username: phishing_frenzy
+  password: password
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -25,18 +25,18 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: phishing-framework_test
+  database: phishing_framework_test
   pool: 5
-  username: root
-  password:
+  username: phishing_frenzy
+  password: password
   host: localhost
 
 production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: phishing-framework_production
+  database: phishing_framework_production
   pool: 5
-  username: root
-  password:
+  username: phishing_frenzy
+  password: password
   host: localhost
