@@ -253,6 +253,9 @@ class TemplatesController < ApplicationController
 			}
 		}
 
+		# cleanup original uploaded zip file
+		FileUtils.rm(zip_upload_location)
+
 		flash[:notice] = "File Uploaded"
 		redirect_to(:controlloer => 'templates', :action => 'list')
 	end
