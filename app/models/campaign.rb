@@ -22,7 +22,7 @@ class Campaign < ActiveRecord::Base
 	validates :description,
 		:length => { :maximum => 255 }
 	validates :emails,
-		:length => { :maximum => 4000 }
+		:length => { :maximum => 60000 }
 	validates :scope, :numericality => { :greater_than_or_equal_to => 0 },
 		:length => { :maximum => 4 }, :allow_nil => true
 
