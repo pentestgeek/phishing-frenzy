@@ -67,9 +67,11 @@ class TemplatesController < ApplicationController
 			render('list')
 		end
 
-		# list of website files
-		template_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', '**')
-		@template_files = Dir["#{template_location}"]
+		# list of template files
+		template_www_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', '**')
+		@template_files = Dir["#{template_www_location}"]
+		template_email_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'email', '**')
+		@email_files= Dir["#{template_email_location}"]
 	end
 
 	def update
@@ -261,8 +263,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit_email
-		@campaign = Campaign.find_by_id(params[:id])
-		@template = Template.find_by_id(@campaign.template_id)
+		@template = Template.find_by_id(params[:id])
 		if @template.nil?
 			flash[:notice] = "Template not found"
 			redirect_to(:controlloer => 'templates', :action => 'list')
@@ -344,6 +345,21 @@ class TemplatesController < ApplicationController
 		redirect_to(:controlloer => 'templates', :action => 'edit_email', :id => params[:id])
 	end	
 
+	def delete_email_template_file
+		@template = Template.find_by_id(params[:id])
+		if @template.nil?
+			flash[:notice] = "Template not found"
+			redirect_to(:controller => 'templates', :action => 'list')
+			return
+		end
+
+		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", params[:filename])
+		FileUtils.rm(file_location)
+
+		flash[:notice] = "#{params[:filename]} Removed"
+		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+	end
+
 	def update_www_template
 		@template = Template.find_by_id(params[:id])
 		if @template.nil?
@@ -360,6 +376,21 @@ class TemplatesController < ApplicationController
 		end
 
 		flash[:notice] = "Website Updated"
+		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+	end
+
+	def delete_www_template_file
+		@template = Template.find_by_id(params[:id])
+		if @template.nil?
+			flash[:notice] = "Template not found"
+			redirect_to(:controller => 'templates', :action => 'list')
+			return
+		end
+
+		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
+		FileUtils.rm(file_location)
+
+		flash[:notice] = "#{params[:filename]} Removed"
 		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
 	end
 

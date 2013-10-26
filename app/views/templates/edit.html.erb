@@ -21,7 +21,23 @@
 
 	<ul>
 		<% @template_files.each do |file| %>
-			<li><%= link_to(file, {:action => 'edit_www', :filename => File.basename(file), :id => @template.id}) %></li>
+			<li>
+				<%= link_to("Delete", {:action => 'delete_www_template_file', :filename => File.basename(file), :id => @template.id}) %>
+
+				<%= link_to(file, {:action => 'edit_www', :filename => File.basename(file), :id => @template.id}) %>
+			</li>
+		<% end %>
+	</ul>
+
+	<h2>Phishing Email Files</h2>
+
+	<ul>
+		<% @email_files.each do |file| %>
+			<li>
+				<%= link_to("Delete", {:action => 'delete_email_template_file', :filename => File.basename(file), :id => @template.id}) %>
+
+				<%= link_to(file, {:action => 'edit_email', :filename => File.basename(file), :id => @template.id}) %>
+			</li>
 		<% end %>
 	</ul>
 </div>

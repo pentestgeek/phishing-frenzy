@@ -5,6 +5,27 @@
 	$(function() {
 		$( "#accordion" ).accordion({collapsible:true, active:false});
 	});
+
+	$('#smtpPreFill').change(function() {
+	var myValue = $(this).val();
+	switch (myValue) {
+		case 'google':
+			$('#smtp_server').val('smtp.google.com');
+			$('#smtp_server_out').val('smtp.google.com');
+			$('#smtp_port').val('25');
+			break;
+		case 'outlook':
+			$('#smtp_server').val('smtp.outlook.com');
+			$('#smtp_server_out').val('smtp.outlook.com');
+			$('#smtp_port').val('25');
+			break;
+		case 'godaddy':
+			$('#smtp_server').val('smtp.secureserver.com');
+			$('#smtp_server_out').val('smtp.secureserver.com');
+			$('#smtp_port').val('587');
+			break;
+		}
+	});
 </script>
 
 <div id="accordion">
@@ -48,15 +69,27 @@
 	</table>
 
 	<h2>SMTP Settings</h2>
+
 	<table summary="Campaign Settings">
 		<%= fields_for @email_settings do |es| %>
 		<tr>
-			<th width="200">SMTP Server:</th>
-			<td><%= es.text_field(:smtp_server) %></td>
+			<th>Pre-populate:</th>
+			<td>
+				<select id="smtpPreFill">
+					<option>--Select--</option>
+					<option value="google">Gmail</option>
+					<option value="outlook">Outlook.com</option>
+					<option value="godaddy">GoDaddy</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>SMTP Server:</th>
+			<td><%= es.text_field(:smtp_server, :id => 'smtp_server') %></td>
 		</tr>
 		<tr>
 			<th>SMTP Outbound Server:</th>
-			<td><%= es.text_field(:smtp_server_out) %></td>
+			<td><%= es.text_field(:smtp_server_out, :id => 'smtp_server_out') %></td>
 		</tr>
 		<tr>
 			<th>SMTP Username:</th>
@@ -68,7 +101,7 @@
 		</tr>
 		<tr>
 			<th>SMTP Port:</th>
-			<td><%= es.text_field(:smtp_port) %></td>
+			<td><%= es.text_field(:smtp_port, :id => 'smtp_port') %></td>
 		</tr>
 		<% end %>
 	</table>
