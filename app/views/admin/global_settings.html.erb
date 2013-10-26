@@ -1,0 +1,28 @@
+<% @page_title = "Global Settings" %>
+<%= link_to("<< Back to Menu", {:controller => 'access', :action => 'menu'}, :class => 'back-link') %>
+
+<div class="global_settings">
+	
+	<h2>Global Settings</h2>
+	</br>
+
+	<%= form_for(@global_settings, :url => {:action => 'update_global_settings'}) do |f| %>
+
+	<table summary="Global Settings fields">
+		<tr>
+			<th><%= f.label("Apache Restart Command") %></th>
+			<td><%= f.text_field(:command_apache_restart) %></td>
+		</tr>
+		<tr>
+			<th><%= f.label("Apache httpd conf path") %></th>
+			<td><%= f.text_field(:path_apache_httpd) %></td>
+		</tr>
+	</table>
+
+	<div class="form-buttons">
+		<%= submit_tag("Update Changes") %>
+	</div>
+
+	<% end %>
+
+</div>

@@ -48,4 +48,19 @@ class AdminController < ApplicationController
 		redirect_to(:action => 'list')
 	end
 
+	def global_settings
+		@global_settings = GlobalSettings.find_by_id(1)
+	end
+
+	def update_global_settings
+		global_settings = GlobalSettings.find_by_id(1)
+		if global_settings.update_attributes(params[:global_settings])
+			flash[:notice] = "Settings Updated"
+			redirect_to(:action => 'global_settings')
+		else
+			flash[:notice] = "Issues Updating Settings"
+			redirect_to(:action => 'global_settings')			
+		end
+	end
+
 end
