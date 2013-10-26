@@ -55,7 +55,7 @@ class Campaign < ActiveRecord::Base
 	end
 
 	def check_changes
-		httpd = '/etc/apache2/httpd.conf'
+		httpd = GlobalSettings.find_by_id(1).path_apache_httpd
 		template = Template.find_by_id(self.template_id)
 		campaign_settings = CampaignSettings.find_by_campaign_id(self.id)
 
@@ -78,7 +78,8 @@ class Campaign < ActiveRecord::Base
 			end
 
 			# reload apache
-			system('sudo /etc/init.d/apache2 reload')
+			restart_apache = GlobalSettings.find_by_id(1).command_apache_restart
+			system(restart_apache)
 		end
 	end
 
