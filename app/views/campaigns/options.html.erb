@@ -1,5 +1,30 @@
 <% @page_title = "Campaign Settings" %>
 
+<script>
+
+	$('#smtpPreFill').change(function() {
+	var myValue = $(this).val();
+	switch (myValue) {
+		case 'google':
+			$('#smtp_server').val('smtp.google.com');
+			$('#smtp_server_out').val('smtp.google.com');
+			$('#smtp_port').val('25');
+			break;
+		case 'outlook':
+			$('#smtp_server').val('smtp.outlook.com');
+			$('#smtp_server_out').val('smtp.outlook.com');
+			$('#smtp_port').val('25');
+			break;
+		case 'godaddy':
+			$('#smtp_server').val('smtp.secureserver.com');
+			$('#smtp_server_out').val('smtp.secureserver.com');
+			$('#smtp_port').val('587');
+			break;
+		}
+	});
+
+</script>
+
 <style>
 	<div class="accordion"> #accordion </div>
 </style>
@@ -7,9 +32,9 @@
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
 <div class="campaign settings">  
-  <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
+	<%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
 
-  <%= render(:partial => "options", :locals => {:f => f}) %>
+	<%= render(:partial => "options", :locals => {:f => f}) %>
 
 	<table>
 		<tr>
@@ -33,7 +58,7 @@
 
 			<td>
 				<div class="form-buttons">
-					<%= link_to("Edit Template", {:controller => 'templates', :action => 'edit_email', :id => @campaign.id}, :class => 'action') %> 
+					<%= link_to("Edit Email", {:controller => 'templates', :action => 'edit_email', :id => @campaign.template_id}, :class => 'action') %> 
 				</div>
 			</td>
 
