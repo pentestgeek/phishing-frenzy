@@ -4,6 +4,11 @@ PhishingFramework::Application.routes.draw do
   get '/email/send_email/:id' => 'campaigns#list'
   get '/email/launch_email/:id' => 'campaigns#list'
 
+  # only allow deletion from POST requests
+  get '/campaigns/destroy/:id' => 'campaigns#list'
+  get '/templates/destroy/:id' => 'templates#list'
+  get '/admin/destroy/:id' => 'admin#list'
+
   get "reports/list"
   get "reports/show"
   get "reports/delete"
