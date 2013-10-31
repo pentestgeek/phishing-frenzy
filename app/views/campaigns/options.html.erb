@@ -31,6 +31,8 @@
 
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
+<h2><%= @campaign.name %></h2>
+
 <div class="campaign settings">  
 	<%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
 
