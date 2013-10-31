@@ -3,22 +3,22 @@
 <table summary="Template Form fields">
 	<tr>
 		<th>Name</th>
+		<td><span class="ui-icon ui-icon-help" title="Template name to distinguish itself"></span></td>
 		<td><%= f.text_field(:name) %></td>
-		<td>[Citrix Login Portal] </td>
 	</tr>
 	<tr>
 		<th>Location</th>
+		<td><span class="ui-icon ui-icon-help" title="template_location - Enter the name of the folder used to store the phishing template"></span></td>
 		<td><%= f.text_field(:location) %></td>
-		<td>[citrix_login_portal] </td>
 	</tr>
 	<tr>
 		<th>Description</th>
+		<td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
 		<td><%= f.text_area(:description, :size => "35x2") %></td>
-		<td>[Users Attempt to login to Citrix Portal] </td>
 	</tr>
 	<tr>
 		<th>Notes</th>
+		<td><span class="ui-icon ui-icon-help" title="Enter any notes or details pertaining to the phishing template"></span></td>
 		<td><%= f.text_area(:notes, :size => "35x2") %></td>
-		<td>[Login Portal] </td>
 	</tr>
 </table>
