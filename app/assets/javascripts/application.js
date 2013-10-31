@@ -15,3 +15,7 @@
 //= require_tree .
 //= require jquery.ui.accordion
 //= require jquery.ui.tooltip
+
+$(function() {
+	$( document ).tooltip();
+});
