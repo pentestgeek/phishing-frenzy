@@ -1,14 +1,16 @@
 PhishingFramework::Application.routes.draw do
+
+  # only allow emails to be send from POST request
+  get '/email/send_email/:id' => 'campaigns#list'
+  get '/email/launch_email/:id' => 'campaigns#list'
+
   get "reports/list"
-
   get "reports/show"
-
   get "reports/delete"
 
   root :to => 'campaigns#home'
 
   match 'admin', :to => 'access#menu'
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
