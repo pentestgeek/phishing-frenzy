@@ -78,7 +78,7 @@ class Campaign < ActiveRecord::Base
 						raise 'Template #{campaign.template_id} not found'
 
 					else
-						f.write(vhost_text(campaign.id, campaign.compaign_settings.fqdn, template.location)
+						f.write(vhost_text(campaign.id, campaign.compaign_settings.fqdn, template.location))
 					end
 				end        
 			end
