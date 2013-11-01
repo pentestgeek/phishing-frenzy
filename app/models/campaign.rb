@@ -55,15 +55,15 @@ class Campaign < ActiveRecord::Base
 	end
 
 	def check_changes
-		httpd = GlobalSettings.find_by_id(1).path_apache_httpd
-		template = Template.find_by_id(self.template_id)
-		campaign_settings = CampaignSettings.find_by_campaign_id(self.id)
-
 		if campaign_settings == nil
 			return false
 		end
 
 		if self.changed?
+			httpd = GlobalSettings.find_by_id(1).path_apache_httpd
+			template = Template.find_by_id(self.template_id)
+			campaign_settings = CampaignSettings.find_by_campaign_id(self.id)
+			
 			# gather active campaigns
 			active_campaigns = Campaign.active
 
