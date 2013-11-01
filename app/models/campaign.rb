@@ -1,7 +1,7 @@
 class Campaign < ActiveRecord::Base
 	# relationships
 	has_one :template
-	has_one :campaign_setting
+	has_one :campaign_settings
 	has_many :email_settings
 	has_many :statistics
 	has_many :victims
@@ -73,7 +73,13 @@ class Campaign < ActiveRecord::Base
 			# write each active campaign to httpd
 			active_campaigns.each do |campaign|
 				File.open(httpd, "a+") do |f|
-					f.write(vhost_text(CampaignSettings.find_by_id(campaign.id), Template.find_by_id(campaign.template_id)))
+					template = Template.find_by_id(campaign.template_id).location)
+					if template.nil?
+						raise 'Template #{campaign.template_id} not found'
+						
+					else
+						f.write(vhost_text(campaign.id, campaign.compaign_settings.fqdn, template)
+					end
 				end        
 			end
 
@@ -83,19 +89,19 @@ class Campaign < ActiveRecord::Base
 		end
 	end
 
-	def vhost_text(campaign_settings, template)
+	def vhost_text(campaign_id, fqdn, template_location)
 		approot = Rails.root
 
 		vhost_text = <<-VHOST
-			# #{campaign_settings.fqdn}
+			# #{fqdn}
 			<VirtualHost *:80>
-							ServerName #{campaign_settings.fqdn}
-							ServerAlias #{campaign_settings.fqdn}
-							ServerAlias www.#{campaign_settings.fqdn}
-							DocumentRoot #{approot}/public/templates/#{template.location}/www/
+							ServerName #{fqdn}
+							ServerAlias #{fqdn}
+							ServerAlias www.#{fqdn}
+							DocumentRoot #{approot}/public/templates/#{template_location}/www/
 							DirectoryIndex index.php
-							CustomLog     #{approot}/log/www-#{campaign_settings.fqdn}-#{self.id}-access.log combined
-							ErrorLog      #{approot}/log/www-#{campaign_settings.fqdn}-#{self.id}-error.log
+							CustomLog     #{approot}/log/www-#{fqdn}-#{campaign_id}-access.log combined
+							ErrorLog      #{approot}/log/www-#{fqdn}-#{campaign_id}-error.log
 			</VirtualHost>
 
 		VHOST
