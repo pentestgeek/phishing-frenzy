@@ -73,12 +73,12 @@ class Campaign < ActiveRecord::Base
 			# write each active campaign to httpd
 			active_campaigns.each do |campaign|
 				File.open(httpd, "a+") do |f|
-					template = Template.find_by_id(campaign.template_id).location)
+					template = Template.find_by_id(campaign.template_id)
 					if template.nil?
 						raise 'Template #{campaign.template_id} not found'
-						
+
 					else
-						f.write(vhost_text(campaign.id, campaign.compaign_settings.fqdn, template)
+						f.write(vhost_text(campaign.id, campaign.compaign_settings.fqdn, template.location)
 					end
 				end        
 			end
