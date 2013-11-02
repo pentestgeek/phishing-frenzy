@@ -13,7 +13,7 @@ class CampaignsController < ApplicationController
 
 	def home
 		# grab only the active campaigns
-		@campaigns = Campaign.active
+		@campaigns = Campaign.active.page(params[:page]).per(8)
 
 		# determine if apache is running
 		apache_output = `service apache2 status`
@@ -70,7 +70,6 @@ class CampaignsController < ApplicationController
 			else
 				render('new')
 			end
-
 		else
 			render('new')
 		end
@@ -96,9 +95,7 @@ class CampaignsController < ApplicationController
 	end
 
 	def update_settings
-		@email_settings = EmailSettings.find_by_campaign_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_campaign_id(params[:id])
-		@campaign = Campaign.find(params[:id])
+		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 
 		# ensure we have required dependencies to go active
 		if params[:campaign][:active] == "1"
@@ -109,7 +106,7 @@ class CampaignsController < ApplicationController
 			end
 		end
 
-		if @campaign.update_attributes(params[:campaign]) and @email_settings.update_attributes(params[:email_settings]) and @campaign_settings.update_attributes(params[:campaign_settings])
+		if @campaign.update_attributes(params[:campaign]) and @campaign.email_settings.update_attributes(params[:email_settings]) and @campaign.campaign_settings.update_attributes(params[:campaign_settings])
 			flash[:notice] = "Campaign Updated"
 			redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
 		else
@@ -123,18 +120,14 @@ class CampaignsController < ApplicationController
 	end
 
 	def destroy
-		CampaignSettings.find_by_campaign_id(params[:id]).destroy
-		EmailSettings.find_by_campaign_id(params[:id]).destroy
 		Campaign.find(params[:id]).destroy
 		flash[:notice] = "Campaign Destroyed"
 		redirect_to(:action => 'list')
 	end
 
 	def options
-		@email_settings = EmailSettings.find_or_create_by_campaign_id(params[:id])
-		@campaign_settings = CampaignSettings.find_or_create_by_campaign_id(params[:id])
 		@templates = Template.all
-		@campaign = Campaign.find_by_id(params[:id])
+		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 		@victims = Victims.where("campaign_id = ?", params[:id])
 		if @campaign.nil?
 			flash[:notice] = "Campaign Does not Exist"
