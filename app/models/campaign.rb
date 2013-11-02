@@ -60,9 +60,8 @@ class Campaign < ActiveRecord::Base
 		end
 
 		if self.changed?
-			httpd = GlobalSettings.find_by_id(1).path_apache_httpd
+			httpd = GlobalSettings.first.path_apache_httpd
 			template = Template.find_by_id(self.template_id)
-			campaign_settings = CampaignSettings.find_by_campaign_id(self.id)
 			
 			# gather active campaigns
 			active_campaigns = Campaign.active
@@ -78,13 +77,13 @@ class Campaign < ActiveRecord::Base
 						raise 'Template #{campaign.template_id} not found'
 
 					else
-						f.write(vhost_text(campaign.id, campaign.compaign_settings.fqdn, template.location))
+						f.write(vhost_text(campaign.id, campaign.campaign_settings.fqdn, template.location))
 					end
 				end        
 			end
 
 			# reload apache
-			restart_apache = GlobalSettings.find_by_id(1).command_apache_restart
+			restart_apache = GlobalSettings.first.command_apache_restart
 			system(restart_apache)
 		end
 	end

@@ -10,12 +10,16 @@
 
 	<table summary="Global Settings fields">
 		<tr>
-			<th><%= f.label("Apache Restart Command") %></th>
+			<th>Apache Restart Command</th>
 			<td><%= f.text_field(:command_apache_restart) %></td>
 		</tr>
 		<tr>
-			<th><%= f.label("Apache httpd conf path") %></th>
+			<th>Apache httpd.conf path</th>
 			<td><%= f.text_field(:path_apache_httpd) %></td>
+		</tr>
+		<tr>
+			<th>SMTP Timeout</th>
+			<td><%= f.text_field(:smtp_timeout) %></td>
 		</tr>
 	</table>
 

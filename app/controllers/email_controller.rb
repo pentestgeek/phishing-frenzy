@@ -90,7 +90,7 @@ class EmailController < ApplicationController
 
 	def sendemail(username, password, from, message, email, port, smtpout, smtp)
 		begin
-			Timeout.timeout(10){
+			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				Net::SMTP.start("#{smtpout}", "#{port}", "#{smtp}","#{username}", "#{password}", :plain) do |smtp|
 					smtp.send_message message, "#{from}", email.chomp
 				end
@@ -108,7 +108,7 @@ class EmailController < ApplicationController
 
 	def sendemail_encrypted(username, password, message, email, smtp_address, port)
 		begin
-			Timeout.timeout(5){
+			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				smtp = Net::SMTP.new(smtp_address, port)
 				smtp.enable_starttls
 				smtp.start(smtp, username, password, :login) do
