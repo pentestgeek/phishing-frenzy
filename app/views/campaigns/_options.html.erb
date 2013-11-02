@@ -19,8 +19,8 @@
 				$('#smtp_port').val('25');
 				break;
 			case 'godaddy':
-				$('#smtp_server').val('smtp.secureserver.com');
-				$('#smtp_server_out').val('smtpout.secureserver.com');
+				$('#smtp_server').val('smtp.secureserver.net');
+				$('#smtp_server_out').val('smtpout.secureserver.net');
 				$('#smtp_port').val('3535');
 				break;
 			}
@@ -78,7 +78,7 @@
 	<h2>SMTP Settings</h2>
 
 	<table summary="Campaign Settings">
-		<%= fields_for @email_settings do |es| %>
+		<%= fields_for @campaign.email_settings do |es| %>
 		<tr>
 			<th>Pre-populate:</th>
 			<td><span class="ui-icon ui-icon-help" title='Pre-populate SMTP and Port settings for commonly used email providers'></span></td>
@@ -109,7 +109,7 @@
 		<tr>
 			<th>SMTP Password:</th>
 			<td><span class="ui-icon ui-icon-help" title='SMTP password to authenticate sending emails'></span></td>
-			<td><%= es.password_field(:smtp_password, :value => @email_settings.smtp_password) %></td>
+			<td><%= es.password_field(:smtp_password, :value => @campaign.email_settings.smtp_password) %></td>
 		</tr>
 		<tr>
 			<th>SMTP Port:</th>
@@ -121,7 +121,7 @@
 
 	<h2>Email Settings</h2>
 	<table summary="Campaign Settings">
-		<%= fields_for @email_settings do |es| %>
+		<%= fields_for @campaign.email_settings do |es| %>
 		<tr>
 			<th>Subject:</th>
 			<td><span class="ui-icon ui-icon-help" title='Subject used for SMTP and email headers'></span></td>
@@ -143,7 +143,7 @@
 			<td><%= es.text_field(:phishing_url) %></td>
 		</tr>
 		<% end %>
-		<%= fields_for @campaign_settings do |cs| %>
+		<%= fields_for @campaign.campaign_settings do |cs| %>
 		<tr>
 			<th>FQDN</th>
 			<td><span class="ui-icon ui-icon-help" title='Full Qualified Domain Name is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect victims to your phishing website.'></span></td>
