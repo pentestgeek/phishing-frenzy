@@ -2,7 +2,7 @@ From: #{display_from} <#{from}>
 BCC: #{to}
 MIME-Version: 1.0
 Content-Type: Multipart/Related; boundary="00123"
-Subject: eFax Delivery 
+Subject: #{subject}
 
 --00123
 Content-Type: Text/HTML; charset=ISO-8859-1

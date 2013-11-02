@@ -326,8 +326,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def update_email_template
-		campaign = Campaign.find_by_id(params[:id])
-		@template = Template.find_by_id(campaign.template_id)
+		@template = Template.find_by_id(params[:id])
 		if @template.nil?
 			flash[:notice] = "Template not found"
 			redirect_to(:controller => 'templates', :action => 'list')

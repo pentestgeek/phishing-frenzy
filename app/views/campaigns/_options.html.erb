@@ -9,9 +9,9 @@
 		var myValue = $(this).val();
 		switch (myValue) {
 			case 'google':
-				$('#smtp_server').val('smtp.google.com');
-				$('#smtp_server_out').val('smtp.google.com');
-				$('#smtp_port').val('25');
+				$('#smtp_server').val('smtp.gmail.com');
+				$('#smtp_server_out').val('smtp.gmail.com');
+				$('#smtp_port').val('587');
 				break;
 			case 'outlook':
 				$('#smtp_server').val('smtp.outlook.com');
@@ -146,7 +146,7 @@
 		<%= fields_for @campaign.campaign_settings do |cs| %>
 		<tr>
 			<th>FQDN</th>
-			<td><span class="ui-icon ui-icon-help" title='Full Qualified Domain Name is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect victims to your phishing website.'></span></td>
+			<td><span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect victims to your phishing website.'></span></td>
 			<td><%= cs.text_field(:fqdn) %></td>
 		</tr>
 	</table>
@@ -160,23 +160,23 @@
 		</tr>
 		<tr>
 			<th>Track Number of Hits?</th>
-			<td></td>
-			<td><%= cs.check_box(:track_hits) %></td>
+			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+			<td><%= cs.check_box(:track_hits, :disabled => true) %></td>
 		</tr>
 		<tr>
 			<th>Use BeeF?</th>
-			<td></td>
-			<td><%= cs.check_box(:use_beef) %></td>
+			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+			<td><%= cs.check_box(:use_beef, :disabled => true) %></td>
 		</tr>
 		<tr>
 			<th>Iptables Restrictions?</th>
-			<td></td>
-			<td><%= cs.check_box(:iptable_restrictions) %></td>
+			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+			<td><%= cs.check_box(:iptable_restrictions, :disabled => true) %></td>
 		</tr>
 		<tr>
 			<th>Schedule Campaign?</th>
-			<td></td>
-			<td><%= cs.check_box(:schedule_campaign) %></td>
+			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+			<td><%= cs.check_box(:schedule_campaign, :disabled => true) %></td>
 		</tr>
 		<% end %>
 	</table>
