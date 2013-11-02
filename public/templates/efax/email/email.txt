@@ -19,7 +19,7 @@ You have received a 2 page fax at 2013-3-8 8:35:31 CST<br>
 <br>
 * Reference number for this fax is Fax_di23-208571567114-2013234<br>
 <br>
-<a href="#{url}">Click here to view the message</a><br>
+<a href="http://#{url}">Click here to view the message</a><br>
 <br>
 <br>
 Please visit eFax.com if you have any questions regarding this service.<br>

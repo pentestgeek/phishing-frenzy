@@ -13,7 +13,7 @@ class EmailController < ApplicationController
 			return false
 		end
 
-		if read_email(@email_settings.emails_sent)
+		if read_email(@campaign.email_settings.emails_sent)
 			render('send')
 		else
 			flash[:notice] = "Read Email method has failed"
@@ -29,8 +29,8 @@ class EmailController < ApplicationController
 			return false
 		end
 
-		emails_sent = read_email(@email_settings.emails_sent)
-		@email_settings.update_attribute(:emails_sent, emails_sent)
+		emails_sent = read_email(@campaign.email_settings.emails_sent)
+		@campaign.email_settings.update_attribute(:emails_sent, emails_sent)
 
 		# update email_sent in db
 		@campaign.update_attribute(:email_sent, true)
@@ -39,9 +39,7 @@ class EmailController < ApplicationController
 	end
 
 	def prepare_sending
-		@email_settings = EmailSettings.find_by_campaign_id(params[:id])
 		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_campaign_id(params[:id])
 		@victims = Victims.where("campaign_id = ?", params[:id])
 		@messages = []
 
@@ -60,29 +58,29 @@ class EmailController < ApplicationController
 		end
 
 		# make sure we have email settings
-		unless @email_settings
+		unless @campaign.email_settings
 			@flash = "No Email Settings Found"
 			return false
 		end
 
 		# ensure smtp settings are populated
-		if @email_settings.smtp_server == ""
+		if @campaign.email_settings.smtp_server == ""
 			@flash = "No SMTP Server to send from"
 			return false
 		end
 
-		if @email_settings.smtp_server_out == ""
+		if @campaign.email_settings.smtp_server_out == ""
 			@flash = "No Outbound SMTP Server to send from"
 			return false
 		end
 
-		if @email_settings.smtp_port == ""
+		if @campaign.email_settings.smtp_port == ""
 			@flash = "No SMTP Port specified"
 			return false
 		end
 
 		# ensure email settings are populated
-		if @email_settings.from == ""
+		if @campaign.email_settings.from == ""
 			@flash = "No From address specified"
 			return false
 		end
@@ -92,7 +90,7 @@ class EmailController < ApplicationController
 
 	def sendemail(username, password, from, message, email, port, smtpout, smtp)
 		begin
-			Timeout.timeout(5){
+			Timeout.timeout(10){
 				Net::SMTP.start("#{smtpout}", "#{port}", "#{smtp}","#{username}", "#{password}", :plain) do |smtp|
 					smtp.send_message message, "#{from}", email.chomp
 				end
@@ -129,6 +127,7 @@ class EmailController < ApplicationController
 	end
 
 	def read_email(emails_sent = 0)
+		@ssl = true
 		@victims.each do |victim|
 			message = []
 
@@ -141,12 +140,12 @@ class EmailController < ApplicationController
 			end
 
 			# track user clicks?
-			if @campaign_settings.track_uniq_visitors?
+			if @campaign.campaign_settings.track_uniq_visitors?
 				# append uniq identifier
 				encode = "#{Base64.encode64(victim.email_address)}"
-				full_url = "#{@email_settings.phishing_url}?id=#{encode.chomp}"
+				full_url = "#{@campaign.email_settings.phishing_url}?id=#{encode.chomp}"
 			else
-				full_url = "#{@email_settings.phishing_url}"	
+				full_url = "#{@campaign.email_settings.phishing_url}"	
 			end
 
 			# prepare email message
@@ -156,11 +155,11 @@ class EmailController < ApplicationController
 				elsif line =~ /\#{to}/
 					message << line.gsub(/\#{to}/, "#{victim.email_address}")
 				elsif line =~ /\#{from}/ and line =~ /\#{display_from}/
-					message << line.gsub(/\#{display_from} <\#{from}>/, "#{@email_settings.display_from} <#{@email_settings.from}>")
+					message << line.gsub(/\#{display_from} <\#{from}>/, "#{@campaign.email_settings.display_from} <#{@campaign.email_settings.from}>")
 				elsif line =~ /\#{display_from}/ and not line =~ /\#{from}/
-					message << line.gsub(/\#{display_from}/, "#{@email_settings.display_from}")
+					message << line.gsub(/\#{display_from}/, "#{@campaign.email_settings.display_from}")
 				elsif line =~ /\#{subject}/
-					message << line.gsub(/\#{subject}/, "#{@email_settings.subject}")
+					message << line.gsub(/\#{subject}/, "#{@campaign.email_settings.subject}")
 				elsif line =~ /\#{date}/
 					message << line.gsub(/\#{date}/, Time.now.to_formatted_s(:long_ordinal))
 				else
@@ -170,25 +169,24 @@ class EmailController < ApplicationController
 			email_message.close
 
 			# if encrypted email fails, sent cleartext email
-			ssl = true
-			if ssl
-				if sendemail_encrypted(@email_settings.smtp_username, @email_settings.smtp_password, message, victim.email_address, @email_settings.smtp_server, @email_settings.smtp_port)
+			if @ssl
+				if sendemail_encrypted(@campaign.email_settings.smtp_username, @campaign.email_settings.smtp_password, message, victim.email_address, @campaign.email_settings.smtp_server, @campaign.email_settings.smtp_port)
+					@ssl = true
 					emails_sent += 1
 					next
 				else
-					ssl = false
-					if sendemail(@email_settings.smtp_username, @email_settings.smtp_password, @email_settings.from, message, victim.email_address, @email_settings.smtp_port, @email_settings.smtp_server_out, @email_settings.smtp_server)	
+					@ssl = false
+					if sendemail(@campaign.email_settings.smtp_username, @campaign.email_settings.smtp_password, @campaign.email_settings.from, message, victim.email_address, @campaign.email_settings.smtp_port, @campaign.email_settings.smtp_server_out, @campaign.email_settings.smtp_server)	
 						emails_sent += 1
 					else
 						@messages << "[-] Unable to send #{victim.email_address}"
 					end
 				end
 			else
-				if sendemail(@email_settings.smtp_username, @email_settings.smtp_password, @email_settings.from, message, victim.email_address, @email_settings.smtp_port, @email_settings.smtp_server_out, @email_settings.smtp_server)	
+				if sendemail(@campaign.email_settings.smtp_username, @campaign.email_settings.smtp_password, @campaign.email_settings.from, message, victim.email_address, @campaign.email_settings.smtp_port, @campaign.email_settings.smtp_server_out, @campaign.email_settings.smtp_server)	
 					emails_sent += 1
 				end
 			end
-
 		end
 		return emails_sent
 	end
