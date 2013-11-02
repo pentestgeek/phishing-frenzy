@@ -1,24 +1,28 @@
+<%= error_messages_for(@global_settings) %>
+
 <% @page_title = "Global Settings" %>
 <%= link_to("<< Back to Menu", {:controller => 'access', :action => 'menu'}, :class => 'back-link') %>
 
 <div class="global_settings">
 	
 	<h2>Global Settings</h2>
-	</br>
 
-	<%= form_for(@global_settings, :url => {:action => 'update_global_settings'}) do |f| %>
+	<%= form_for(:global_settings, :url => {:action => 'update_global_settings'}) do |f| %>
 
 	<table summary="Global Settings fields">
 		<tr>
 			<th>Apache Restart Command</th>
+			<td><span class="ui-icon ui-icon-help" title='Command used on the Operating System to restart Apache. This is required to manage the virtual hosts for phishing websites'></span></td>
 			<td><%= f.text_field(:command_apache_restart) %></td>
 		</tr>
 		<tr>
-			<th>Apache httpd.conf path</th>
+			<th>Apache httpd.conf Path</th>
+			<td><span class="ui-icon ui-icon-help" title='Path or location of where the Apache httpd.conf configuration file is located. Default location on most debian systems is /etc/apache/httpd.conf'></span></td>
 			<td><%= f.text_field(:path_apache_httpd) %></td>
 		</tr>
 		<tr>
 			<th>SMTP Timeout</th>
+			<td><span class="ui-icon ui-icon-help" title='Timeout in seconds to allow when sending phishing emails through the SMTP server'></span></td>
 			<td><%= f.text_field(:smtp_timeout) %></td>
 		</tr>
 	</table>
