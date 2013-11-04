@@ -1,5 +1,10 @@
 <%= link_to("<< Back to Campaign Options", {:controller => 'campaigns', :action => 'options', :id => params[:id]}, :class => 'back-link') %>
 <h3>Victims</h3>
+
+<div class="form-button-victims">
+	<%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => @victims.first.campaign_id}) %>
+</div>
+
 <% counter = 1 %>
 <% @victims.each do |victim| %>
 
@@ -16,7 +21,3 @@
 	</table>
 	
 <% end %>
-
-<div class="form-buttons">
-	<%= button_to("delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => @victims.first.campaign_id}, :class => 'action') %>
-</div>
