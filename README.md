@@ -119,6 +119,7 @@ Change ownership and permissions of the web application to the same account Apac
 
 	#chown -R www-data:www-data phishing-frenzy/
 	#chmod a+rw /var/www/phishing-frenzy/public/templates/
+	#chmod o+rw phishing-frenzy/public/uploads/
 
 Edit /etc/sudoers to allow Phishing Frenzy to restart apache and manage the virtual hosts. This way Phishing Frenzy can run multiple phishing websites on one webserver.
 
@@ -131,9 +132,59 @@ Phishing Frenzy is configured with a default login of:
 	username: admin
 	password: funtime
 
+### Production mode
+
+Now that we have our rails application up and running in development mode, we can switch over to performance mode to increase performance among other things.
+
+Using our rails helper 'rake' we can precompile all of our assets which is required to enable production mode.
+
+	#rake assets:precompile
+
+Now we must migrate and seed the data for our production database.  If you have not created a seperate production account within mysql you need to do that now.
+
+	#rake db:seed RAILS_ENV=production --trace
+
+	#rake db:migrate RAILS_ENV=production --trace
+
+Now we must tell Apache to use production mode for our rails application by modifying /etc/apache2/pf.conf and changing the line of:
+
+	RailsEnv development
+
+to
+
+	RailsEnv production
+
+So your configuration file will look something like this:
+
+	<VirtualHost *:80>
+		ServerName phishing-frenzy.com
+		# !!! Be sure to point DocumentRoot to 'public'!
+		DocumentRoot /var/www/phishing-frenzy/public
+		RailsEnv production
+		<Directory /var/www/phishing-frenzy/public>
+			# This relaxes Apache security settings.
+			AllowOverride all
+			# MultiViews must be turned off.
+			Options -MultiViews
+		</Directory>
+	</VirtualHost>
+
 Enjoy Phishing Frenzy and please submit all bugs.
 
+### Troubleshooting
+
+If you receive an error im the browser such as "rails no such file tmp/cache/assets/*".
+
+Try the following:
+
+	#rake tmp:pids:clear
+	#rake tmp:sessions:clear
+	#rake tmp:sockets:clear
+	#rake tmp:cache:clear
+
 ### Resources
-http://nathanhoad.net/how-to-ruby-on-rails-ubuntu-apache-with-passenger
-https://rvm.io/rvm/install
-http://rubyonrails.org/download
+
+* http://nathanhoad.net/how-to-ruby-on-rails-ubuntu-apache-with-passenger
+* https://rvm.io/rvm/install
+* http://rubyonrails.org/download
+* http://www.pentestgeek.com/2013/11/04/introducing-phishing-frenzy/
