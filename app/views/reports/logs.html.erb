@@ -2,6 +2,8 @@
 
 <h2>Apache Logs: <%= @campaign.name %></h2>
 
+<%= button_to("Download Logs", {:controller => 'reports', :action => 'download_logs', :id => @campaign.id}) %>
+
 <% counter = 1 %>
 <% @apache_data[:logs].each do |log| %>
 	<table>

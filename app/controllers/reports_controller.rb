@@ -116,6 +116,19 @@ class ReportsController < ApplicationController
 		end
 	end
 
+	def download_logs
+		@campaign = Campaign.find_by_id(params[:id])
+		logfile_name = Rails.root.to_s + "/log/www-#{@campaign.campaign_settings.fqdn}-#{@campaign.id}-access.log"
+
+		begin
+			# force browser to download file
+			send_file logfile_name, :type => 'application/zip', :disposition => 'attachment', :filename => Pathname.new(logfile_name).basename
+		rescue => e
+			flash[:notice] = "Download Error: #{e}"
+			redirect_to(:action => 'logs', :id => params[:id])
+		end
+	end
+
 	def enum_visitors(line)
 		if line.include?('id=')
 			first = line.split('id=')[1]
