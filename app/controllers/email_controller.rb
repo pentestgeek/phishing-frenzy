@@ -29,10 +29,15 @@ class EmailController < ApplicationController
 			return false
 		end
 
-		emails_sent = read_email(@campaign.email_settings.emails_sent)
-		@campaign.email_settings.update_attribute(:emails_sent, emails_sent)
+		# if this is the first time launching, clear apache logs for fresh start
+		if @campaign.email_settings.emails_sent == 0
+			ReportsController.clear_apache_logs(@campaign)
+		end
 
-		# update email_sent in db
+		emails_sent = read_email(@campaign.email_settings.emails_sent)
+
+		# update emails_sent and email_sent in db
+		@campaign.email_settings.update_attribute(:emails_sent, emails_sent)
 		@campaign.update_attribute(:email_sent, true)
 		flash[:notice] = "Campaign Launched"
 		render('send')

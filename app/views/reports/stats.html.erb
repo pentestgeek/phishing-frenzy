@@ -17,14 +17,6 @@
 					$('#browsers_popup').hide();
 			});
 	});
-
-	$(function() {
-		$('#check_box').change(function() {
-			if (this.checked) {
-				location.reload();
-			}
-		});
-	});
 </script>
 
 <!--Load the AJAX API-->
@@ -100,7 +92,7 @@
 			<% if @passwd %>
 				<h3>Passwords (<%= link_to(@passwd.lines.count, {:action => 'passwords', :id => @campaign.id}, :target => "_blank") %>)</h3>
 			<% end %>
-			<%= check_box("yes", "no", {:id => 'check_box', :checked => false }) %> Auto-Reload
+			<%= button_to("Clear Logs", {:controller => 'reports', :action => 'clear_logs', :id => @campaign.id}) %>
 		</th>
 		<td>
 			<div id="chart_div" class="style_image"></div>

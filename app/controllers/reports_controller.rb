@@ -140,4 +140,26 @@ class ReportsController < ApplicationController
 		end
 	end
 
+	def clear_logs
+		@campaign = Campaign.find_by_id(params[:id])
+
+		if ReportsController.clear_apache_logs(@campaign)
+			flash[:notice] = "Logs Cleared"
+			redirect_to(:action => 'stats', :id => params[:id])
+		else
+			flash[:notice] = "Error: #{e}"
+			redirect_to(:action => 'stats', :id => params[:id])
+		end		
+	end
+
+	def self.clear_apache_logs(campaign)
+		logfile_name = Rails.root.to_s + "/log/www-#{campaign.campaign_settings.fqdn}-#{campaign.id}-access.log"
+
+		# clear apache log file
+		begin
+			File.open(logfile_name, 'w') {|file| file.truncate(0) }
+		rescue
+			return false
+		end
+	end
 end
