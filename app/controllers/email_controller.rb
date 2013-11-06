@@ -94,6 +94,17 @@ class EmailController < ApplicationController
 	end
 
 	def sendemail(username, password, from, message, email, port, smtpout, smtp)
+		# if username is not set, send open-relay
+		if username.to_s.empty?
+			Timeout.timeout(GlobalSettings.first.smtp_timeout){
+				Net::SMTP.start("#{smtpout}") do |smtp|
+					smtp.send_message message, "#{from}", email.chomp
+				end
+				@messages << "[+] Successfully sent to: #{email}"
+				return true
+			}			
+		end
+
 		begin
 			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				Net::SMTP.start("#{smtpout}", "#{port}", "#{smtp}","#{username}", "#{password}", :plain) do |smtp|
@@ -111,7 +122,19 @@ class EmailController < ApplicationController
 		end
 	end
 
-	def sendemail_encrypted(username, password, message, email, smtp_address, port)
+	def sendemail_encrypted(username, password, from, message, email, smtp_address, port)
+		# if username is not set, send open-relay
+
+		if username.to_s.empty?
+			Timeout.timeout(GlobalSettings.first.smtp_timeout){
+				Net::SMTP.start("#{smtp_address}") do |smtp|
+					smtp.send_message message, "#{from}", email.chomp
+				end
+				@messages << "[+] Successfully sent to: #{email}"
+				return true
+			}			
+		end
+
 		begin
 			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				smtp = Net::SMTP.new(smtp_address, port)
@@ -175,7 +198,7 @@ class EmailController < ApplicationController
 
 			# if encrypted email fails, sent cleartext email
 			if @ssl
-				if sendemail_encrypted(@campaign.email_settings.smtp_username, @campaign.email_settings.smtp_password, message, victim.email_address, @campaign.email_settings.smtp_server, @campaign.email_settings.smtp_port)
+				if sendemail_encrypted(@campaign.email_settings.smtp_username, @campaign.email_settings.smtp_password, @campaign.email_settings.from, message, victim.email_address, @campaign.email_settings.smtp_server, @campaign.email_settings.smtp_port)
 					@ssl = true
 					emails_sent += 1
 					next
