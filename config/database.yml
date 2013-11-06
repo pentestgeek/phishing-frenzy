@@ -27,7 +27,7 @@ test:
   reconnect: false
   database: phishing_frenzy_test
   pool: 5
-  username: phishing_frenzy
+  username: phishing_frenzy_test
   password: password
   host: localhost
 
@@ -37,6 +37,6 @@ production:
   reconnect: false
   database: phishing_frenzy_production
   pool: 5
-  username: phishing_frenzy
+  username: phishing_frenzy_production
   password: password
   host: localhost

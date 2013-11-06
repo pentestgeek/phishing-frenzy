@@ -49,6 +49,10 @@ Install RVM and Ruby
 
 	curl -L https://get.rvm.io | bash -s stable --ruby
 
+Pay attention to the install notes here, you may be required to run a command similar to the following in order to get rvm working properly.  You may also be asked to logout / login or open a new shell before rvm is functioning properly.
+
+	$source /usr/local/rvm/scripts/rvm
+
 Install Ruby on Rails. We can use rvmsudo with rvm to get the job done.
 
 	$rvmsudo rvm all do gem install rails
@@ -96,7 +100,11 @@ Create Rails Database for Phishing Frenzy:
 
 ### Ruby on Rails Configuration
 
-Make sure app/config/database.yaml file is properly configured or the rake tasks will fail. The database.yaml file will tell your rails application how to properly authenticate to database server and access the database. If either of the rake tasks fail, it will render Phishing Frenzy worthless, so ensure the rake tasks are completed successfully before continuing on.
+Make sure app/config/database.yml file is properly configured or the rake tasks will fail. The database.yml file will tell your rails application how to properly authenticate to database server and access the database. If either of the rake tasks fail, it will render Phishing Frenzy worthless, so ensure the rake tasks are completed successfully before continuing on.
+
+Ensure that you are in the root of the rails application before running any rake commands.  rake commands will most certainly fail to run because of the required approot/Rakefile required.
+
+Before you chmod these files, you may be required to create the log directory or even the development.log file if the rails application has never been started.
 
 	$sudo chmod 0666 /var/www/phishing-frenzy/log/development.log
 	$sudo chmod 0666 /var/www/phishing-frenzy/db/schema.rb
@@ -136,11 +144,18 @@ Phishing Frenzy is configured with a default login of:
 
 Now that we have our rails application up and running in development mode, we can switch over to performance mode to increase performance among other things.
 
+You may be required to create the production.log file and chmod it so the rails application can be started. You'll usually receive some message in the terminal that states this needs to be done.
+
+	$sudo chmod 0666 /var/www/phishing-frenzy/log/production.log
+
 Using our rails helper 'rake' we can precompile all of our assets which is required to enable production mode.
 
 	#rake assets:precompile
 
 Now we must migrate and seed the data for our production database.  If you have not created a seperate production account within mysql you need to do that now.
+
+	mysql> create database phishing_frenzy_production;
+	mysql> grant all privileges on phishing_frenzy_production.* to 'phishing_frenzy_production'@'localhost' identified by 'password';
 
 	#rake db:seed RAILS_ENV=production --trace
 
