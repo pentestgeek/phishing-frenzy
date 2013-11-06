@@ -26,6 +26,10 @@ Configure Apache to always run Phishing Frenzy by adding the following line to t
 
 	Include pf.conf
 
+Also you will need to add the following line which is used to manage the virtual hosts.
+
+	Include httpd.conf
+
 This addition to inclue pf.conf tells Apache to look at this file within the Apache directory (/etc/apache2/pf.conf) server up whatever website is configured. Now that Apache is configured to process the pf.conf configuration file everytime Apache reloads / restarts, create and add the following content to pf.conf. 'ServerName' should be changed to whichever domain name that Phishing Frenzy is running under. This tells Apache which website to server up when a request for phishing-frenzy.com is made.
 
 	<VirtualHost *:80>
@@ -87,10 +91,6 @@ Install all the gems for the Ruby on Rails application:
 	$cd /var/www/phishing-frenzy
 	$rvmsudo bundle install
 
-Install nodejs
-
-	#apt-get install nodejs
-
 ### MySQL Configuration
 
 Create Rails Database for Phishing Frenzy:
@@ -120,6 +120,8 @@ Poppulate database with content using Rails Seeds helper:
 Change ownership of apache config to allow Phishing Fenzy manage virtual hosts. If you currently have entries within the httpd.conf file, backup the file now because Phishing Frenzy will delete all entries in this file when managing virtual hosts for phishing campaigns.
 
 	#chown www-data:www-data /etc/apache2/httpd.conf
+
+If you are running Kali linux or a distro that does not have the httpd.conf file you will need to create one so Phishing Frenzy can manage the virtual hosts.
 
 ### Linux Configuration
 
@@ -156,6 +158,8 @@ Now we must migrate and seed the data for our production database.  If you have 
 
 	mysql> create database phishing_frenzy_production;
 	mysql> grant all privileges on phishing_frenzy_production.* to 'phishing_frenzy_production'@'localhost' identified by 'password';
+
+Rake will assist with creating the database schema and seeding the database
 
 	#rake db:seed RAILS_ENV=production --trace
 
@@ -202,4 +206,5 @@ Try the following:
 * http://nathanhoad.net/how-to-ruby-on-rails-ubuntu-apache-with-passenger
 * https://rvm.io/rvm/install
 * http://rubyonrails.org/download
+* http://httpd.apache.org/docs/2.2/vhosts/
 * http://www.pentestgeek.com/2013/11/04/introducing-phishing-frenzy/
