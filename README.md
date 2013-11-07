@@ -32,6 +32,11 @@ Also you will need to add the following line which is used to manage the virtual
 
 This addition to inclue pf.conf tells Apache to look at this file within the Apache directory (/etc/apache2/pf.conf) server up whatever website is configured. Now that Apache is configured to process the pf.conf configuration file everytime Apache reloads / restarts, create and add the following content to pf.conf. 'ServerName' should be changed to whichever domain name that Phishing Frenzy is running under. This tells Apache which website to server up when a request for phishing-frenzy.com is made.
 
+	<IfModule mod_passenger.c>
+		PassengerRoot %ROOT
+		PassengerRuby %RUBY
+	</IfModule>
+
 	<VirtualHost *:80>
 		ServerName phishing-frenzy.com
 		# !!! Be sure to point DocumentRoot to 'public'!
