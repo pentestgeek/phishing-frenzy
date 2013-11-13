@@ -1,5 +1,4 @@
 PhishingFramework::Application.routes.draw do
-
   # only allow emails to be send from POST request
   get '/email/send_email/:id' => 'campaigns#list'
   get '/email/launch_email/:id' => 'campaigns#list'
@@ -8,6 +7,7 @@ PhishingFramework::Application.routes.draw do
   get '/campaigns/destroy/:id' => 'campaigns#list'
   get '/templates/destroy/:id' => 'templates#list'
   get '/admin/destroy/:id' => 'admin#list'
+  get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
 
   get "reports/list"
   get "reports/show"

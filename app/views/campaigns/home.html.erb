@@ -68,8 +68,10 @@
 	<%= image_tag('green-light.png', :size => '11x11') %>
 	Virtual Hosts Configured:
 	<UL TYPE="square">
-	<% @vhosts.each do |vhost| %>
-		<LI><%= vhost %>
+	<% if @vhosts %>
+		<% @vhosts.each do |vhost| %>
+			<LI><%= vhost %>
+		<% end %>
 	<% end %>
 	</UL>
 </div>

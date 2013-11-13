@@ -5,6 +5,7 @@ class Campaign < ActiveRecord::Base
 	has_one :email_settings, dependent: :destroy
 	has_many :statistics
 	has_many :victims
+	has_many :smtp_communications
 
 	# allow mass asignment
 	attr_accessible :name, :description, :active, :emails, :scope, :template_id

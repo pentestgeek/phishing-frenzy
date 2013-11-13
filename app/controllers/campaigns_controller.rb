@@ -160,4 +160,16 @@ class CampaignsController < ApplicationController
 		flash[:notice] = "Deleted #{victim.email_address}"
 		redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id)		
 	end
+
+	def smtp
+		@campaign = Campaign.find_by_id(params[:id])
+	end
+
+	def delete_smtp_entry
+		smtp = SmtpCommunication.find_by_id(params[:id])
+		campaign_id = smtp[:campaign_id]
+		SmtpCommunication.find_by_id(params[:id]).destroy
+		flash[:notice] = "SMTP Entry Deleted"
+		redirect_to(:controller => 'campaigns', :action => 'smtp', :id => campaign_id)	
+	end
 end

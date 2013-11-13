@@ -95,10 +95,11 @@ class EmailController < ApplicationController
 
 	def sendemail(username, password, from, message, email, port, smtpout, smtp)
 		# if username is not set, send open-relay
-		if username.to_s.empty?
+		if username.to_s == ""
 			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				Net::SMTP.start("#{smtpout}") do |smtp|
-					smtp.send_message message, "#{from}", email.chomp
+					response = smtp.send_message message, "#{from}", email.chomp
+					log_smtp_communication(response, email, from)
 				end
 				@messages << "[+] Successfully sent to: #{email}"
 				return true
@@ -108,7 +109,8 @@ class EmailController < ApplicationController
 		begin
 			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				Net::SMTP.start("#{smtpout}", "#{port}", "#{smtp}","#{username}", "#{password}", :plain) do |smtp|
-					smtp.send_message message, "#{from}", email.chomp
+					response = smtp.send_message message, "#{from}", email.chomp
+					log_smtp_communication(response, email, from)
 				end
 				@messages << "[+] Successfully sent to: #{email}"
 				return true
@@ -124,11 +126,13 @@ class EmailController < ApplicationController
 
 	def sendemail_encrypted(username, password, from, message, email, smtp_address, port)
 		# if username is not set, send open-relay
-
-		if username.to_s.empty?
+		if username.to_s == ""
 			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				Net::SMTP.start("#{smtp_address}") do |smtp|
-					smtp.send_message message, "#{from}", email.chomp
+					response = smtp.send_message message, "#{from}", email.chomp
+
+					# log smtp communications
+					log_smtp_communication(response, email, from)
 				end
 				@messages << "[+] Successfully sent to: #{email}"
 				return true
@@ -139,9 +143,12 @@ class EmailController < ApplicationController
 			Timeout.timeout(GlobalSettings.first.smtp_timeout){
 				smtp = Net::SMTP.new(smtp_address, port)
 				smtp.enable_starttls
+
 				smtp.start(smtp, username, password, :login) do
-					smtp.send_message(message, username, email)
+					response = smtp.send_message(message, username, email)
+					log_smtp_communication(response, email, from)
 				end
+
 				@messages << "[+] Successfully sent to: #{email}"
 				return true
 			}
@@ -217,5 +224,17 @@ class EmailController < ApplicationController
 			end
 		end
 		return emails_sent
+	end
+
+	def log_smtp_communication(response, to, from)
+		# log smtp communication
+		smtp = SmtpCommunication.new
+		smtp.to = to
+		smtp.from = from
+		smtp.status = response.status
+		smtp.string = response.string
+
+		# commit changes
+		@campaign.smtp_communications << smtp
 	end
 end

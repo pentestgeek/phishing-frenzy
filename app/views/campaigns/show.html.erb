@@ -3,7 +3,7 @@
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
 <div class="campaign show">
-	<h2>Show Campaign</h2>
+	<h2>Campaign Details</h2>
 
 	<table summary="Campaign detail view">
 		<tr>
@@ -29,18 +29,13 @@
 			<th>Active</th>
 			<td><%= @campaign.active %></td>
 		</tr>
-		<tr>
-			<th>Emails</th>
-			<td><%= @campaign.emails %></td>
-		</tr>
-		<tr>
-			<th>Created</th>
-			<td><%= @campaign.created_at %></td>
-		</tr>
-		<tr>
-			<th>Updated</th>
-			<td><%= @campaign.updated_at %></td>
-		</tr>
 	</table>
+	
+	<h3>Actions</h3>
+	<ul>
+		<li><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
+		<li><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
+		<li><%= link_to('Delete Campaign', {:action => 'delete', :id => params[:id]}) %></li>
+	</ul>
 	
 </div>
