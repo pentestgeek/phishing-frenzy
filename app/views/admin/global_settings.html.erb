@@ -16,6 +16,11 @@
 			<td><%= f.text_field(:command_apache_restart) %></td>
 		</tr>
 		<tr>
+			<th>Apache Status Command</th>
+			<td><span class="ui-icon ui-icon-help" title='Command used on the Operating System to status Apache. This is required for monitoring the web server.'></span></td>
+			<td><%= f.text_field(:command_apache_status) %></td>
+		</tr>
+		<tr>
 			<th>Apache httpd.conf Path</th>
 			<td><span class="ui-icon ui-icon-help" title='Path or location of where the Apache httpd.conf configuration file is located. Default location on most debian systems is /etc/apache/httpd.conf'></span></td>
 			<td><%= f.text_field(:path_apache_httpd) %></td>
