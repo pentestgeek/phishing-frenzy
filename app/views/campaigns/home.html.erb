@@ -24,7 +24,7 @@
 				<td><%= campaign.scope %></td>
 				<td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
 				<td>
-					<% if Victims.where("campaign_id = ?", campaign.id).size != 0 %>
+					<% if Victim.where("campaign_id = ?", campaign.id).size != 0 %>
 						<%= image_tag('green-light.png', :size => '11x11') %>
 					<% else %>
 						<%= image_tag('red-light.png', :size => '11x11') %>

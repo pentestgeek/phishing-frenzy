@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
 		@campaign_settings = CampaignSettings.find_by_id(params[:id])
 		@email_settings = EmailSettings.find_by_id(params[:id])
 		@template = Template.find_by_id(@campaign.template_id)
-		@victims = Victims.where(:campaign_id => params[:id])
+		@victims = Victim.where(:campaign_id => params[:id])
 
 		@apache_data = parse_apache_logs(@campaign_settings, @campaign)
 

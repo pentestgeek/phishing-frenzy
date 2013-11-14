@@ -128,7 +128,7 @@ class CampaignsController < ApplicationController
 	def options
 		@templates = Template.all
 		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
-		@victims = Victims.where("campaign_id = ?", params[:id])
+		@victims = Victim.where("campaign_id = ?", params[:id])
 		if @campaign.nil?
 			flash[:notice] = "Campaign Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')
@@ -136,7 +136,7 @@ class CampaignsController < ApplicationController
 	end
 
 	def victims
-		@victims = Victims.where("campaign_id = ?", params[:id])
+		@victims = Victim.where("campaign_id = ?", params[:id])
 		if @victims.empty?
 			flash[:notice] = "Campaign Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')
@@ -144,13 +144,13 @@ class CampaignsController < ApplicationController
 	end
 
 	def clear_victims
-		Victims.where("campaign_id = ?", params[:id]).delete_all
+		Victim.where("campaign_id = ?", params[:id]).delete_all
 		flash[:notice] = "Victims Cleared"
 		redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
 	end
 
 	def delete_victim
-		victim = Victims.find_by_id(params[:id])
+		victim = Victim.find_by_id(params[:id])
 		if victim.nil?
 			flash[:notice] = "Victim Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')

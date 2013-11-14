@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131114150136) do
+ActiveRecord::Schema.define(:version => 20131114175733) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20131114150136) do
     t.boolean  "email_sent",  :default => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+    t.string   "test_email"
   end
 
   add_index "campaigns", ["template_id"], :name => "index_campaigns_on_template_id"
