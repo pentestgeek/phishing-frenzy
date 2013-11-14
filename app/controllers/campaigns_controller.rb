@@ -16,7 +16,7 @@ class CampaignsController < ApplicationController
 		@campaigns = Campaign.active.page(params[:page]).per(8)
 
 		# determine if apache is running
-		apache_output = `service apache2 status`
+		apache_output = GlobalSettings.apache_status
 		if apache_output =~ /pid/
 			@apache = true
 		else
