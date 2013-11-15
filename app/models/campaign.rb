@@ -28,11 +28,11 @@ class Campaign < ActiveRecord::Base
 		:length => { :maximum => 4 }, :allow_nil => true
 
 
-  def test_victim
-    v = Victim.new
-    v.email_address = test_email
-    v
-  end
+	def test_victim
+		v = Victim.new
+		v.email_address = test_email
+		v
+	end
 
 	private
 
@@ -114,6 +114,6 @@ class Campaign < ActiveRecord::Base
 		VHOST
 
 		return vhost_text
-  end
+	end
 
 end

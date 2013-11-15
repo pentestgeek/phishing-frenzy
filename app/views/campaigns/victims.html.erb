@@ -8,16 +8,16 @@
 <% counter = 1 %>
 <% @victims.each do |victim| %>
 
-    <table id="victim-<%= victim.id %>">
-      <tr class="<%= cycle('odd', 'even') %>">
-        <td width="320">
-          <p><%= counter %>: <%= victim.email_address %></p>
-          <% counter += 1 %>
-        </td>
-        <td>
-          <%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
-        </td>
-      </tr>
-    </table>
+		<table id="victim-<%= victim.id %>">
+			<tr class="<%= cycle('odd', 'even') %>">
+				<td width="320">
+					<p><%= counter %>: <%= victim.email_address %></p>
+					<% counter += 1 %>
+				</td>
+				<td>
+					<%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
+				</td>
+			</tr>
+		</table>
 	
 <% end %>
