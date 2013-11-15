@@ -7,8 +7,8 @@ class EmailController < ApplicationController
 	end
 
 	def send_email
-    @campaign = Campaign.find_by_id(params[:id])
-    @mailer = CampaignMailer.new(@campaign)
+	@campaign = Campaign.find_by_id(params[:id])
+	@mailer = CampaignMailer.new(@campaign)
 
 		unless @mailer.valid?
 			flash[:notice] = "#{@mailer.messages.join(". ")}"
@@ -17,8 +17,8 @@ class EmailController < ApplicationController
 		end
 
 		if @mailer.test!
-      flash[:notice] = "#{@mailer.messages.join(". ")}"
-      redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+			flash[:notice] = "#{@mailer.messages.join(". ")}"
+			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
 		else
 			flash[:notice] = "Test email has failed"
 			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
@@ -27,17 +27,16 @@ class EmailController < ApplicationController
 	end
 
 	def launch_email
-    @campaign = Campaign.find_by_id(params[:id])
-    @mailer = CampaignMailer.new(@campaign)
-    unless @mailer.valid?
-      flash[:notice] = "#{@mailer.messages.join(". ")}"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
-			return false
-		end
-
+	@campaign = Campaign.find_by_id(params[:id])
+	@mailer = CampaignMailer.new(@campaign)
+	if @mailer.valid? and @mailer.victims_valid?
 		@mailer.launch!
-    @messages = @mailer.messages
+		@messages = @mailer.messages
 		flash[:notice] = "Campaign Launched"
 		render('send')
+	else
+		flash[:notice] = "#{@mailer.messages.join(". ")}"
+		redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
+		end
 	end
 end

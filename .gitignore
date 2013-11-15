@@ -1,7 +1,6 @@
 *.rbc
 *.sassc
 .sass-cache
-capybara-*.html
 .rspec
 .rvmrc
 /.bundle
@@ -14,8 +13,7 @@ capybara-*.html
 /spec/tmp/*
 **.orig
 rerun.txt
-pickle-email-*.html
 .project
 config/initializers/secret_token.rb
 .idea
-public/templates/intel/www/passwd.txt
+public/templates/*
