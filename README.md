@@ -30,7 +30,7 @@ Also you will need to add the following line which is used to manage the virtual
 
 	Include httpd.conf
 
-This addition to inclue pf.conf tells Apache to look at this file within the Apache directory (/etc/apache2/pf.conf) server up whatever website is configured. Now that Apache is configured to process the pf.conf configuration file everytime Apache reloads / restarts, create and add the following content to pf.conf. 'ServerName' should be changed to whichever domain name that Phishing Frenzy is running under. This tells Apache which website to server up when a request for phishing-frenzy.com is made.
+This addition to inclue pf.conf tells Apache to look at this file within the Apache directory (/etc/apache2/pf.conf) and serve up whatever website is configured. Now that Apache is configured to process the pf.conf configuration file everytime Apache reloads / restarts, create and add the following content to pf.conf. 'ServerName' should be changed to whichever domain name that Phishing Frenzy is running under. This tells Apache which website to server up when a request for phishing-frenzy.com is made.
 
 	<IfModule mod_passenger.c>
 		PassengerRoot %ROOT
