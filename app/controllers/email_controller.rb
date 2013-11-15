@@ -1,5 +1,4 @@
 class EmailController < ApplicationController
-	before_filter :confirm_logged_in
 
 	def index
 		send_email

@@ -157,6 +157,14 @@ A:hover
   background: #A41400;
   color: #FFFFFF;
 }
+.alert
+{
+  height: 1.25em;
+  padding: 0.5em;
+  text-align: center;
+  background: #ffff00;
+  color: #0000ff;
+}
 .form-buttons
 {
   text-align: center;

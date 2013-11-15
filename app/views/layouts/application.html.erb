@@ -10,14 +10,21 @@
 		<div id="header">
 				<h1><%=  image_tag('fish2.png', :size => '42x42') %> Phishing Frenzy <%=  image_tag('fish2.png', :size => '42x42') %></h1>
 			</div>
+            <% if admin_signed_in? %>
 			<div id="navigation">
-				<%= link_to("Home", {:controller => 'campaigns', :action => 'home'}) %> | <%= link_to("Campaigns", {:controller => 'campaigns'}) %> | <%= link_to("Templates", {:controller => 'templates'}) %> | <%= link_to("Reports", {:controller => 'reports', :action => 'list'}) %> | <%= link_to("About", {:controller => 'campaigns', :action => 'aboutus'}) %> | <%= link_to("Admin", {:controller => 'admin'}) %> | <%= link_to("Logout", :controller => 'access', :action => 'logout') %>
+				<%= link_to("Home", root_path) %> | <%= link_to("Campaigns", campaigns_path) %> | <%= link_to("Templates", templates_path) %> | <%= link_to("Reports", reports_path) %> | <%= link_to("About", aboutus_campaigns_path) %> | <%= link_to("Admin", access_path) %> | <%= link_to('Logout', destroy_admin_session_path, :method => :delete) %>
 			</div>
+            <% end %>
 			<div id="main" style="overflow:auto;">
 				<div id="content">
 				<% if !flash[:notice].blank? %>
 					<div class="notice">
 						<%= flash[:notice] %>
+					</div>
+				<% end %>
+				<% if !flash[:alert].blank? %>
+					<div class="alert">
+						<%= flash[:alert] %>
 					</div>
 				<% end %>
 				<%= yield %>

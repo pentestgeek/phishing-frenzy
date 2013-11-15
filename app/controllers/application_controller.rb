@@ -1,15 +1,11 @@
 class ApplicationController < ActionController::Base
 	protect_from_forgery
+  before_filter :authenticate_admin!
 
 	protected
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username) }
+  end
 
-	def confirm_logged_in
-		unless session[:user_id]
-			flash[:notice] = "Please log in."
-			redirect_to(:controller => 'access', :action => 'login')
-			return false
-		else
-			return true
-		end
-	end
+
 end

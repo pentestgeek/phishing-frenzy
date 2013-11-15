@@ -145,7 +145,7 @@ Edit /etc/sudoers to allow Phishing Frenzy to restart apache and manage the virt
 Phishing Frenzy is configured with a default login of:
 
 	username: admin
-	password: funtime
+	password: Funt1me!
 
 ### Production mode
 

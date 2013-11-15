@@ -1,5 +1,4 @@
 class AdminController < ApplicationController
-  	before_filter :confirm_logged_in
 
 	def index
 		list
@@ -7,7 +6,12 @@ class AdminController < ApplicationController
 	end
 
 	def list
-		@admin = Admin.sorted
+
+    if params[:approved] == "false"
+      @admins = Admin.sorted.find_all_by_approved(false)
+    else
+      @admins = Admin.sorted
+    end
 	end
 
 	def new
@@ -60,6 +64,20 @@ class AdminController < ApplicationController
 		else
 			render('global_settings')		
 		end
-	end
+  end
+
+  def approve
+    @admin = Admin.find(params[:id])
+    @admin.approved = true
+    @admin.save
+    redirect_to(:action => 'list')
+  end
+
+  def revoke
+    @admin = Admin.find(params[:id])
+    @admin.approved = false
+    @admin.save
+    redirect_to(:action => 'list')
+  end
 
 end
