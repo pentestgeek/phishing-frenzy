@@ -80,9 +80,8 @@ ActiveRecord::Schema.define(:version => 20131114175733) do
   create_table "global_settings", :force => true do |t|
     t.string   "command_apache_restart"
     t.string   "path_apache_httpd"
-    t.integer  "smtp_timeout",           :default => 5
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.string   "command_apache_status"
   end
 
