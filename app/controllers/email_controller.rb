@@ -10,7 +10,7 @@ class EmailController < ApplicationController
 	@campaign = Campaign.find_by_id(params[:id])
 	@mailer = CampaignMailer.new(@campaign)
 
-		unless @mailer.valid?
+		unless @mailer.valid? and not @mailer.test_victim_valid?
 			flash[:notice] = "#{@mailer.messages.join(". ")}"
 			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
 			return false
