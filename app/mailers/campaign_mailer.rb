@@ -17,6 +17,14 @@ class CampaignMailer
 		return true
 	end
 
+	def test_victim_valid?
+		# make sure we have test victim to send to
+		if @campaign.test_victim.email_address.empty?
+			@messages << "No Test Victim to Send To"
+			return false
+		end
+	end
+
 	def valid?
 		@messages = []
 
@@ -65,7 +73,6 @@ class CampaignMailer
 	end
 
 	def launch!
-
 		# if this is the first time launching, clear apache logs for fresh start
 		if @campaign.email_settings.emails_sent == 0
 			ReportsController.clear_apache_logs(@campaign)
@@ -148,80 +155,80 @@ class CampaignMailer
 	end
 
 	def sendemail(username, password, from, message, email, port, smtpout, smtp)
-		# if username is not set, send open-relay
-		if username.to_s == ""
-			Timeout.timeout(GlobalSettings.first.smtp_timeout) {
-				Net::SMTP.start("#{smtpout}") do |smtp|
-					response = smtp.send_message message, "#{from}", email.chomp
-					log_smtp_communication(response, email, from)
-				end
-				@messages << "[+] Successfully sent to: #{email}"
-				return true
-			}
-		end
+		response = nil
+		e = nil
+		array = []
+		array << smtpout << port << smtp << username << password << :plain
+		array = [smtpout] if username.to_s.empty?
 
 		begin
 			Timeout.timeout(GlobalSettings.first.smtp_timeout) {
-				Net::SMTP.start("#{smtpout}", "#{port}", "#{smtp}", "#{username}", "#{password}", :plain) do |smtp|
-					response = smtp.send_message message, "#{from}", email.chomp
-					log_smtp_communication(response, email, from)
+				Net::SMTP.start(*array) do |smtp|
+					response = smtp.send_message message, from, email.chomp
 				end
 				@messages << "[+] Successfully sent to: #{email}"
 				return true
 			}
+		rescue Timeout::Error => e
+			@messages << "[-] SMTP Timeout Sending to #{email} using #{smtp}:#{port}\n"
+			return false
+		rescue Net::SMTPAuthenticationError => e
+			@messages << "[-] Invalid Username and or Password"
+			return false
 		rescue => e
 			@messages << "[-] #{e} when sending to #{email} through #{smtp}:#{port}"
 			return false
-		rescue Timeout::Error
-			@messages << "[-] SMTP Timeout Sending to #{email} using #{smtp}:#{port}\n"
-			return false
+		ensure
+			log_smtp_communication(response, email, from, e)
 		end
 	end
 
 	def sendemail_encrypted(username, password, from, message, email, smtp_address, port)
-		# if username is not set, send open-relay
-		if username.to_s == ""
-			Timeout.timeout(GlobalSettings.first.smtp_timeout) {
-				Net::SMTP.start("#{smtp_address}") do |smtp|
-					response = smtp.send_message message, "#{from}", email.chomp
-
-					# log smtp communications
-					log_smtp_communication(response, email, from)
-				end
-				@messages << "[+] Successfully sent to: #{email}"
-				return true
-			}
-		end
+		response = nil
+		e = nil
 
 		begin
 			Timeout.timeout(GlobalSettings.first.smtp_timeout) {
 				smtp = Net::SMTP.new(smtp_address, port)
 				smtp.enable_starttls
 
-				smtp.start(smtp, username, password, :login) do
-					response = smtp.send_message(message, username, email)
-					log_smtp_communication(response, email, from)
-				end
+				array = []
+				array << smtp << username << password
+				array = [smtp_address] if username.to_s.empty?
 
+				smtp.start(*array, :login) do
+					response = smtp.send_message(message, username, email)
+				end
 				@messages << "[+] Successfully sent to: #{email}"
 				return true
 			}
+		rescue Timeout::Error => e
+			@messages << "[-] SMTP Timeout Sending to #{email} using #{smtp_address}:#{port} with SSL\n"
+			return false
+		rescue Net::SMTPAuthenticationError => e
+			@messages << "[-] Invalid Username and or Password"
+			return false
 		rescue => e
 			@messages << "[-] #{e} when sending to #{email} using SSL through #{smtp_address}:#{port}"
 			return false
-		rescue Timeout::Error
-			@messages << "[-] SMTP Timeout Sending to #{email} using #{smtp_address}:#{port} with SSL\n"
-			return false
+		ensure
+			log_smtp_communication(response, email, from, e)
 		end
 	end
 
-	def log_smtp_communication(response, to, from)
+	def log_smtp_communication(response, to, from, error=nil)
 		# log smtp communication
 		smtp = SmtpCommunication.new
 		smtp.to = to
 		smtp.from = from
-		smtp.status = response.status
-		smtp.string = response.string
+
+		if response
+			smtp.status = response.status
+			smtp.string = response.string
+		else
+			smtp.status = ""
+			smtp.string = error.message if error
+		end
 
 		# commit changes
 		@campaign.smtp_communications << smtp
