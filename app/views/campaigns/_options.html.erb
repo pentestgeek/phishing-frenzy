@@ -52,11 +52,16 @@
 			<td><%= f.check_box(:active) %></td>
 		</tr>
 		<tr>
+			<th>Test Victim</th>
+			<td><span class="ui-icon ui-icon-help" title="This is the only email that will be used when you click 'Test Email'."></span></td>
+			<td><%= f.text_field(:test_email) %></td>
+		</tr>
+		<tr>
 			<th>
-				<% if Victims.where("campaign_id = #{@campaign.id}").size != 0 %>
-				Victims (<%= link_to(Victims.where("campaign_id = #{@campaign.id}").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>)
+				<% if Victim.where("campaign_id = #{@campaign.id}").size != 0 %>
+				Victims (<%= link_to(Victim.where("campaign_id = #{@campaign.id}").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>)
 				<% else %>
-				Victims (<%= Victims.where("campaign_id = #{@campaign.id}").size %>)        
+				Victims (<%= Victim.where("campaign_id = #{@campaign.id}").size %>)
 				<% end %>
 			</th>
 			<td><span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span></td>

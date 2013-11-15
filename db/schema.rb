@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131026191507) do
+ActiveRecord::Schema.define(:version => 20131114175733) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20131026191507) do
     t.boolean  "email_sent",  :default => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+    t.string   "test_email"
   end
 
   add_index "campaigns", ["template_id"], :name => "index_campaigns_on_template_id"
@@ -79,9 +80,23 @@ ActiveRecord::Schema.define(:version => 20131026191507) do
   create_table "global_settings", :force => true do |t|
     t.string   "command_apache_restart"
     t.string   "path_apache_httpd"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.integer  "smtp_timeout",           :default => 5
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.string   "command_apache_status"
   end
+
+  create_table "smtp_communications", :force => true do |t|
+    t.string   "to"
+    t.string   "from"
+    t.string   "status"
+    t.string   "string"
+    t.integer  "campaign_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "smtp_communications", ["campaign_id"], :name => "index_smtp_communications_on_campaign_id"
 
   create_table "statistics", :force => true do |t|
     t.integer  "campaign_id"

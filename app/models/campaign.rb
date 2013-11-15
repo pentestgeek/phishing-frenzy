@@ -8,7 +8,7 @@ class Campaign < ActiveRecord::Base
 	has_many :smtp_communications
 
 	# allow mass asignment
-	attr_accessible :name, :description, :active, :emails, :scope, :template_id
+	attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email
 
 	# named scopes
 	scope :active, where(:active => true)
@@ -27,6 +27,13 @@ class Campaign < ActiveRecord::Base
 	validates :scope, :numericality => { :greater_than_or_equal_to => 0 },
 		:length => { :maximum => 4 }, :allow_nil => true
 
+
+  def test_victim
+    v = Victim.new
+    v.email_address = test_email
+    v
+  end
+
 	private
 
 	def parse_email_addresses
@@ -35,7 +42,7 @@ class Campaign < ActiveRecord::Base
 			if self.emails.include? ","
 				victims = self.emails.split(",")
 				victims.each do |v|
-					victim = Victims.new
+					victim = Victim.new
 					victim.campaign_id = self.id
 					victim.email_address = v.strip
 					victim.save
@@ -43,7 +50,7 @@ class Campaign < ActiveRecord::Base
 			else
 				victims = self.emails.split("\r\n")
 				victims.each do |v|
-					victim = Victims.new
+					victim = Victim.new
 					victim.campaign_id = self.id
 					victim.email_address = v
 					victim.save
@@ -107,5 +114,6 @@ class Campaign < ActiveRecord::Base
 		VHOST
 
 		return vhost_text
-	end
+  end
+
 end

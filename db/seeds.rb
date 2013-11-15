@@ -13,5 +13,6 @@ Template.create([
 # Create Default Global Settings
 GlobalSettings.create({
 	command_apache_restart: 'sudo /etc/init.d/apache2 reload',
+	command_apache_status: '/etc/init.d/apache2 status',
 	path_apache_httpd: '/etc/apache2/httpd.conf'
 })
