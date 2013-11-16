@@ -4,8 +4,7 @@
     <h2>Your Registration</h2>
     <%= link_to('Edit registration', edit_admin_registration_path(current_admin)) %>
 	<h2>Users</h2>
-	
-	<%= link_to("Add New Admin", {:action => 'new', :class => 'action new'}) %> |
+
     <% if params[:approved] == "false" %>
         <%= link_to "All Admins", :action => "list" %>
     <% else %>
