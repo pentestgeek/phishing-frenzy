@@ -28,11 +28,11 @@ class Campaign < ActiveRecord::Base
 		:length => { :maximum => 4 }, :allow_nil => true
 
 
-  def test_victim
-    v = Victim.new
-    v.email_address = test_email
-    v
-  end
+	def test_victim
+		v = Victim.new
+		v.email_address = test_email
+		v
+	end
 
 	private
 
@@ -70,7 +70,7 @@ class Campaign < ActiveRecord::Base
 		if self.changed?
 			httpd = GlobalSettings.first.path_apache_httpd
 			template = Template.find_by_id(self.template_id)
-			
+
 			# gather active campaigns
 			active_campaigns = Campaign.active
 
@@ -87,7 +87,7 @@ class Campaign < ActiveRecord::Base
 					else
 						f.write(vhost_text(campaign.id, campaign.campaign_settings.fqdn, template.location))
 					end
-				end        
+				end
 			end
 
 			# reload apache
@@ -114,6 +114,6 @@ class Campaign < ActiveRecord::Base
 		VHOST
 
 		return vhost_text
-  end
+	end
 
 end
