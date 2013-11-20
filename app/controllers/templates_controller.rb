@@ -1,5 +1,4 @@
 class TemplatesController < ApplicationController
-	before_filter :confirm_logged_in
 
 	def index
 		list
@@ -7,7 +6,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.order("id").page(params[:page]).per(8)
+		@templates = Template.order("id").page(params[:page] || 1).per(8)
 	end
 
 	def show

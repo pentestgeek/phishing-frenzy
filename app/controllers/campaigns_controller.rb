@@ -1,7 +1,5 @@
 class CampaignsController < ApplicationController
 	include ActionView::Helpers::JavaScriptHelper # to be able to use escape_javascript
-	before_filter :confirm_logged_in
-	
 	def index
 		list
 		render('list')

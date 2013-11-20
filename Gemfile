@@ -37,6 +37,9 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
+# TO use devise for authentication
+gem 'devise'
+
 # To use google charts
 gem 'googlecharts'
 

@@ -1,4 +1,6 @@
 PhishingFramework::Application.routes.draw do
+  devise_for :admins
+
   # only allow emails to be send from POST request
   get '/email/send_email/:id' => 'campaigns#list'
   get '/email/launch_email/:id' => 'campaigns#list'
@@ -6,16 +8,52 @@ PhishingFramework::Application.routes.draw do
   # only allow deletion from POST requests
   get '/campaigns/destroy/:id' => 'campaigns#list'
   get '/templates/destroy/:id' => 'templates#list'
-  get '/admin/destroy/:id' => 'admin#list'
   get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
 
   get "reports/list"
   get "reports/show"
   get "reports/delete"
 
+  resources :campaigns do
+    collection do
+      get 'home'
+      get 'list'
+      get 'aboutus'
+    end
+    member do
+      post 'update_settings'
+    end
+  end
+
+  resources :templates do
+    collection do
+      get 'list'
+    end
+  end
+
+  resources :reports do
+    collection do
+      get 'list'
+      get 'stats'
+    end
+  end
+
+  resources :admin do
+    collection do
+      get 'list'
+      get 'global_settings'
+      put 'update_global_settings'
+    end
+    member do
+      post 'approve'
+      post 'revoke'
+      delete 'destroy'
+    end
+  end
+
   root :to => 'campaigns#home'
 
-  match 'admin', :to => 'access#menu'
+  match 'access', :to => 'access#menu', as: 'access'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
