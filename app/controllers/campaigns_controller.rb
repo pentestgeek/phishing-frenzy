@@ -65,7 +65,7 @@ class CampaignsController < ApplicationController
 			@email_settings = EmailSettings.new(:campaign_id => @campaign.id)
 			if @campaign_settings.save and @email_settings.save
 				flash[:notice] = "Campaign Created"
-				redirect_to(:action => 'list')
+				redirect_to(:action => 'options', id: @campaign.id)
 			else
 				render('new')
 			end
