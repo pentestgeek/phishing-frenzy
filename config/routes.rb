@@ -6,8 +6,6 @@ PhishingFramework::Application.routes.draw do
   get '/email/launch_email/:id' => 'campaigns#list'
 
   # only allow deletion from POST requests
-  get '/campaigns/destroy/:id' => 'campaigns#list'
-  get '/templates/destroy/:id' => 'templates#list'
   get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
 
   get "reports/list"
@@ -19,6 +17,7 @@ PhishingFramework::Application.routes.draw do
       get 'home'
       get 'list'
       get 'aboutus'
+      delete 'destroy'
     end
     member do
       post 'update_settings'
@@ -28,6 +27,7 @@ PhishingFramework::Application.routes.draw do
   resources :templates do
     collection do
       get 'list'
+      delete 'destroy'
     end
   end
 

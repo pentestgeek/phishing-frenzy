@@ -26,7 +26,7 @@
 				<%= link_to("Show", {:action => 'show', :id => template.id}, :class => 'action show') %>
 				<%= link_to("Edit", {:action => 'edit', :id => template.id}, :class => 'action edit') %>
 				<%= link_to("Copy", {:action => 'copy', :id => template.id}, :class => 'action copy') %>
-				<%= link_to("Delete", {:action => 'delete', :id => template.id}, :class => 'action delete') %>
+				<%= link_to "Delete", template_path(template), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'action delete' %>
 				<%= link_to("Backup", {:action => 'backup', :id => template.id}, :class => 'action backup') %>
 			</td>
 

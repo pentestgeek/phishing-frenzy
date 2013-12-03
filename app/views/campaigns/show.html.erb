@@ -35,7 +35,7 @@
 	<ul>
 		<li><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
 		<li><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
-		<li><%= link_to('Delete Campaign', {:action => 'delete', :id => params[:id]}) %></li>
+		<li><%= link_to "Delete Campaign", campaign_path(@campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?' %></li>
 	</ul>
 	
 </div>

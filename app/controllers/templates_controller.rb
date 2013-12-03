@@ -111,7 +111,7 @@ class TemplatesController < ApplicationController
 
 		Template.find(params[:id]).destroy
 		flash[:notice] = "Template Destroyed"
-		redirect_to(:action => 'list')
+		redirect_to templates_path
 	end
 
 	def folder_exists?(location)

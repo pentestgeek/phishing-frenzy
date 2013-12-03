@@ -35,7 +35,7 @@
 			<td class="actions">
 				<%= link_to("Show", {:action => 'show', :id => campaign.id}, :class => 'action show') %>
 				<%= link_to("Options", {:action => 'options', :id => campaign.id}, :class => 'action delete') %>
-				<%= link_to("Delete", {:action => 'delete', :id => campaign.id}, :class => 'action delete') %> 
+				<%= link_to "Delete", campaign_path(campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'action delete' %>
 			</td>
 
 		</tr>

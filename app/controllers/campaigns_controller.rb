@@ -121,7 +121,7 @@ class CampaignsController < ApplicationController
 	def destroy
 		Campaign.find(params[:id]).destroy
 		flash[:notice] = "Campaign Destroyed"
-		redirect_to(:action => 'list')
+		redirect_to campaign_path
 	end
 
 	def options
