@@ -40,6 +40,11 @@ gem 'jquery-rails'
 # TO use devise for authentication
 gem 'devise'
 
+# For login tracking
+gem 'paper_trail', '>= 3.0.0.rc2'
+
+
+
 # To use google charts
 gem 'googlecharts'
 

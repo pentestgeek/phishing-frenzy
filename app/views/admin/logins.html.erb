@@ -1,0 +1,22 @@
+<% @page_title = "#{@admin.name} Login Archive" %>
+<%= link_to("<< Back to Admin Menu", access_path, :class => 'back-link') %>
+<div class="Admin list">
+  <h2><%=  @admin.name %> Logins</h2>
+
+  <div><%= pluralize(@logins.size, 'login') %> logged out of <%= @admin.sign_in_count %> logins total </div>
+  <table class="listing" summary="Campiagn list">
+    <tr class="header">
+      <th>Date</th>
+      <th>IP</th>
+    </tr>
+
+    <% @logins.each do |login| %>
+
+        <tr class="<%= cycle('odd', 'even') %>">
+          <td><%= login.current_sign_in_at %></td>
+          <td><%= login.current_sign_in_ip %></td>
+        </tr>
+    <% end %>
+  </table>
+
+</div>

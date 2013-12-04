@@ -12,7 +12,14 @@ class AdminController < ApplicationController
     else
       @admins = Admin.sorted
     end
-	end
+  end
+
+  def logins
+
+    @admin = Admin.find(params[:id])
+    @logins = @admin.versions.map{|version| version.reify}
+
+  end
 
 	def new
 		@admin = Admin.new
