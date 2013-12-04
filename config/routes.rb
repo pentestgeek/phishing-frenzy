@@ -45,6 +45,7 @@ PhishingFramework::Application.routes.draw do
       put 'update_global_settings'
     end
     member do
+      get 'logins'
       post 'approve'
       post 'revoke'
       delete 'destroy'

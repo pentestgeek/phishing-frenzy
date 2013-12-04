@@ -36,6 +36,9 @@
             <%= link_to "Delete", admin_path(admin), method: :delete,
                         confirm: 'Are you sure you want to permanently delete this admin?', class: 'action delete' %>
           </td>
+          <td>
+            <%=  link_to "Logins", logins_admin_path(admin) %>
+          </td>
         </tr>
     <% end %>
   </table>
