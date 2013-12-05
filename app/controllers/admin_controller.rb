@@ -6,20 +6,17 @@ class AdminController < ApplicationController
 	end
 
 	def list
+		if params[:approved] == "false"
+			@admins = Admin.sorted.find_all_by_approved(false)
+		else
+			@admins = Admin.sorted
+		end
+	end
 
-    if params[:approved] == "false"
-      @admins = Admin.sorted.find_all_by_approved(false)
-    else
-      @admins = Admin.sorted
-    end
-  end
-
-  def logins
-
-    @admin = Admin.find(params[:id])
-    @logins = @admin.versions.map{|version| version.reify}
-
-  end
+	def logins
+		@admin = Admin.find(params[:id])
+		@logins = @admin.versions.map{|version| version.reify}
+	end
 
 	def new
 		@admin = Admin.new
@@ -71,20 +68,20 @@ class AdminController < ApplicationController
 		else
 			render('global_settings')		
 		end
-  end
+	end
 
-  def approve
-    @admin = Admin.find(params[:id])
-    @admin.approved = true
-    @admin.save
-    redirect_to(:action => 'list')
-  end
+	def approve
+		@admin = Admin.find(params[:id])
+		@admin.approved = true
+		@admin.save
+		redirect_to(:action => 'list')
+	end
 
-  def revoke
-    @admin = Admin.find(params[:id])
-    @admin.approved = false
-    @admin.save
-    redirect_to(:action => 'list')
-  end
+	def revoke
+		@admin = Admin.find(params[:id])
+		@admin.approved = false
+		@admin.save
+		redirect_to(:action => 'list')
+	end
 
 end
