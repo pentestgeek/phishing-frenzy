@@ -4,7 +4,7 @@
 	<div class="accordion"> #accordion </div>
 </style>
 
-<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+<%= link_to("<< Back to List", list_campaigns_path, :class => 'back-link') %>
 
 <h2><%= @campaign.name %></h2>
 
