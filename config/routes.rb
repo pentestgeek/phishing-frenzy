@@ -27,6 +27,7 @@ PhishingFramework::Application.routes.draw do
 	resources :templates do
 		collection do
 			get 'list'
+			get 'restore'
 			delete 'destroy'
 		end
 	end

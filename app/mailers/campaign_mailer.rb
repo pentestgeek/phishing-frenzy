@@ -74,9 +74,9 @@ class CampaignMailer
 
 	def launch!
 		# if this is the first time launching, clear apache logs for fresh start
-		if @campaign.email_settings.emails_sent == 0
-			ReportsController.clear_apache_logs(@campaign)
-		end
+		#if @campaign.email_settings.emails_sent == 0
+		#	ReportsController.clear_apache_logs(@campaign)
+		#end
 
 		@victims.each do |victim|
 			message = read(victim)
