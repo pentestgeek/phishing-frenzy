@@ -23,6 +23,11 @@
 				$('#smtp_server_out').val('smtpout.secureserver.net');
 				$('#smtp_port').val('3535');
 				break;
+			case 'sendgrid':
+				$('#smtp_server').val('smtp.sendgrid.net');
+				$('#smtp_server_out').val('smtp.sendgrid.net');
+				$('#smtp_port').val('465');
+				break;
 			}
 		});
 	});
@@ -93,6 +98,7 @@
 					<option value="google">Gmail</option>
 					<option value="outlook">Outlook.com</option>
 					<option value="godaddy">GoDaddy</option>
+					<option value="sendgrid">Sendgrid</option>
 				</select>
 			</td>
 		</tr>
