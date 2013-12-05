@@ -14,7 +14,7 @@
 		<th>Action</th>
 	</tr>
 
-	<% @campaign.smtp_communications.each do |smtp_transaction| %>
+	<% @campaign.smtp_communications.order("created_at DESC").each do |smtp_transaction| %>
 	
 	<tr class="<%= cycle('odd', 'even') %>">
 		<td><%= smtp_transaction.created_at.to_formatted_s(:db) %></td>			
