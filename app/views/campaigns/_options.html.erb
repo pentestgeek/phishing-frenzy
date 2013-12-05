@@ -52,16 +52,16 @@
 			<td><%= f.check_box(:active) %></td>
 		</tr>
 		<tr>
-			<th>Test Victim</th>
+			<th>Test Target</th>
 			<td><span class="ui-icon ui-icon-help" title="This is the only email that will be used when you click 'Test Email'."></span></td>
 			<td><%= f.text_field(:test_email) %></td>
 		</tr>
 		<tr>
 			<th>
 				<% if Victim.where("campaign_id = #{@campaign.id}").size != 0 %>
-				Victims (<%= link_to(Victim.where("campaign_id = #{@campaign.id}").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>)
+				Targets (<%= link_to(Victim.where("campaign_id = #{@campaign.id}").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>)
 				<% else %>
-				Victims (<%= Victim.where("campaign_id = #{@campaign.id}").size %>)
+				Targets (<%= Victim.where("campaign_id = #{@campaign.id}").size %>)
 				<% end %>
 			</th>
 			<td><span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span></td>
@@ -144,14 +144,14 @@
 		</tr>
 		<tr>
 			<th>Phishing URL:</th>
-			<td><span class="ui-icon ui-icon-help" title='Phishing URL that you would like victims to click on. This URL is embeded within the email message before sending'></span></td>
+			<td><span class="ui-icon ui-icon-help" title='Phishing URL that you would like the target to click on. This URL is embeded within the email message before sending'></span></td>
 			<td><%= es.text_field(:phishing_url) %></td>
 		</tr>
 		<% end %>
 		<%= fields_for @campaign.campaign_settings do |cs| %>
 		<tr>
 			<th>FQDN</th>
-			<td><span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect victims to your phishing website.'></span></td>
+			<td><span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'></span></td>
 			<td><%= cs.text_field(:fqdn) %></td>
 		</tr>
 	</table>
@@ -160,7 +160,7 @@
 	<table summary="Campaign Settings">	
 		<tr>
 			<th>Track User Clicks?</th>
-			<td><span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each victim that visits the website can be properly identified'></span></td>
+			<td><span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span></td>
 			<td><%= cs.check_box(:track_uniq_visitors) %></td>
 		</tr>
 		<tr>
