@@ -1,8 +1,9 @@
 class CampaignMailer
 	attr_reader :messages, :emails_sent
 
-	def initialize(campaign)
+	def initialize(campaign, blast)
 		@campaign = campaign
+    @blast = blast
 		@victims = campaign ? @campaign.victims : []
 		@emails_sent = 0
 	end
@@ -70,6 +71,7 @@ class CampaignMailer
 	def test!
 		message = read(@campaign.test_victim)
 		deliver(@campaign.test_victim, message)
+    @blast.email_delivered!
 	end
 
 	def launch!
@@ -81,6 +83,7 @@ class CampaignMailer
 		@victims.each do |victim|
 			message = read(victim)
 			deliver(victim, message)
+      @blast.email_delivered!
 		end
 
 		previously_sent_emails = @campaign.email_settings.emails_sent

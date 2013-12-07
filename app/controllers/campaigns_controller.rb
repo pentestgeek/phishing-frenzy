@@ -48,6 +48,7 @@ class CampaignsController < ApplicationController
 
 	def show
 		@campaign = Campaign.find_by_id(params[:id])
+    @blasts = @campaign.blasts.order('created_at DESC').limit(10)
 		if @campaign.nil?
 			list
 			render('list')

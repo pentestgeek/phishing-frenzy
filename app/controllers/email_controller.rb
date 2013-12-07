@@ -1,41 +1,21 @@
 class EmailController < ApplicationController
+  TEST = false
+  ACTIVE = true
 
-	def index
-		send_email
-		render('send')
+  def index
+    send_email
+    render('send')
+  end
+
+  def send_email
+    MailWorker.perform_async(params[:id], TEST)
+    flash[:notice] = "Campaign test email sent"
+    redirect_to :back
+
 	end
-
-	def send_email
-	@campaign = Campaign.find_by_id(params[:id])
-	@mailer = CampaignMailer.new(@campaign)
-
-		unless @mailer.valid? and not @mailer.test_victim_valid?
-			flash[:notice] = "#{@mailer.messages.join(". ")}"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
-			return false
-		end
-
-		if @mailer.test!
-			flash[:notice] = "#{@mailer.messages.join(". ")}"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
-		else
-			flash[:notice] = "Test email has failed"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
-			return false		
-		end
-	end
-
 	def launch_email
-	@campaign = Campaign.find_by_id(params[:id])
-	@mailer = CampaignMailer.new(@campaign)
-	if @mailer.valid? and @mailer.victims_valid?
-		@mailer.launch!
-		@messages = @mailer.messages
-		flash[:notice] = "Campaign Launched"
-		render('send')
-	else
-		flash[:notice] = "#{@mailer.messages.join(". ")}"
-		redirect_to(:controller => 'campaigns', :action => 'options', :id => @campaign.id)
-		end
+    MailWorker.perform_async(params[:id], ACTIVE)
+    flash[:notice] = "Campaign blast launched"
+    redirect_to :back
 	end
 end

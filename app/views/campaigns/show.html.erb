@@ -3,39 +3,68 @@
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
 <div class="campaign show">
-	<h2>Campaign Details</h2>
+  <h2>Campaign Details</h2>
 
-	<table summary="Campaign detail view">
-		<tr>
-			<th><%= image_tag('fishing_pole.png', :size => '35x35') %></th>
-		</tr>
-		<tr>
-			<th>ID</th>
-			<td><%= @campaign.id %></td>
-		</tr>
-		<tr>
-			<th>Client</th>
-			<td><%= @campaign.name %></td>
-		</tr>
-		<tr>
-			<th>Description</th>
-			<td><%= @campaign.description %></td>
-		</tr>
-		<tr>
-			<th>Scope</th>
-			<td><%= @campaign.scope %></td>
-		</tr>
-		<tr>
-			<th>Active</th>
-			<td><%= @campaign.active %></td>
-		</tr>
-	</table>
-	
-	<h3>Actions</h3>
-	<ul>
-		<li><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
-		<li><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
-		<li><%= link_to "Delete Campaign", campaign_path(@campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?' %></li>
-	</ul>
-	
+  <table summary="Campaign detail view">
+    <tr>
+      <th><%= image_tag('fishing_pole.png', :size => '35x35') %></th>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <td><%= @campaign.id %></td>
+    </tr>
+    <tr>
+      <th>Client</th>
+      <td><%= @campaign.name %></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><%= @campaign.description %></td>
+    </tr>
+    <tr>
+      <th>Scope</th>
+      <td><%= @campaign.scope %></td>
+    </tr>
+    <tr>
+      <th>Active</th>
+      <td><%= @campaign.active %></td>
+    </tr>
+  </table>
+
+  <h3>Actions</h3>
+  <ul>
+    <li><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
+    <li><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
+    <li><%= link_to "Test", "/email/send_email/#{@campaign.id}", method: :post %></li>
+    <li><%= link_to "Launch", "/email/launch_email/#{@campaign.id}", method: :post, confirm: 'Are you sure you want launch this campaign?' %></li>
+    <li><%= link_to "Delete Campaign", campaign_path(@campaign), method: :delete, confirm: 'Are you sure you want to permanently delete this campaign?' %></li>
+  </ul>
+
+  <h3>Recent Blasts</h3>
+  <table summary="Recent email blasts">
+    <thead>
+    <tr>
+      <th>Started</th>
+      <th>Last Updated</th>
+      <th>Test</th>
+      <th>Targets</th>
+      <th>Emails Sent</th>
+      <th>Message</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @blasts.each do |blast| %>
+        <tr>
+          <td><%= blast.created_at %></td>
+          <td><%= blast.updated_at %></td>
+          <td><%= blast.test? %></td>
+          <td><%= blast.number_of_targets %></td>
+          <td><%= blast.emails_sent %></td>
+          <td><%= blast.message %></td>
+        </tr>
+
+    <% end %>
+    </tbody>
+  </table>
+
 </div>

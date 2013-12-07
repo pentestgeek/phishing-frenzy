@@ -56,6 +56,12 @@ PhishingFramework::Application.routes.draw do
 	root :to => 'campaigns#home'
 
 	match 'access', :to => 'access#menu', as: 'access'
+
+  require 'sidekiq/web'
+
+  authenticate :admin do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 	# The priority is based upon order of creation:
 	# first created -> highest priority.
 

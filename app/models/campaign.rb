@@ -6,6 +6,7 @@ class Campaign < ActiveRecord::Base
 	has_many :statistics
 	has_many :victims
 	has_many :smtp_communications
+  has_many :blasts
 
 	# allow mass asignment
 	attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email
