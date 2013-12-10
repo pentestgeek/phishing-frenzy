@@ -43,8 +43,6 @@ gem 'devise'
 # For login tracking
 gem 'paper_trail', '>= 3.0.0.rc2'
 
-
-
 # To use google charts
 gem 'googlecharts'
 
@@ -62,6 +60,7 @@ gem 'pry'
 
 # To assist with pagination
 gem 'kaminari'
+gem 'bootstrap-kaminari-views'
 
 # To determine binary files
 gem 'ptools'

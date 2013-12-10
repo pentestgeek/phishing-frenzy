@@ -2,13 +2,11 @@
 
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
-<div class="campaign show">
-	<h2>Campaign Details</h2>
+<h2>Campaign Details</h2>
 
-	<table summary="Campaign detail view">
-		<tr>
-			<th><%= image_tag('fishing_pole.png', :size => '35x35') %></th>
-		</tr>
+<div class="campaign show">
+	<table class="table">
+
 		<tr>
 			<th>ID</th>
 			<td><%= @campaign.id %></td>
@@ -30,8 +28,11 @@
 			<td><%= @campaign.active %></td>
 		</tr>
 	</table>
-	
+
+<div class="page-header">
 	<h3>Actions</h3>
+</div>
+
 	<ul>
 		<li><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
 		<li><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>

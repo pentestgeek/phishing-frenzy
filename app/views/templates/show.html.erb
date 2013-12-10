@@ -4,11 +4,9 @@
 
 <div class="template show">
 	<h2>Template Details</h2>
+	<%= image_tag('template.png', :size => '35x35') %>
 
-	<table summary="template detail view">
-		<tr>
-			<th><%= image_tag('template.png', :size => '35x35') %></th>
-		</tr>
+	<table class="table" summary="template detail view">
 		<tr>
 			<th>ID</th>
 			<td><%= @template.id %></td>

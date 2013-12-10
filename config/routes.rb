@@ -28,6 +28,7 @@ PhishingFramework::Application.routes.draw do
 		collection do
 			get 'list'
 			get 'restore'
+			get 'edit_email'
 			delete 'destroy'
 		end
 	end

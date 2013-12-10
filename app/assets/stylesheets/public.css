@@ -8,12 +8,6 @@ dark brown:   #332318
 light brown:  #4C2516
 black:            #000000
 */
-HTML
-{
-  height: 100%;
-  width: 100%;
-  background: #000000;
-}
 BODY
 {
   width: 100%;
@@ -21,26 +15,11 @@ BODY
   height: 100%;
   margin: 0;
   padding: 0;
-  font: 14px Verdana, Lucida, Arial, Helvetica, sans-serif;
   color: #000000;
 }
 P, TD, UL, OL, LI, DL, DT, DD
 {
   font-family: Verdana, Lucida, Arial, Helvetica, sans-serif;
-}
-IMG
-{
-  border: none;
-}
-TABLE
-{
-  border-collapse: collapse;
-}
-TABLE TR TH, TABLE TR TD
-{
-  vertical-align: top;
-  text-align: left;
-  padding: 3px;
 }
 A, A:visited
 {
@@ -87,19 +66,6 @@ A:hover
   min-width: 200px;
   float: left;
   padding: 10px;
-}
-#footer
-{
-  clear: both;
-  height: 30px;
-  text-align: right;
-  background: #A40303;
-  color: #000000;
-}
-#footer P
-{
-  margin: 0;
-  padding: 0.5em 1em;
 }
 /*Navigation*/
 #navigation UL
@@ -151,60 +117,23 @@ A:hover
 }
 .notice, .alert
 {
-  height: 1.25em;
-  padding: 0.5em;
   text-align: center;
   background: #A41400;
   color: #FFFFFF;
 }
 
-.form-buttons
-{
-  text-align: center;
-  margin: 1em 0;
-}
 .back-link
 {
   font-size: 0.8em;
   margin-bottom: 1em;
 }
-/*large action buttons*/
-.action
-{
-  float: center;
-  padding: 2px 5px;
-  margin: 0 0 1em 1em;
-  background: #FFFFFF;
-  color: #4C2516;
-  border: 1px solid #4C2516;
-  text-decoration: none;
-  font-size: 0.8em;
-  text-align: center;
-}
+
 .action:hover
 {
   background: #A41400;
   color: #FFFFFF;
 }
-/*
-a.action { float: right; padding: 2px 5px; margin: 0 0 1em 1em;
-background: #FFFFFF; color: #4C2516;  border: 1px solid #4C2516;
-text-decoration: none; font-size: 0.8em; text-align: center; }
-a.action:hover { background: #993120; color: #FFFFFF; }
 
-small action buttons*/
-.actions
-{
-  width: 200px;
-}
-.actions A.action
-{
-  float: left;
-  min-width: 3.5em;
-  padding: 1px 2px;
-  margin: 2px 5px;
-  font-size: 0.7em;
-}
 /*Errors*/
 .fieldWithErrors
 {
@@ -220,7 +149,7 @@ small action buttons*/
 {
   width: 400px;
   padding: 0;
-  margin: 0 auto 1.5em;
+  margin: 20px 0px;
   border: 1px solid #AA0000;
   background-color: #FFFFFF;
   font-size: 12px;
@@ -231,7 +160,6 @@ small action buttons*/
   font-size: 12px;
   padding: 5px 5px 5px 15px;
   margin: 0;
-  width: 380px;
   background-color: #AA0000;
   color: #FFFFFF;
 }
@@ -326,16 +254,41 @@ small action buttons*/
   font-weight: normal;
 }
 
-/*
-#accordion
-{
-        width: 510px;
-        background: #F7F7F7;
+.navbar .nav > li > a {
+  float: none;
+  padding: 15px 15px 15px;
+  text-decoration: none;
 }
-#accordion TABLE TD, TH
-{
-        width: 500px;
-        min-height: 650px;
-        background: #FFFFFF;
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -60px;
 }
-*/
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+  height: 30px;
+  padding-top: 5px;
+}
+#footer {
+  background-color: #ca0002;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+#footer {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+}
+
+input {
+    height: 28px !important;
+}

@@ -1,14 +1,20 @@
 <% @page_title = "Phishing Templates" %>
 
-<div class="template list">
+<div class='page-header'>
 	<h2>Templates</h2>
-	<%= paginate @templates %></br >
+</div>
+
+<div class="pagination">
+	<%= paginate @templates, :theme => 'twitter-bootstrap-3' %>
+</div>
+
+<div class="template list">
 
 	<%= link_to("Create", new_template_path) %> | 
 	<%= link_to("Restore", restore_templates_path) %>
 
 	<div ><%= pluralize(@templates.size, 'template') %> found</div>
-	<table class="listing" summary="Templates">
+	<table class="table table-striped" summary="Templates">
 		<tr class="header">
 			<th>&nbsp;</th>
 			<th>Name</th>
@@ -18,17 +24,17 @@
 
 		</tr>
 		<% @templates.each do |template| %>
-		<tr class="<%= cycle('odd', 'even') %>">
+		<tr>
 			<td><%= image_tag('template.png', :size => '35x35') %></td>      
 			<td><%= template.name %></td>
-			<td width="200"><%= template.description %></td>
-			<td width="200"><%= template.location %></td>
+			<td><%= template.description %></td>
+			<td><%= template.location %></td>
 			<td class="actions">
-				<%= link_to("Show", {:action => 'show', :id => template.id}, :class => 'action show') %>
-				<%= link_to("Edit", {:action => 'edit', :id => template.id}, :class => 'action edit') %>
-				<%= link_to("Copy", {:action => 'copy', :id => template.id}, :class => 'action copy') %>
-				<%= link_to "Delete", template_path(template), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'action delete' %>
-				<%= link_to("Backup", {:action => 'backup', :id => template.id}, :class => 'action backup') %>
+				<%= link_to("Show", {:action => 'show', :id => template.id}, class:'btn btn-mini') %>
+				<%= link_to("Edit", {:action => 'edit', :id => template.id}, class:'btn btn-mini') %>
+				<%= link_to("Copy", {:action => 'copy', :id => template.id}, class:'btn btn-mini') %>
+				<%= link_to "Delete", template_path(template), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class:'btn btn-mini' %>
+				<%= link_to("Backup", {:action => 'backup', :id => template.id}, class:'btn btn-mini') %>
 			</td>
 
 		</tr>

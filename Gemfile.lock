@@ -31,6 +31,9 @@ GEM
     arel (3.0.2)
     atomic (1.1.14)
     bcrypt-ruby (3.1.2)
+    bootstrap-kaminari-views (0.0.3)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
     builder (3.0.4)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -140,6 +143,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap-kaminari-views
   coffee-rails (~> 3.2.1)
   devise
   execjs

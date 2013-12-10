@@ -35,21 +35,16 @@
 
 <div id="accordion">
 	<h2>Campaign Settings</h2>
-	<table summary="Campaign Settings">
-		<tr>
-			<th>Name</th>
-			<td><span class="ui-icon ui-icon-help" title='Name your campaign'></span></td>
-			<td><%= f.text_field(:name) %></td>
-		</tr>
+	<table class='table' summary="Campaign Settings">
 		<tr>
 			<th>Description</th>
 			<td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
-			<td><%= f.text_field(:description) %></td>
+			<td><%= f.text_field(:description, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>Scope</th>
 			<td><span class="ui-icon ui-icon-help" title="How many email addresses are in scope?"></span></td>
-			<td><%= f.text_field(:scope, :size => "3") %></td>
+			<td><%= f.text_field(:scope, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>Active</th>
@@ -59,7 +54,7 @@
 		<tr>
 			<th>Test Target</th>
 			<td><span class="ui-icon ui-icon-help" title="This is the only email that will be used when you click 'Test Email'."></span></td>
-			<td><%= f.text_field(:test_email) %></td>
+			<td><%= f.text_field(:test_email, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>
@@ -71,29 +66,31 @@
 			</th>
 			<td><span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span></td>
 			<td>
-				<%= f.text_area(:emails, :size => "35x2", :value => '') %>
+				<%= f.text_area(:emails, :size => "35x2", :value => '', class: 'span9') %>
 			</td>
 		</tr>
 	</table>
 
 	<h2>Template Selection</h2>
-	<table summary="Campaign Settings">
+	<table class='table' summary="Campaign Settings">
 		<tr>
-			<th width="200">Phishing Scenario</th>
+			<th>Phishing Scenario</th>
 			<td><span class="ui-icon ui-icon-help" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span></td>
-			<td><%= f.select :template_id, options_for_select(@templates.map{|p| [p.name, p.id]}, @campaign.template_id) %></td>
+			<td>
+				<%= f.select(:template_id, options_for_select(@templates.map{|p| [p.name, p.id]}, @campaign.template_id), class: 'span9') %>
+			</td>
 		</tr>
 	</table>
 
 	<h2>SMTP Settings</h2>
 
-	<table summary="Campaign Settings">
+	<table class='table' summary="Campaign Settings">
 		<%= fields_for @campaign.email_settings do |es| %>
 		<tr>
 			<th>Pre-populate:</th>
 			<td><span class="ui-icon ui-icon-help" title='Pre-populate SMTP and Port settings for commonly used email providers'></span></td>
 			<td>
-				<select id="smtpPreFill">
+				<select id="smtpPreFill" class="span9">
 					<option>--Select--</option>
 					<option value="google">Gmail</option>
 					<option value="outlook">Outlook.com</option>
@@ -105,65 +102,65 @@
 		<tr>
 			<th>SMTP Server:</th>
 			<td><span class="ui-icon ui-icon-help" title='SMTP server used to received emails'></span></td>
-			<td><%= es.text_field(:smtp_server, :id => 'smtp_server') %></td>
+			<td><%= es.text_field(:smtp_server, :id => 'smtp_server', class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>SMTP Outbound Server:</th>
 			<td><span class="ui-icon ui-icon-help" title='SMTP server used to relay emails through'></span></td>
-			<td><%= es.text_field(:smtp_server_out, :id => 'smtp_server_out') %></td>
+			<td><%= es.text_field(:smtp_server_out, :id => 'smtp_server_out', class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>SMTP Username:</th>
 			<td><span class="ui-icon ui-icon-help" title='SMTP username to authenticate sending emails'></span></td>
-			<td><%= es.text_field(:smtp_username) %></td>
+			<td><%= es.text_field(:smtp_username, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>SMTP Password:</th>
 			<td><span class="ui-icon ui-icon-help" title='SMTP password to authenticate sending emails'></span></td>
-			<td><%= es.password_field(:smtp_password, :value => @campaign.email_settings.smtp_password) %></td>
+			<td><%= es.password_field(:smtp_password, :value => @campaign.email_settings.smtp_password, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>SMTP Port:</th>
 			<td><span class="ui-icon ui-icon-help" title='SMTP port used to relay emails through'></span></td>
-			<td><%= es.text_field(:smtp_port, :id => 'smtp_port') %></td>
+			<td><%= es.text_field(:smtp_port, :id => 'smtp_port', class: 'span9') %></td>
 		</tr>
 		<% end %>
 	</table>
 
 	<h2>Email Settings</h2>
-	<table summary="Campaign Settings">
+	<table class='table' summary="Campaign Settings">
 		<%= fields_for @campaign.email_settings do |es| %>
 		<tr>
 			<th>Subject:</th>
 			<td><span class="ui-icon ui-icon-help" title='Subject used for SMTP and email headers'></span></td>
-			<td><%= es.text_field(:subject) %></td>
+			<td><%= es.text_field(:subject, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>From:</th>
 			<td><span class="ui-icon ui-icon-help" title='From: used for email headers'></span></td>
-			<td><%= es.text_field(:from) %></td>
+			<td><%= es.text_field(:from, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>Display From:</th>
 			<td><span class="ui-icon ui-icon-help" title='What you want displayed for the from category within the email headers'></span></td>
-			<td><%= es.text_field(:display_from) %></td>
+			<td><%= es.text_field(:display_from, class: 'span9') %></td>
 		</tr>
 		<tr>
 			<th>Phishing URL:</th>
 			<td><span class="ui-icon ui-icon-help" title='Phishing URL that you would like the target to click on. This URL is embeded within the email message before sending'></span></td>
-			<td><%= es.text_field(:phishing_url) %></td>
+			<td><%= es.text_field(:phishing_url, class: 'span9') %></td>
 		</tr>
 		<% end %>
 		<%= fields_for @campaign.campaign_settings do |cs| %>
 		<tr>
 			<th>FQDN</th>
 			<td><span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'></span></td>
-			<td><%= cs.text_field(:fqdn) %></td>
+			<td><%= cs.text_field(:fqdn, class: 'span9') %></td>
 		</tr>
 	</table>
 
 	<h2>Phishing Options</h2>
-	<table summary="Campaign Settings">	
+	<table class='table' summary="Campaign Settings">	
 		<tr>
 			<th>Track User Clicks?</th>
 			<td><span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span></td>

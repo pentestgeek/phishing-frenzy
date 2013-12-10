@@ -1,12 +1,18 @@
+<%- model_class = Campaign -%>
+
 <% @page_title = "Phishing Campaigns" %>
 
-<div class="campaign list">
+<div class="page-header">
 	<h2>Campaigns</h2>
-	<%= paginate @campaigns %></br >
-	<%= link_to("Add New Campaign", {:action => 'new', :class => 'action new'}) %>
+</div>
 
-	<div ><%= pluralize(@campaigns.size, 'campaign') %> found</div>
-	<table class="listing" summary="Campiagn list">
+<li><%= paginate @campaigns, :theme => 'twitter-bootstrap-3' %></li>
+
+<%= link_to("New Campaign", new_campaign_path) %>
+
+<div class="list campaigns">
+	<div ><%= pluralize(Campaign.all.size, 'campaign') %> found</div>
+	<table class="table table-striped" summary="Campiagn list">
 		<tr class="header">
 			<th>&nbsp;</th>
 			<th>Client</th>
@@ -19,8 +25,8 @@
 
 		<% @campaigns.each do |campaign| %>
 		
-		<tr class="<%= cycle('odd', 'even') %>">
-			<td><%= image_tag('fishing_pole.png', :size => '35x35') %></td>      
+		<tr>
+			<td><%= image_tag('fishing_pole.png', :size => '28x28') %></td>      
 			<td><%= campaign.name %></td>
 			<td><%= campaign.description %></td>
 			<td><%= campaign.scope %></td>
@@ -33,9 +39,9 @@
 				<% end %>
 			</td>
 			<td class="actions">
-				<%= link_to("Show", {:action => 'show', :id => campaign.id}, :class => 'action show') %>
-				<%= link_to("Options", {:action => 'options', :id => campaign.id}, :class => 'action delete') %>
-				<%= link_to "Delete", campaign_path(campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'action delete' %>
+				<%= link_to("Show", campaign_path(campaign.id), :class => 'btn btn-mini') %>
+				<%= link_to("Options", {:action => 'options', :id => campaign.id}, :class => 'btn btn-mini') %>
+				<%= link_to "Delete", campaign_path(campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'btn btn-mini' %>
 			</td>
 
 		</tr>

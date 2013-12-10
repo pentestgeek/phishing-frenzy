@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= bootstrap.min
 //= require_tree .
 //= require jquery.ui.accordion
 //= require jquery.ui.tooltip

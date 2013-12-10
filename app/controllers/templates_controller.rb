@@ -265,12 +265,12 @@ class TemplatesController < ApplicationController
 		@template = Template.find_by_id(params[:id])
 		if @template.nil?
 			flash[:notice] = "Template not found"
-			redirect_to(:controlloer => 'templates', :action => 'list')
+			redirect_to(:back)
+		else
+			# text_box with email.txt displaying
+			email_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", "email.txt")
+			@email_content = File.read(email_location)
 		end
-
-		# text_box with email.txt displaying
-		email_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", "email.txt")
-		@email_content = File.read(email_location)
 	end
 
 	def edit_www
