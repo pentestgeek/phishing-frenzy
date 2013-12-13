@@ -18,9 +18,13 @@ class ApplicationController < ActionController::Base
   end
 
   def queue_status
-    q = Sidekiq::Stats.new.enqueued
-    if q > 0 and !@sidekiq
-      flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'email')} enqueued, but sidekiq is not running"
+    begin
+      q = Sidekiq::Stats.new.enqueued
+      if q > 0 and !@sidekiq
+        flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but sidekiq is not running"
+      end
+    rescue Redis::CannotConnectError => e
+      flash[:warning] = "Sidekiq cannot connect to Redis"
     end
   end
 
