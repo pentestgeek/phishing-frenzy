@@ -13,37 +13,6 @@ class CampaignsController < ApplicationController
 	def home
 		# grab only the active campaigns
 		@campaigns = Campaign.active.page(params[:page]).per(8)
-
-		# determine if apache is running
-		apache_output = GlobalSettings.apache_status
-		if apache_output =~ /pid/
-			@apache = true
-		else
-			@apache = false
-		end
-
-		# determine if any VHOST are configured
-		vhosts_output = `apache2ctl -S`
-		if vhosts_output.blank?
-			@vhosts = []
-		else 
-			@vhosts = vhosts_output.split("\n")[3..20]
-		end
-		# determine if metasploit is running
-		msf_output = `ps aux | grep msf`
-		if msf_output =~ /msfconsole/
-			@msf = true
-		else
-			@msf = false
-		end
-
-		# determine if BeeF is running
-		beef_output = `ps aux | grep beef`
-		if beef_output =~ /beef.py/
-			@beef = true
-		else
-			@beef = false
-		end
 	end
 
 	def show

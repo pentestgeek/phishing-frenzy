@@ -3,15 +3,13 @@
 
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
-<div class="template restore">
+<div class="page-header">
 	<h2>Restore Phishing Template</h2>
 </div>
 
 <%= form_tag({action: :upload}, multipart: true) do %>
-	<%= file_field_tag 'restore_template' %>
-
-	<div class="form-buttons">
-		<%= submit_tag("Restore Template") %>
-	</div>
+	<%= file_field_tag 'restore_template', class:'btn' %>
+	<p></p>
+	<%= submit_tag("Restore Template", class:'btn') %>
 <% end %>
 

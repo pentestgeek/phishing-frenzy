@@ -1,6 +1,10 @@
 <% @page_title = "Phishing Visitors" %>
 
-<h2>Visitors: <%= @campaign.name %></h2>
+<%= link_to("<< Back to Stats", {:action => 'stats', :id => params[:id]}, :class => 'back-link') %>
+
+<div class='page-header'>
+	<h2>Visitors: <%= @campaign.name %></h2>
+</div>
 
 <% counter = 1 %>
 <% @apache_data[:visitors].each do |visitor| %>

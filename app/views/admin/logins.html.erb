@@ -4,7 +4,7 @@
   <h2><%=  @admin.name %> Logins</h2>
 
   <div><%= pluralize(@logins.size, 'login') %> logged out of <%= @admin.sign_in_count %> logins total </div>
-  <table class="listing" summary="Campiagn list">
+  <table class="table table-striped" summary="Campiagn list">
     <tr class="header">
       <th>Date</th>
       <th>IP</th>
@@ -12,7 +12,7 @@
 
     <% @logins.each do |login| %>
 
-        <tr class="<%= cycle('odd', 'even') %>">
+        <tr>
           <td><%= login.current_sign_in_at %></td>
           <td><%= login.current_sign_in_ip %></td>
         </tr>

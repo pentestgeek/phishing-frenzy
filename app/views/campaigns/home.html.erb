@@ -1,10 +1,12 @@
 <% @page_title = "Home" %>
-<h2>Dashboard</h2>
+<div class="page-header">
+	<h2>Dashboard</h2>
+</div>
 <h3>Active Phishing Campaigns</h3>
 
 <div ><%= pluralize(@campaigns.size, 'campaign') %> active</div>
 	<% if @campaigns.size > 0 %>
-		<table class="listing" summary="Campiagn list">
+		<table class="table table-striped" summary="Campiagn list">
 			<tr class="header">
 				<th>&nbsp;</th>
 				<th>Client</th>
@@ -17,8 +19,8 @@
 
 			<% @campaigns.each do |campaign| %>
 			
-			<tr class="<%= cycle('odd', 'even') %>">
-				<td><%= image_tag('fishing_pole.png', :size => '35x35') %></td>      
+			<tr>
+				<td><%= image_tag('fishing_pole.png', :size => '28x28') %></td>      
 				<td><%= campaign.name %></td>
 				<td><%= campaign.description %></td>
 				<td><%= campaign.scope %></td>
@@ -31,47 +33,11 @@
 					<% end %>
 				</td>
 				<td class="actions">
-					<%= link_to("Options", {:action => 'options', :id => campaign.id}, :class => 'action delete') %>
+					<%= link_to("Options", {:action => 'options', :id => campaign.id}, class:'btn btn-mini') %>
 				</td>
 
 			</tr>
 			<% end %>
 		</table>
 	<% end %>
-
-	<h3>Status</h3>
-
-	<% if @apache %>
-		<%= image_tag('green-light.png', :size => '11x11') %>
-		Apache is running<br>
-	<% else %>
-		<%= image_tag('red-light.png', :size => '11x11') %>
-		Apache is not running<br>
-	<% end %>
-
-	<% if @beef %>
-		<%= image_tag('green-light.png', :size => '11x11') %>
-		BeeF is running<br>
-	<% else %>
-		<%= image_tag('red-light.png', :size => '11x11') %>
-		BeeF is not running<br>
-	<% end %>
-
-	<% if @msf %>
-		<%= image_tag('green-light.png', :size => '11x11') %>
-		Metasploit is running<br>
-	<% else %>
-		<%= image_tag('red-light.png', :size => '11x11') %>
-		Metasploit is not running<br>
-	<% end %>
-
-	<%= image_tag('green-light.png', :size => '11x11') %>
-	Virtual Hosts Configured:
-	<UL TYPE="square">
-	<% if @vhosts %>
-		<% @vhosts.each do |vhost| %>
-			<LI><%= vhost %>
-		<% end %>
-	<% end %>
-	</UL>
 </div>

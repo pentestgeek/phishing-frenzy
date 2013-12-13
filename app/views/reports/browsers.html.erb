@@ -1,11 +1,15 @@
 <% @page_title = "Browser Details" %>
 
-<h2>Browser Types: <%= @campaign.name %></h2>
+<%= link_to("<< Back to Stats", {:action => 'stats', :id => params[:id]}, :class => 'back-link') %>
+
+<div class='page-header'>
+	<h2>Browser Types: <%= @campaign.name %></h2>
+</div>
 
 <% counter = 1 %>
 <% @apache_data[:browsers].each do |browser| %>
-	<table>
-		<tr class="<%= cycle('odd', 'even') %>">
+	<table class='table table-striped'>
+		<tr>
 			<td width="800">
 				<p><%= simple_format(browser) %></p>
 				<% counter += 1 %>

@@ -1,12 +1,22 @@
 <% @page_title = "Admin Menu" %>
 
-<div class="menu">
-	
+<div class="page-header">
 	<h2>Admin Menu</h2>
-	<div class="identity">Logged in as: <%= session[:username] %></div>
-	<ul>
-		<li><%= link_to("Manage Admin Users", :controller => 'admin', :action => 'list') %></li>
-		<li><%= link_to("Manage Global Settings", :controller => 'admin', :action => 'global_settings') %></li>		
-		<li><%= link_to("Logout", :action => 'logout') %></li>
-	</ul> 
 </div>
+
+<div class='row'>
+	<div class='col-md-4 col-sm-4'>
+		<div class="menu">	
+			<ul class="list-group">
+				<li class="list-group-item"><%= link_to("Manage Admin Users", :controller => 'admin', :action => 'list') %></li>
+				<li class="list-group-item"><%= link_to("Manage Global Settings", :controller => 'admin', :action => 'global_settings') %></li>		
+				<li class="list-group-item"><%= link_to("Logout", :action => 'logout') %></li>
+			</ul> 
+		</div>
+	</div>
+</div>
+
+<div class='col-md-4 col-sm-4 center'>
+	<%=  image_tag('fish.jpg', :size => '300x300') %>
+</div>
+

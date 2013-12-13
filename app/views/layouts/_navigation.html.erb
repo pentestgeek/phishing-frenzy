@@ -1,0 +1,24 @@
+<div class="navbar navbar-fluid-top navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <%= link_to "Phishing Frenzy", home_campaigns_path, class: 'brand' %>
+      <div class="container-fluid">
+        <ul class="nav nav-collapse collapse">
+          <li><%= link_to "Campaigns", list_campaigns_path %></li>
+          <li><%= link_to "Templates", list_templates_path %></li>
+          <li><%= link_to "Reports", list_reports_path %></li>
+          <li><%= link_to "About", aboutus_campaigns_path %></li>
+          <li><%= link_to "Admin", access_path %></li>
+          <li><%= link_to "Logout", destroy_admin_session_path, :method => :delete %></li>
+        </ul>
+        <%=  render partial: 'layouts/system_status' %>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</div>

@@ -2,14 +2,15 @@
 
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
-<div class="campaign show">
+<div class="page-header">
 	<h2>New Phishing Campaign</h2>
-	<%= image_tag('fishing_pole.png', :size => '50x50') %>
-	<%= form_for(:campaign, :url => {:action => 'create'}) do |f| %>
-		<%= render(:partial => "form", :locals => {:f => f}) %>
-		
-		<div class="form-buttons">
-			<%= submit_tag("Create Campaign", :class => 'action') %>
-		</div>
-	<% end %>
 </div>
+
+<%= image_tag('fishing_pole.png', :size => '50x50') %>
+<%= form_for(:campaign, :url => {:action => 'create'}) do |f| %>
+	<%= render(:partial => "form", :locals => {:f => f}) %>
+	
+	<div>
+		<%= submit_tag("Create Campaign", :class => 'btn') %>
+	</div>
+<% end %>

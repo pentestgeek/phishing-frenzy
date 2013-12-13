@@ -65,9 +65,14 @@ gem 'pry'
 
 # To assist with pagination
 gem 'kaminari'
+gem 'bootstrap-kaminari-views'
 
 # To determine binary files
 gem 'ptools'
 
 # java runtime lib
 gem 'execjs'
+
+# bootstrap
+gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "twitter-bootstrap-rails"

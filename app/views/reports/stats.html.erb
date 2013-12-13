@@ -55,14 +55,17 @@
 	}
 </script>
 
-<h2>Report Details for <%= @campaign.name %></h2>
+<div class="page-header">
+	<h2>Report Details for <%= @campaign.name %></h2>
+</div>
+
 <table>
 	<tr>
 		<th width="200">
-			<h3>Email Sent (<%= @email_settings.emails_sent %>)</h3>
-			<h3>Clicks (<%= @apache_data[:visitors].length %>)</h3>
+			<p>Email Sent (<%= @email_settings.emails_sent %>)</p>
+			<p>Clicks (<%= @apache_data[:visitors].length %>)</p>
 			<div id="visitors">
-				<h3>Visitors: (<%= link_to(@apache_data[:visitors].length, {:action => 'visitors', :id => @campaign.id}, :target => "_blank") %>) </h3>
+				<p>Visitors: (<%= link_to(@apache_data[:visitors].length, {:action => 'visitors', :id => @campaign.id}) %>) </p>
 			</div>
 			<div id="visitors_popup" class="popup">
 				<% visitor_counter = 1 %>
@@ -71,10 +74,10 @@
 					<% visitor_counter += 1 %>
 				<% end %>
 			</div>
-			<h3>Logs: (<%= link_to(@apache_data[:logs].length, {:action => 'logs', :id => @campaign.id}, :target => "_blank") %>)</h3>
-			<h3>IP Addresses: (<%= link_to(@apache_data[:ip_addresses].length, {:action => 'ip_addresses', :id => @campaign.id}, :target => "_blank") %>)</h3>
+			<p>Logs: (<%= link_to(@apache_data[:logs].length, {:action => 'logs', :id => @campaign.id}) %>)</p>
+			<p>IP Addresses: (<%= link_to(@apache_data[:ip_addresses].length, {:action => 'ip_addresses', :id => @campaign.id}) %>)</p>
 			<div id="browsers">
-				<h3>Browsers (<%= link_to(@apache_data[:browsers].length, {:action => 'browsers', :id => @campaign.id}, :target => "_blank") %>)</h3>
+				<p>Browsers (<%= link_to(@apache_data[:browsers].length, {:action => 'browsers', :id => @campaign.id}, :target => "_blank") %>)</p>
 			</div>
 			<div id="browsers_popup" class="popup">
 				<% counter = 1 %>
@@ -90,9 +93,9 @@
 				<% end %>
 			</div>
 			<% if @passwd %>
-				<h3>Passwords (<%= link_to(@passwd.lines.count, {:action => 'passwords', :id => @campaign.id}, :target => "_blank") %>)</h3>
+				<p>Passwords (<%= link_to(@passwd.lines.count, {:action => 'passwords', :id => @campaign.id}) %>)</p>
 			<% end %>
-			<%= button_to("Clear Logs", {:controller => 'reports', :action => 'clear_logs', :id => @campaign.id}) %>
+			<%= button_to("Clear Logs", {:controller => 'reports', :action => 'clear_logs', :id => @campaign.id}, class:'btn btn-mini') %>
 		</th>
 		<td>
 			<div id="chart_div" class="style_image"></div>

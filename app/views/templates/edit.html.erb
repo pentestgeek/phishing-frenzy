@@ -2,21 +2,20 @@
 
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
-<div class="template update">
+<div class='page-header'>
 	<h2>Update Phishing Template</h2>
+</div>
+<div class="template update">
 	
 	<%= form_for(:template, :url => {:action => 'update', :id => @template.id}) do |f| %>
 		<%= render(:partial => "form", :locals => {:f => f}) %>
-		
-		<div class="form-buttons">
-			<%= submit_tag("Update Template") %>
-		</div>
+		<%= submit_tag("Update Template", class:'btn') %>
 	<% end %>
 
 	<h2>Phishing Website Files</h2>
 
 	<div class="buttons">
-		<%= link_to("New File", {:controller => 'templates', :action => 'new_www_file', :id => @template.id}, :class => 'action') %> 
+		<%= link_to("New File", {:controller => 'templates', :action => 'new_www_file', :id => @template.id}, class:'btn') %> 
 	</div>
 
 	<ul>

@@ -4,7 +4,7 @@
 
 <h3>SMTP Logs</h3>
 
-<table class="listing" summary="smtp logs">
+<table class="table table-striped" summary="smtp logs">
 	<tr class="header">
 		<th>Date</th>
 		<th>To</th>
@@ -22,7 +22,7 @@
 		<td><%= smtp_transaction.from %></td>
 		<td><%= smtp_transaction.status %></td>
 		<td><%= smtp_transaction.string %></td>
-		<td><%= link_to("Delete", {:action => 'delete_smtp_entry', :id => smtp_transaction.id}, :method => 'POST') %></td>
+		<td><%= link_to("Delete", {:action => 'delete_smtp_entry', :id => smtp_transaction.id}, class:'btn btn-mini btn-danger', :method => 'POST') %></td>
 	</tr>
 	
 	<% end %>

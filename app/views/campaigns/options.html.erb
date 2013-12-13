@@ -19,46 +19,28 @@
   <%= link_to("<< Back to Campaign", campaign_path(@campaign), :class => 'back-link') %>
 </div>
 
-<h2><%= @campaign.name %></h2>
+<div class="page-header">
+	<h1><%= @campaign.name %></h1>
+</div>
 
-<div class="campaign settings">
-  <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
 
-      <%= render(:partial => "options", :locals => {:f => f}) %>
+<div class="campaign settings">  
+	<%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
 
-      <table>
-        <tr>
-          <td>
-            <div class="form-buttons">
-              <%= submit_tag("Save Settings", :class => 'action') %>
-            </div>
-          </td>
+	<div class="col-md-9 col-sm-9">
+		<%= render(:partial => "options", :locals => {:f => f}) %>
 
-          <td>
-            <div class="form-buttons">
-              <%= link_to("Test Email", {:controller => 'email', :action => 'send_email', :id => @campaign.id}, :class => 'action', :method => :post) %>
-            </div>
-          </td>
 
-          <td>
-            <div class="form-buttons">
-              <%= link_to("Launch Email", {:controller => 'email', :action => 'launch_email', :id => @campaign.id}, :class => 'action', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
-            </div>
-          </td>
+					<%= submit_tag("Save Settings", class:'btn btn-primary') %>
 
-          <td>
-            <div class="form-buttons">
-              <%= link_to("Edit Email", {:controller => 'templates', :action => 'edit_email', :id => @campaign.template_id}, :class => 'action') %>
-            </div>
-          </td>
+					<%= link_to("Test Email", {:controller => 'email', :action => 'send_email', :id => @campaign.id}, class:'btn', :method => :post) %> 
 
-          <td>
-            <div class="form-buttons">
-              <%= link_to("Preview", {:controller => 'templates', :action => 'preview_email', :id => @campaign.id}, :class => 'action') %>
-            </div>
-          </td>
-        </tr>
-      </table>
+					<%= link_to("Launch Email", {:controller => 'email', :action => 'launch_email', :id => @campaign.id}, class:'btn', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %> 
 
-  <% end %>
+					<%= link_to("Edit Email", {:controller => 'templates', :action => 'edit_email', :id => @campaign.template_id}, class:'btn') %> 
+
+					<%= link_to("Preview", {:controller => 'templates', :action => 'preview_email', :id => @campaign.id}, class:'btn') %> 
+
+		<% end %>
+	</div>
 </div>

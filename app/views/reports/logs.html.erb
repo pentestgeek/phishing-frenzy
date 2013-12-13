@@ -1,8 +1,12 @@
 <% @page_title = "Log Details" %>
 
-<h2>Apache Logs: <%= @campaign.name %></h2>
+<%= link_to("<< Back to Stats", {:action => 'stats', :id => params[:id]}, :class => 'back-link') %>
 
-<%= button_to("Download Logs", {:controller => 'reports', :action => 'download_logs', :id => @campaign.id}) %>
+<div class='page-header'>
+	<h2>Apache Logs: <%= @campaign.name %></h2>
+</div>
+
+<%= button_to("Download Logs", {:controller => 'reports', :action => 'download_logs', :id => @campaign.id}, class:'btn') %>
 
 <% counter = 1 %>
 <% @apache_data[:logs].each do |log| %>

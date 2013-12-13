@@ -1,10 +1,15 @@
 <%= link_to("<< Back to Template", {:action => 'edit', :id => @template.id}, :class => 'back-link') %>
+
 <h2><%= @template.name %></h2>
 
-<%= form_for(:template, :url => {:action => 'update_email_template', :id => params[:id]}) do |f| %>
-	<%= text_area_tag("email_content", @email_content, :size => "110x40") %>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Save") %>
+<div class='row'>
+	<div class='col-md-12'>
+		<%= form_for(:template, :url => {:action => 'update_email_template', :id => params[:id]}) do |f| %>
+			<div class="form-buttons">
+				<%= submit_tag("Save", class: 'btn btn-primary pull-left') %>
+			</div>
+
+			<%= text_area_tag("email_content", @email_content, :rows => 35, class: 'span12') %>
+		<% end %>
 	</div>
-<% end %>
+</div>

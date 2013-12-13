@@ -9,7 +9,7 @@ class EmailController < ApplicationController
 
   def send_email
     MailWorker.perform_async(params[:id], TEST)
-    flash[:notice] = "Campaign test email sent"
+    flash[:notice] = "Campaign test email queued"
     redirect_to :back
 
 	end

@@ -12,9 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
 //= require jquery.ui.accordion
 //= require jquery.ui.tooltip
+//= require bootstrap
 
 $(function() {
 	$( document ).tooltip();
