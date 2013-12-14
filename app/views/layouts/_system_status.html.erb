@@ -21,11 +21,11 @@
             <% end %></li>
       <% end %>
       <% if @sidekiq %>
-          <li><%= link_to(sidekiq_web_path) do %>
+          <li><%= link_to(sidekiq_web_path, target: "_blank") do %>
                 <span class="label label-success">Sidekiq</span>
             <% end %></li>
       <% else %>
-          <li><%= link_to(sidekiq_web_path) do %>
+          <li><%= link_to(sidekiq_web_path, target: "_blank") do %>
                 <span class="label label-default">Sidekiq</span>
             <% end %></li>
       <% end %>
