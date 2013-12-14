@@ -57,6 +57,16 @@ PhishingFramework::Application.routes.draw do
 	root :to => 'campaigns#home'
 
 	match 'access', :to => 'access#menu', as: 'access'
+
+  require 'sidekiq/web'
+
+  authenticate :admin do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  require 'sidekiq/api'
+  match "queue-status" => proc { [200, {"Content-Type" => "text/plain"}, [Sidekiq::Queue.new.size < 100 ? "OK" : "UHOH" ]] }
+
 	# The priority is based upon order of creation:
 	# first created -> highest priority.
 

@@ -1,14 +1,28 @@
 <% @page_title = "Campaign Settings" %>
 
 <style>
-	<div class="accordion"> #accordion </div>
+    <div class
+
+    =
+    "accordion"
+    >
+    #accordion <
+
+    /
+    div>
 </style>
 
-<%= link_to("<< Back to List", list_campaigns_path, :class => 'back-link') %>
+<div>
+  <%= link_to("<< Back to List", list_campaigns_path, :class => 'back-link') %>
+</div>
+<div>
+  <%= link_to("<< Back to Campaign", campaign_path(@campaign), :class => 'back-link') %>
+</div>
 
 <div class="page-header">
 	<h1><%= @campaign.name %></h1>
 </div>
+
 
 <div class="campaign settings">  
 	<%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>

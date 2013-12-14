@@ -40,40 +40,4 @@
 			<% end %>
 		</table>
 	<% end %>
-
-	<h3>Status</h3>
-
-	<% if @apache %>
-		<%= image_tag('green-light.png', :size => '11x11') %>
-		Apache is running<br>
-	<% else %>
-		<%= image_tag('red-light.png', :size => '11x11') %>
-		Apache is not running<br>
-	<% end %>
-
-	<% if @beef %>
-		<%= image_tag('green-light.png', :size => '11x11') %>
-		BeeF is running<br>
-	<% else %>
-		<%= image_tag('red-light.png', :size => '11x11') %>
-		BeeF is not running<br>
-	<% end %>
-
-	<% if @msf %>
-		<%= image_tag('green-light.png', :size => '11x11') %>
-		Metasploit is running<br>
-	<% else %>
-		<%= image_tag('red-light.png', :size => '11x11') %>
-		Metasploit is not running<br>
-	<% end %>
-
-	<%= image_tag('green-light.png', :size => '11x11') %>
-	Virtual Hosts Configured:
-	<UL TYPE="square">
-	<% if @vhosts %>
-		<% @vhosts.each do |vhost| %>
-			<LI><%= vhost %>
-		<% end %>
-	<% end %>
-	</UL>
 </div>
