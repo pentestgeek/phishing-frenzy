@@ -34,12 +34,12 @@
 	<h3>Actions</h3>
 </div>
 
-	<ul>
-		<li><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
-		<li><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
-		<li><%= link_to "Test", "/email/send_email/#{@campaign.id}", method: :post %></li>
-    	<li><%= link_to "Launch", "/email/launch_email/#{@campaign.id}", method: :post, confirm: 'Are you sure you want launch this campaign?' %></li>
-		<li><%= link_to "Delete Campaign", campaign_path(@campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?' %></li>
+	<ul class="list-group">
+		<li class="list-group-item"><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
+		<li class="list-group-item"><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
+		<li class="list-group-item"><%= link_to "Test Emails for Campaign", "/email/send_email/#{@campaign.id}", method: :post %></li>
+    	<li class="list-group-item"><%= link_to "Launch Emails for Campaign", "/email/launch_email/#{@campaign.id}", method: :post, confirm: 'Are you sure you want launch this campaign?' %></li>
+		<li class="list-group-item"><%= link_to "Delete Campaign", campaign_path(@campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?' %></li>
 	</ul>
 
   <h3>Recent Blasts</h3>
