@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131207180630) do
+ActiveRecord::Schema.define(:version => 20131214025854) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -106,9 +106,11 @@ ActiveRecord::Schema.define(:version => 20131207180630) do
     t.string   "command_apache_restart"
     t.string   "path_apache_httpd"
     t.integer  "smtp_timeout",           :default => 5
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
     t.string   "command_apache_status"
+    t.string   "command_apache_vhosts",  :default => "apache2ctl -S"
+    t.boolean  "asynchronous",           :default => false
   end
 
   create_table "smtp_communications", :force => true do |t|

@@ -11,6 +11,15 @@
                 <span class="label label-default">Apache</span>
             <% end %></li>
       <% end %>
+      <% if @redis %>
+          <li><%= link_to("#") do %>
+                <span class="label label-success">Redis</span>
+            <% end %></li>
+      <% else %>
+          <li><%= link_to("#") do %>
+                <span class="label label-default">Redis</span>
+            <% end %></li>
+      <% end %>
       <% if @sidekiq %>
           <li><%= link_to(sidekiq_web_path) do %>
                 <span class="label label-success">Sidekiq</span>
@@ -20,7 +29,6 @@
                 <span class="label label-default">Sidekiq</span>
             <% end %></li>
       <% end %>
-
       <% if @beef %>
           <li><%= link_to("#") do %>
                 <span class="label label-success">BeeF</span>

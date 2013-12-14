@@ -128,6 +128,21 @@ Change ownership of apache config to allow Phishing Fenzy manage virtual hosts. 
 
 If you are running Kali linux or a distro that does not have the httpd.conf file you will need to create one so Phishing Frenzy can manage the virtual hosts.
 
+### Background Jobs
+
+Phishing Frenzy uses Sidekiq to send emails in the background. Sidekiq depends on Redis to manage the job queue. At this
+time, Phishing Frenzy does not use asynchronous processing by default so you do not need to install Redis and Sidekiq.
+The feature can be enabled from the Global Settings view in the Admin section.
+
+* [Install Redis on Ubuntu](https://www.digitalocean.com/community/questions/how-to-install-redis-on-ubuntu)
+* [Install Redis and Use Redis](https://www.digitalocean.com/community/articles/how-to-install-and-use-redis)
+
+In order to allow for Sidekiq process monitoring, you must start Sidekiq with a configuration that places the Sidekiq pid
+in /tmp/pids/sidekiq.pid
+
+    bundle exec sidekiq -C config/sidekiq.yml
+
+
 ### Linux Configuration
 
 Change ownership and permissions of the web application to the same account Apache is running as. In most cases this will be the 'www-data' account.

@@ -21,6 +21,11 @@
 			<td><%= f.text_field(:command_apache_status) %></td>
 		</tr>
 		<tr>
+			<th>Apache VHOST Command</th>
+			<td><span class="ui-icon ui-icon-help" title='Command used on the Operating System for listing all Virtual Hosts.'></span></td>
+			<td><%= f.text_field(:command_apache_vhosts) %></td>
+		</tr>
+		<tr>
 			<th>Apache httpd.conf Path</th>
 			<td><span class="ui-icon ui-icon-help" title='Path or location of where the Apache httpd.conf configuration file is located. Default location on most debian systems is /etc/apache/httpd.conf'></span></td>
 			<td><%= f.text_field(:path_apache_httpd) %></td>
@@ -29,6 +34,11 @@
 			<th>SMTP Timeout</th>
 			<td><span class="ui-icon ui-icon-help" title='Timeout in seconds to allow when sending phishing emails through the SMTP server'></span></td>
 			<td><%= f.text_field(:smtp_timeout) %></td>
+		</tr>
+		<tr>
+			<th>Background Email</th>
+			<td><span class="ui-icon ui-icon-help" title='Use Sidekiq to send emails in the background'></span></td>
+			<td><%= f.check_box(:asynchronous) %></td>
 		</tr>
 	</table>
 

@@ -8,12 +8,7 @@ class SystemMonitor
 
   # determine if any VHOST are configured
   def vhosts
-    vhosts_output = `apache2ctl -S`
-    if vhosts_output.blank?
-      []
-    else
-      vhosts_output.split("\n")[3..20]
-    end
+    GlobalSettings.apache_vhosts
   end
 
   # determine if metasploit is running
