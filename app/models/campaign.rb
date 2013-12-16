@@ -1,6 +1,6 @@
 class Campaign < ActiveRecord::Base
 	# relationships
-	has_one :template
+	belongs_to :template
 	has_one :campaign_settings, dependent: :destroy
 	has_one :email_settings, dependent: :destroy
 	has_many :statistics

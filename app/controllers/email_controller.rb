@@ -8,30 +8,36 @@ class EmailController < ApplicationController
   end
 
   def send_email
+    @campaign = Campaign.find(params[:id])
     if GlobalSettings.asynchronous?
       begin
-        MailWorker.perform_async(params[:id], TEST)
-        flash[:notice] = "Campaign test email queued"
+        PhishingFrenzyMailer.delay.intel(@campaign.id, @campaign.test_victim.email_address, TEST)
+        flash[:notice] = "Campaign test email queued for preview"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
       end
     else
-      MailWorker.new.perform(params[:id], TEST)
-      flash[:notice] = "Campaign test email sent"
+      PhishingFrenzyMailer.intel(@campaign.id, @campaign.test_victim.email_address, TEST).deliver
+      flash[:notice] = "Campaign test email available for preview"
     end
     redirect_to :back
   end
 
   def launch_email
+    @campaign = Campaign.find(params[:id])
     if GlobalSettings.asynchronous?
       begin
-        MailWorker.perform_async(params[:id], ACTIVE)
+        @campaign.victims.each do |target|
+          PhishingFrenzyMailer.delay.intel(@campaign.id, target, ACTIVE)
+        end
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
       end
     else
-      MailWorker.new.perform(params[:id], ACTIVE)
+      @campaign.victims.each do |target|
+        PhishingFrenzyMailer.intel(@campaign.id, target.email_address, ACTIVE).deliver
+      end
       flash[:notice] = "Campaign blast launched"
     end
     redirect_to :back

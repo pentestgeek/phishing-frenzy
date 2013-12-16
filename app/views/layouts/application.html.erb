@@ -46,7 +46,8 @@
 			<div class="row-fluid">
 				<div class="span2">
 					<div class="row-fluid">
-						<div class="span12 pagination-centered"><%=  image_tag('logo.png', :size => '150x150') %>
+						<div class="span12 pagination-centered">
+                          <%=  image_tag('logo.png', :size => '150x150') %>
 						</div>
 					</div>
 				</div><!--/span-->
@@ -55,7 +56,7 @@
 					<% flash.each do |key, value| %>
 						<%= content_tag(:div, value, class: "alert alert-#{key}") %>
 					<% end %>
-					
+
 					<%= yield %>
 				</div>
 			</div><!--/row-->

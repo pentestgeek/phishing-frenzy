@@ -6,7 +6,7 @@
     =
     "accordion"
     >
-    #accordion <
+    #accordion<
 
     /
     div>
@@ -20,27 +20,26 @@
 </div>
 
 <div class="page-header">
-	<h1><%= @campaign.name %></h1>
+  <h1><%= @campaign.name %></h1>
 </div>
 
 
-<div class="campaign settings">  
-	<%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
+<div class="campaign settings">
+  <div class="col-md-9 col-sm-9">
+    <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
 
-	<div class="col-md-9 col-sm-9">
-		<%= render(:partial => "options", :locals => {:f => f}) %>
+        <%= render(:partial => "options", :locals => {:f => f}) %>
 
+        <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
 
-					<%= submit_tag("Save Settings", class:'btn btn-primary') %>
+        <%= link_to("Test Email", {:controller => 'email', :action => 'send_email', :id => @campaign.id}, class: 'btn', :method => :post) %>
 
-					<%= link_to("Test Email", {:controller => 'email', :action => 'send_email', :id => @campaign.id}, class:'btn', :method => :post) %> 
+        <%= link_to("Launch Email", {:controller => 'email', :action => 'launch_email', :id => @campaign.id}, class: 'btn', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
 
-					<%= link_to("Launch Email", {:controller => 'email', :action => 'launch_email', :id => @campaign.id}, class:'btn', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %> 
+        <%= link_to("Edit Email", {:controller => 'templates', :action => 'edit_email', :id => @campaign.template_id}, class: 'btn') %>
 
-					<%= link_to("Edit Email", {:controller => 'templates', :action => 'edit_email', :id => @campaign.template_id}, class:'btn') %> 
+        <%= link_to("Preview", '/letter_opener', class: 'btn', target: "_blank") %>
 
-					<%= link_to("Preview", {:controller => 'templates', :action => 'preview_email', :id => @campaign.id}, class:'btn') %> 
-
-		<% end %>
-	</div>
+    <% end %>
+  </div>
 </div>

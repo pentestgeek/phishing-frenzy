@@ -47,6 +47,9 @@ gem 'paper_trail', '>= 3.0.0.rc2'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 
+# For email previewing
+gem 'letter_opener_web'
+
 
 # To use google charts
 gem 'googlecharts'
