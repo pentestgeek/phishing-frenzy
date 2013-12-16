@@ -6,7 +6,9 @@
 	<h2>Campaigns</h2>
 </div>
 
-<li><%= paginate @campaigns, :theme => 'twitter-bootstrap-3' %></li>
+<li>
+	<%= paginate @campaigns, :theme => 'twitter-bootstrap-3' %>
+</li>
 
 <%= link_to("New Campaign", new_campaign_path) %>
 
