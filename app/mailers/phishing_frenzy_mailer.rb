@@ -7,6 +7,9 @@ class PhishingFrenzyMailer < ActionMailer::Base
     track = @campaign.campaign_settings.track_uniq_visitors?
     phishing_url = @campaign.email_settings.phishing_url
     @target = target
+    if @campaign.template.location == 'intel'
+      attachments.inline['image.jpg'] = File.read("#{Rails.root}/app/assets/images/intel.jpg")
+    end
 
     if active
       @url = full_url(@target, phishing_url, track)
@@ -30,9 +33,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
       bait
     else
       @url = full_url(@target, phishing_url, track)
-      if @campaign.template.location == 'intel'
-        attachments.inline['image.jpg'] = File.read("#{Rails.root}/app/assets/images/intel.jpg")
-      end
       mail(
           to: @target,
           subject: @campaign.email_settings.subject,
