@@ -2,8 +2,9 @@ PhishingFramework::Application.routes.draw do
 	devise_for :admins
 
 	# only allow emails to be send from POST request
-	get '/email/send_email/:id' => 'campaigns#list'
-	get '/email/launch_email/:id' => 'campaigns#list'
+	post '/email/preview_email/:id' => 'email#preview', as: 'preview_email'
+	post '/email/test_email/:id' =>    'email#test', as: 'test_email'
+	post '/email/launch_email/:id' =>  'email#launch', as: 'launch'
 
 	# only allow deletion from POST requests
 	get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
@@ -21,7 +22,8 @@ PhishingFramework::Application.routes.draw do
 		end
 		member do
 			post 'update_settings'
-		end
+    end
+    resources :blasts, only: [:show], shallow: true
 	end
 
 	resources :templates do
