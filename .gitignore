@@ -17,4 +17,5 @@ rerun.txt
 config/initializers/secret_token.rb
 .idea
 public/templates/*
+public/uploads/**/*
 Gemfile.lock

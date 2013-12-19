@@ -36,6 +36,10 @@ GEM
       kaminari (>= 0.13)
       rails (>= 3.1)
     builder (3.0.4)
+    carrierwave (0.9.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     coderay (1.0.9)
@@ -91,6 +95,7 @@ GEM
     mime-types (1.25)
     multi_json (1.8.2)
     mysql2 (0.3.13)
+    nested_form (0.3.2)
     orm_adapter (0.4.0)
     paper_trail (3.0.0.rc2)
       activerecord (>= 3.0, < 5.0)
@@ -182,6 +187,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-kaminari-views
+  carrierwave
   coffee-rails (~> 3.2.1)
   devise
   execjs
@@ -193,6 +199,7 @@ DEPENDENCIES
   less-rails
   letter_opener_web
   mysql2
+  nested_form
   paper_trail (>= 3.0.0.rc2)
   pry
   ptools

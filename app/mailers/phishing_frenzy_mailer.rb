@@ -10,10 +10,11 @@ class PhishingFrenzyMailer < ActionMailer::Base
     track = @campaign.campaign_settings.track_uniq_visitors?
     phishing_url = @campaign.email_settings.phishing_url
     @target = target
-    phishing_attachment = "#{Rails.root}/app/assets/images/#{@campaign.template.location}.jpg"
     blast = @campaign.blasts.find(blast_id)
 
-    attachments.inline['image.jpg'] = File.read(phishing_attachment) if File.exists?(phishing_attachment)
+    @campaign.template.images.each do |image|
+      attachments.inline[image[:file]] = File.read(image.file.current_path)
+    end
 
     if method==ACTIVE
       @url = full_url(@target, phishing_url, track)
@@ -21,7 +22,8 @@ class PhishingFrenzyMailer < ActionMailer::Base
           to: @target,
           from: @campaign.email_settings.from,
           subject: @campaign.email_settings.subject,
-          template_name: @campaign.template.location,
+          template_path: @campaign.template.email_template_path,
+          template_name: @campaign.template.email_files.first[:file],
           delivery_method: :smtp
       )
       bait.delivery_method.settings.merge!(campaign_smtp_settings)
@@ -31,7 +33,8 @@ class PhishingFrenzyMailer < ActionMailer::Base
       bait = mail(
           to: @target,
           subject: @campaign.email_settings.subject,
-          template_name: @campaign.template.location,
+          template_path: @campaign.template.email_directory,
+          template_name: @campaign.template.email_files.first[:file],
           delivery_method: :letter_opener_web)
       cast(blast, bait)
     end
