@@ -33,7 +33,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
       bait = mail(
           to: @target,
           subject: @campaign.email_settings.subject,
-          template_path: @campaign.template.email_directory,
+          template_path: @campaign.template.email_template_path,
           template_name: @campaign.template.email_files.first[:file],
           delivery_method: :letter_opener_web)
       cast(blast, bait)
