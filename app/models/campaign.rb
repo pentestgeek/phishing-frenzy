@@ -31,6 +31,13 @@ class Campaign < ActiveRecord::Base
   validates :scope, :numericality => {:greater_than_or_equal_to => 0},
             :length => {:maximum => 4}, :allow_nil => true
 
+  def get_binding
+    @campaign_id = id
+    @fqdn = campaign_settings.fqdn
+    @template_location = deployment_directory
+    @approot = Rails.root
+    binding
+  end
 
   def test_victim
     v = Victim.new
@@ -75,7 +82,6 @@ class Campaign < ActiveRecord::Base
     if self.changed?
       Rails.logger.info "!!!!CHANGED!!!!"
       httpd = GlobalSettings.first.path_apache_httpd
-      template = Template.find_by_id(self.template_id)
 
       # gather active campaigns
       active_campaigns = Campaign.active
@@ -89,9 +95,8 @@ class Campaign < ActiveRecord::Base
           template = Template.find_by_id(campaign.template_id)
           if template.nil?
             raise 'Template #{campaign.template_id} not found'
-
           else
-            f.write(vhost_text)
+            f.write(vhost_text(campaign))
           end
         end
       end
@@ -102,16 +107,10 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def vhost_text
-    @campaign_id = id
-    @fqdn = campaign_settings.fqdn
-    @template_location = deployment_directory
-    @approot = Rails.root
+  def vhost_text(campaign)
     template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb", ))
-    template.result(binding)
+    template.result(campaign.get_binding)
   end
-
-
 
   def devops
     active ? deploy : undeploy
