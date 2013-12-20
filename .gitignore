@@ -18,4 +18,5 @@ config/initializers/secret_token.rb
 .idea
 public/templates/*
 public/uploads/**/*
+public/deployed/**/*
 Gemfile.lock
