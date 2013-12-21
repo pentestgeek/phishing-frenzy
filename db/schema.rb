@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131219045315) do
+ActiveRecord::Schema.define(:version => 20131220204833) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -116,9 +116,13 @@ ActiveRecord::Schema.define(:version => 20131219045315) do
     t.integer  "smtp_port"
     t.string   "smtp_username"
     t.string   "smtp_password"
-    t.integer  "emails_sent",     :default => 0
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.integer  "emails_sent",          :default => 0
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.string   "openssl_verify_mode"
+    t.string   "domain"
+    t.string   "authentication"
+    t.boolean  "enable_starttls_auto"
   end
 
   add_index "email_settings", ["campaign_id"], :name => "index_email_settings_on_campaign_id"

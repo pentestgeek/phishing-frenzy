@@ -40,7 +40,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
   end
 
-  private
+  #private
   def full_url(target, url, track)
     if track
       # append uniq identifier
@@ -76,13 +76,13 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
   def campaign_smtp_settings
     {
-        :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE,
+        :openssl_verify_mode => @campaign.email_settings.openssl_verify_mode_class,
         address: @campaign.email_settings.smtp_server,
         port: @campaign.email_settings.smtp_port,
         user_name: @campaign.email_settings.smtp_username,
         password: @campaign.email_settings.smtp_password,
-        authentication: 'plain',
-        enable_starttls_auto: true,
+        authentication: @campaign.email_settings.authentication.to_sym,
+        enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
         return_response: true
     }
   end
