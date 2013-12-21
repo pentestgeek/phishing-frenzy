@@ -16,7 +16,7 @@
           <li><%= link_to "Admin", main_app.access_path %></li>
           <li><%= link_to "Logout", main_app.destroy_admin_session_path, :method => :delete %></li>
         </ul>
-        <%= render partial: 'layouts/system_status' %>
+        <%= render(partial: 'layouts/system_status') if @show_status%>
       </div>
       <!--/.nav-collapse -->
     </div>
