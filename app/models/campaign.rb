@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'zip'
 
 class Campaign < ActiveRecord::Base
   # relationships
@@ -36,6 +37,7 @@ class Campaign < ActiveRecord::Base
     @fqdn = campaign_settings.fqdn
     @template_location = deployment_directory
     @approot = Rails.root
+    @directory_index = template.index_file
     binding
   end
 
@@ -108,7 +110,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def vhost_text(campaign)
-    template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb", ))
+    template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb",))
     template.result(campaign.get_binding)
   end
 
@@ -123,7 +125,11 @@ class Campaign < ActiveRecord::Base
   def deploy
     FileUtils.mkdir_p(deployment_directory)
     template.website_files.each do |page|
-      FileUtils.cp(page.file.current_path, File.join(deployment_directory, page[:file]))
+      loc = File.join(deployment_directory, page[:file])
+      FileUtils.cp(page.file.current_path, loc)
+      if inflatable?(loc)
+        inflate(loc, deployment_directory)
+      end
     end
   end
 
@@ -131,4 +137,17 @@ class Campaign < ActiveRecord::Base
     File.join(Rails.root, "public/deployed/campaigns", id.to_s)
   end
 
+  def inflatable?(file)
+    File.extname(file) == '.zip'
+  end
+
+  def inflate(file, destination)
+    Zip::File.open(file) { |zip_file|
+      zip_file.each { |f|
+        f_path=File.join(destination, f.name)
+        FileUtils.mkdir_p(File.dirname(f_path))
+        zip_file.extract(f, f_path) unless File.exist?(f_path)
+      }
+    }
+  end
 end

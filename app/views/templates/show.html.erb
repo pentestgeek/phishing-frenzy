@@ -37,8 +37,12 @@
         <% @template.website_files.each do |www| %>
             <p>
               <%= link_to www[:file], www.file.url %>
+              <% if www.function == 'website-index' %>
+                <small>*</small>
+              <% end %>
             </p>
         <% end %>
+      <p><small>* - Index file</small></p>
       </td>
     </tr>
     <tr>

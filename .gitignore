@@ -20,3 +20,4 @@ public/templates/*
 public/uploads/**/*
 public/deployed/**/*
 Gemfile.lock
+.DS_Store

@@ -17,13 +17,6 @@ class TemplatesController < ApplicationController
 		end
 
 		@images = @template.images
-
-		# determine if location exists
-		if File.directory? File.join(Rails.root.to_s, 'public', 'templates', @template.location)
-			@template_exists = true
-		else
-			@template_exists = false
-		end
 	end
 
 	def new
@@ -53,12 +46,6 @@ class TemplatesController < ApplicationController
 			list
 			render('list')
 		end
-
-		# list of template files
-		template_www_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', '**')
-		@template_files = Dir["#{template_www_location}"]
-		template_email_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'email', '**')
-		@email_files= Dir["#{template_email_location}"]
 	end
 
 	def update
@@ -67,10 +54,6 @@ class TemplatesController < ApplicationController
 		if not @template.valid?
 			render('edit')
 			return
-		end
-
-		if @template.location != params[:template][:location]
-			FileUtils.mv(File.join(Rails.root.to_s, 'public', 'templates', @template.location), File.join(Rails.root.to_s, 'public', 'templates', params[:template][:location]))
 		end
 
 		if @template.update_attributes(params[:template])
@@ -92,10 +75,6 @@ class TemplatesController < ApplicationController
 	def destroy
 		# delete folder if_exists?
 		@template = Template.find_by_id(params[:id])
-
-		if folder_exists?(@template.location)
-			FileUtils.rm_rf(File.join(Rails.root.to_s, 'public', 'templates', @template.location))
-		end
 
 		Template.find(params[:id]).destroy
 		flash[:notice] = "Template Destroyed"

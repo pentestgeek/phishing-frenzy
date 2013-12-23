@@ -7,13 +7,6 @@
     <td><%= f.text_field(:name) %></td>
   </tr>
   <tr>
-    <th>Location</th>
-    <td>
-      <span class="ui-icon ui-icon-help" title="template_location - Enter the name of the folder used to store the phishing template"></span>
-    </td>
-    <td><%= f.text_field(:location) %></td>
-  </tr>
-  <tr>
     <th>Description</th>
     <td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
     <td><%= f.text_area(:description, :size => "35x2") %></td>
@@ -25,9 +18,16 @@
     </td>
     <td><%= f.text_area(:notes, :size => "35x2") %></td>
   </tr>
+  <tr>
+    <th>Index</th>
+    <td>
+      <span class="ui-icon ui-icon-help" title="This is the file displayed at the root URL. Defaults to index.html" />
+    </td>
+    <td><%= f.text_field(:directory_index) %></td>
+  </tr>
 </table>
-<h2>Attachments</h2>
-<div id="attachments"></div>
+<h3>Template Files</h3>
+
 <%= f.fields_for :attachments do |attachment_form| %>
     <div class="row">
       <div class="col-xs-1">

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131220204833) do
+ActiveRecord::Schema.define(:version => 20131222200357) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -166,8 +166,9 @@ ActiveRecord::Schema.define(:version => 20131220204833) do
     t.string   "description"
     t.string   "location"
     t.string   "notes"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "directory_index"
   end
 
   add_index "templates", ["campaign_id"], :name => "index_templates_on_campaign_id"
