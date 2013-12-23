@@ -38,9 +38,7 @@
 
         <%= link_to("Launch", launch_path(@campaign.id), class: 'btn', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
 
-        <%= link_to("Edit Email", {:controller => 'templates', :action => 'edit_email', :id => @campaign.template_id}, class: 'btn') %>
-
-        <%= link_to("Preview", '/letter_opener', class: 'btn', target: "_blank") %>
+        <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn') %>
 
     <% end %>
   </div>

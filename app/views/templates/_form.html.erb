@@ -21,12 +21,15 @@
   <tr>
     <th>Index</th>
     <td>
-      <span class="ui-icon ui-icon-help" title="This is the file displayed at the root URL. Defaults to index.html" />
+      <span class="ui-icon ui-icon-help" title="This is the file displayed at the root URL. Defaults to index.html"/>
     </td>
     <td><%= f.text_field(:directory_index) %></td>
   </tr>
 </table>
 <h3>Template Files</h3>
+<div id="attachments">
+</div>
+
 
 <%= f.fields_for :attachments do |attachment_form| %>
     <div class="row">
