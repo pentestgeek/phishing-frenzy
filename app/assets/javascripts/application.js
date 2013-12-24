@@ -15,6 +15,8 @@
 //= require jquery.ui.accordion
 //= require jquery.ui.tooltip
 //= require bootstrap
+//= require jquery_nested_form
+
 
 $(function() {
 	$( document ).tooltip();

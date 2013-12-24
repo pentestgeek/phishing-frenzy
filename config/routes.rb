@@ -2,8 +2,9 @@ PhishingFramework::Application.routes.draw do
 	devise_for :admins
 
 	# only allow emails to be send from POST request
-	get '/email/send_email/:id' => 'campaigns#list'
-	get '/email/launch_email/:id' => 'campaigns#list'
+	post '/email/preview_email/:id' => 'email#preview', as: 'preview_email'
+	post '/email/test_email/:id' =>    'email#test', as: 'test_email'
+	post '/email/launch_email/:id' =>  'email#launch', as: 'launch'
 
 	# only allow deletion from POST requests
 	get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
@@ -21,7 +22,8 @@ PhishingFramework::Application.routes.draw do
 		end
 		member do
 			post 'update_settings'
-		end
+    end
+    resources :blasts, only: [:show], shallow: true
 	end
 
 	resources :templates do
@@ -67,60 +69,7 @@ PhishingFramework::Application.routes.draw do
   require 'sidekiq/api'
   match "queue-status" => proc { [200, {"Content-Type" => "text/plain"}, [Sidekiq::Queue.new.size < 100 ? "OK" : "UHOH" ]] }
 
-	# The priority is based upon order of creation:
-	# first created -> highest priority.
+  mount LetterOpenerWeb::Engine, at: 'letter_opener'
 
-	# Sample of regular route:
-	#   match 'products/:id' => 'catalog#view'
-	# Keep in mind you can assign values other than :controller and :action
-
-	# Sample of named route:
-	#   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-	# This route can be invoked with purchase_url(:id => product.id)
-
-	# Sample resource route (maps HTTP verbs to controller actions automatically):
-	#   resources :products
-
-	# Sample resource route with options:
-	#   resources :products do
-	#     member do
-	#       get 'short'
-	#       post 'toggle'
-	#     end
-	#
-	#     collection do
-	#       get 'sold'
-	#     end
-	#   end
-
-	# Sample resource route with sub-resources:
-	#   resources :products do
-	#     resources :comments, :sales
-	#     resource :seller
-	#   end
-
-	# Sample resource route with more complex sub-resources
-	#   resources :products do
-	#     resources :comments
-	#     resources :sales do
-	#       get 'recent', :on => :collection
-	#     end
-	#   end
-
-	# Sample resource route within a namespace:
-	#   namespace :admin do
-	#     # Directs /admin/products/* to Admin::ProductsController
-	#     # (app/controllers/admin/products_controller.rb)
-	#     resources :products
-	#   end
-
-	# You can have the root of your site routed with "root"
-	# just remember to delete public/index.html.
-	# root :to => 'welcome#index'
-
-	# See how all your routes lay out with "rake routes"
-
-	# This is a legacy wild controller route that's not recommended for RESTful applications.
-	# Note: This route will make all actions in every controller accessible via GET requests.
 	match ':controller(/:action(/:id))(.:format)'
 end
