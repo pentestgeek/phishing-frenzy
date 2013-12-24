@@ -38,7 +38,7 @@
 
         <%= link_to("Launch", launch_path(@campaign.id), class: 'btn', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
 
-        <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn') %>
+        <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn') unless @template.nil? %>
 
     <% end %>
   </div>

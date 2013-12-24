@@ -98,6 +98,10 @@ class CampaignsController < ApplicationController
 		@templates = Template.all
 		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 		@victims = Victim.where("campaign_id = ?", params[:id])
+    @template = @campaign.template
+    unless @template
+      flash[:warning] = "No template has been selected for this campaign"
+    end
 		if @campaign.nil?
 			flash[:notice] = "Campaign Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')
