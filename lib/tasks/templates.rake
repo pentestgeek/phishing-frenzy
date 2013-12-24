@@ -2,6 +2,7 @@ namespace :templates do
   task update: :environment do
     t = Template.where(name: 'New Intel Password Checker').first
     unless t.attachments.size > 0
+      t.update_attribute(directory_index: 'index.php')
       a = t.attachments.create(function: 'website')
       a.file = File.open("#{Rails.root}/vendor/templates/intel/index.php")
       a.save!
@@ -18,6 +19,7 @@ namespace :templates do
 
     t = Template.where(name: 'New Efax').first
     unless t.attachments.size > 0
+      t.update_attribute(directory_index: 'index.php')
       a = t.attachments.create(function: 'website')
       a.file = File.open("#{Rails.root}/vendor/templates/efax/index.php")
       a.save!
@@ -31,7 +33,8 @@ namespace :templates do
   end
 
   task load: :environment do
-    t = Template.create(name: 'New Intel Password Checker', description: 'Users test the strength of their password')
+    t = Template.create(name: 'New Intel Password Checker', directory_index: 'index.php', description: 'Users test the strength of their password')
+    t.update_attribute(directory_index: 'index.php')
     a = t.attachments.create(function: 'website')
     a.file = File.open("#{Rails.root}/vendor/templates/intel/index.php")
     a.save!
@@ -44,8 +47,7 @@ namespace :templates do
     a = t.attachments.create(function: 'attachment')
     a.file = File.open("#{Rails.root}/vendor/templates/intel/intel.jpg")
     a.save!
-    t = Template.create(name: 'New Efax', description: 'User received a efax which requires them to open the PDF')
-    a = t.attachments.create(function: 'website')
+    t = Template.create(name: 'New Efax', directory_index: 'index.php', description: 'User received a efax which requires them to open the PDF')
     a.file = File.open("#{Rails.root}/vendor/templates/efax/index.php")
     a.save!
     a = t.attachments.create(function: 'email')
