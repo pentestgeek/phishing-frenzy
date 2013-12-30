@@ -3,7 +3,11 @@
 
 <script>
 	$(function() {
-		$( "#accordion" ).accordion({collapsible:true, active:false});
+		$( "#accordion" ).accordion({
+			collapsible:true, 
+			active:false, 
+			heightStyle: "content"
+		});
 
 		$('#smtpPreFill').change(function() {
 		var myValue = $(this).val();
