@@ -59,6 +59,8 @@ module PhishingFramework
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    config.assets.initialize_on_precompile=false
+
     # Default url for __Devise__ emails
     config.action_mailer.default_url_options = { :host => 'phishing-frenzy.com' }
   end
