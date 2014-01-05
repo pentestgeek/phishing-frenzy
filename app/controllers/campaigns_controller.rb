@@ -17,7 +17,7 @@ class CampaignsController < ApplicationController
 
 	def show
 		@campaign = Campaign.find_by_id(params[:id])
-    @blasts = @campaign.blasts.order('created_at DESC').limit(10)
+		@blasts = @campaign.blasts.order('created_at DESC').limit(10)
 		if @campaign.nil?
 			list
 			render('list')
@@ -91,7 +91,7 @@ class CampaignsController < ApplicationController
 	def destroy
 		Campaign.find(params[:id]).destroy
 		flash[:notice] = "Campaign Destroyed"
-		redirect_to campaign_path
+		redirect_to list_campaigns_path
 	end
 
 	def options
@@ -101,7 +101,7 @@ class CampaignsController < ApplicationController
 		if @campaign.nil?
 			flash[:notice] = "Campaign Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')
-		end   
+		end
 	end
 
 	def victims
