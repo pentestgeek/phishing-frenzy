@@ -3,6 +3,8 @@ Phishing Frenzy
 
 Ruby on Rails Phishing Framework
 
+[PhishingFrenzy](http://i.imgur.com/pt4JHb4.png)
+
 Install
 -------
 
