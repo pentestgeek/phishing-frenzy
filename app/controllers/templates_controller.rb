@@ -32,24 +32,6 @@ class TemplatesController < ApplicationController
 
 	def create
 		@template = Template.new(params[:template])
-
-		if not @template.valid?
-			render('new')
-			return
-		end
-
-		# check if folder already exists
-		if folder_exists?(@template.location)
-			render('new')
-			return
-		else
-			Dir.mkdir(File.join(Rails.root.to_s, 'public', 'templates', @template.location), 0700)
-			Dir.mkdir(File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'email'), 0700)
-			Dir.mkdir(File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www'), 0700)
-			File.new(File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'email', 'email.txt'), 0700)
-			File.new(File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', 'index.php'), 0700)
-		end
-
 		if @template.save
 			flash[:notice] = "Template Created"
 			redirect_to(:action => 'list')
@@ -75,16 +57,6 @@ class TemplatesController < ApplicationController
 
 	def update
 		@template = Template.find(params[:id])
-
-		if not @template.valid?
-			render('edit')
-			return
-		end
-
-		if @template.location != params[:template][:location]
-			FileUtils.mv(File.join(Rails.root.to_s, 'public', 'templates', @template.location), File.join(Rails.root.to_s, 'public', 'templates', params[:template][:location]))
-		end
-
 		if @template.update_attributes(params[:template])
 			flash[:notice] = "Template Updated"
 			redirect_to(:action => 'list')
@@ -105,21 +77,13 @@ class TemplatesController < ApplicationController
 		# delete folder if_exists?
 		@template = Template.find_by_id(params[:id])
 
-		if folder_exists?(@template.location)
+		if Template.folder_exists?(@template.location)
 			FileUtils.rm_rf(File.join(Rails.root.to_s, 'public', 'templates', @template.location))
 		end
 
 		Template.find(params[:id]).destroy
 		flash[:notice] = "Template Destroyed"
 		redirect_to templates_path
-	end
-
-	def folder_exists?(location)
-		if File.directory? File.join(Rails.root.to_s, 'public', 'templates', location)
-			return true
-		else
-			return false
-		end
 	end
 
 	def copy
@@ -396,7 +360,7 @@ class TemplatesController < ApplicationController
 
 	def copy_template(template)
 		# generate random string
-		random_string = (0...8).map { (65 + rand(26)).chr }.join
+		random_string = Template.random_string
 
 		# copy template attributes to new_template object
 		new_template = template.dup
@@ -404,11 +368,6 @@ class TemplatesController < ApplicationController
 		# change location and name for template
 		new_template.name = "#{template.name} #{random_string}"
 		new_template.location = "#{template.location}_#{random_string}"
-
-		# copy folder to new destination
-		FileUtils.cp_r(File.join(
-			Rails.root.to_s, 'public', 'templates', template.location), 
-			File.join(Rails.root.to_s, 'public', 'templates', new_template.location))
 
 		if new_template.save
 			redirect_to list_templates_path, notice: "Template copy complete"

@@ -7,7 +7,7 @@
 </div>
 <div class="template update">
 	
-	<%= form_for(:template, :url => {:action => 'update', :id => @template.id}) do |f| %>
+	<%= form_for(:template, :url => {:action => 'update', :id => @template.id}, method: :put) do |f| %>
 		<%= render(:partial => "form", :locals => {:f => f}) %>
 		<%= submit_tag("Update Template", class:'btn') %>
 	<% end %>
