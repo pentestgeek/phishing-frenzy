@@ -127,38 +127,9 @@ class TemplatesController < ApplicationController
 		if @template.nil?
 			list
 			render('list')
-		end
-	end
-
-	def copy_template
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			list
-			render('list')
-		end
-
-		# check if folder already exists
-		if folder_exists?(params[:new_location])
-			flash[:notice] = "Folder Already Exists"
-			redirect_to(:action => 'copy', :id => @template.id)
-			return
 		else
-			# copy folder to new destination
-			FileUtils.cp_r(File.join(Rails.root.to_s, 'public', 'templates', @template.location), File.join(Rails.root.to_s, 'public', 'templates', params[:new_location]))
-		end
-
-		# add new template database entry
-		new_template = Template.new
-		new_template.location = params[:new_location]
-		new_template.name = params[:new_name]
-
-		if new_template.save
-			flash[:notice] = "Template Copied"
-			redirect_to(:action => 'list')
-		else
-			flash[:notice] = "Issues Saving New Template"
-			redirect_to(:action => 'copy', :id => @template.id)
-			return
+			# copy template
+			copy_template(@template)
 		end
 	end
 
@@ -418,6 +389,31 @@ class TemplatesController < ApplicationController
 		rescue => e
 			flash[:notice] = "#{e}"
 			redirect_to(:controller => 'templates', :action => 'edit', :id => @template.id)
+		end
+	end
+
+	private
+
+	def copy_template(template)
+		# generate random string
+		random_string = (0...8).map { (65 + rand(26)).chr }.join
+
+		# copy template attributes to new_template object
+		new_template = template.dup
+
+		# change location and name for template
+		new_template.name = "#{template.name} #{random_string}"
+		new_template.location = "#{template.location}_#{random_string}"
+
+		# copy folder to new destination
+		FileUtils.cp_r(File.join(
+			Rails.root.to_s, 'public', 'templates', template.location), 
+			File.join(Rails.root.to_s, 'public', 'templates', new_template.location))
+
+		if new_template.save
+			redirect_to list_templates_path, notice: "Template copy complete"
+		else
+			redirect_to list_templates_path, notice: "Issues Saving Template"
 		end
 	end
 end
