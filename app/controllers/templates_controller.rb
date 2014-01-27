@@ -166,15 +166,14 @@ class TemplatesController < ApplicationController
 		yaml_file = Zip::File.open(zip_upload_location).find { |file| file.name =~ /\.yaml$/ }
 		template = YAML.load(yaml_file.get_input_stream.read)
 		new_template = template.dup
-		new_template.save!
+		new_template.save!(validate: false)
 
 		template_location = File.join(Rails.root.to_s, "public", "templates", "#{new_template.location}")
-		if Dir.exist?(template_location)
+		if Template.folder_exists?(template_location)
 			# append random location and update db
-			random_string = (0...8).map { (65 + rand(26)).chr }.join
+			random_string = Template.random_string
 			new_template.location += "_#{random_string}"
 			new_template.save!
-			template_location += "_#{random_string}"
 		end
 
 		# create directory for new template

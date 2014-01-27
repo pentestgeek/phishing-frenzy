@@ -13,8 +13,6 @@ class Template < ActiveRecord::Base
 		# ensure spaces are removed from location attribute
 		if self.new_record?
 			self.location = self.location.parameterize("_")
-		else
-			self.location = self.location.parameterize("_")
 		end
 	end
 
