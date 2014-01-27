@@ -26,9 +26,9 @@
 		<% @templates.each do |template| %>
 		<tr>
 			<td><%= image_tag('template.png', :size => '35x35') %></td>      
-			<td><%= template.name %></td>
-			<td><%= template.description %></td>
-			<td><%= template.location %></td>
+			<td><%= truncate(template.name, length: 50) %></td>
+			<td><%= truncate(template.description, length: 100) %></td>
+			<td><%= truncate(template.location, length: 20) %></td>
 			<td class="actions">
 				<%= link_to("Show", {:action => 'show', :id => template.id}, class:'btn btn-mini') %>
 				<%= link_to("Edit", {:action => 'edit', :id => template.id}, class:'btn btn-mini') %>
