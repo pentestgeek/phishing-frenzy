@@ -119,23 +119,23 @@ class CampaignsController < ApplicationController
 	end
 
 	def delete_victim
-	victim = Victim.find_by_id(params[:id])
-	if victim.nil?
-		flash[:notice] = "Victim Does not Exist"
-		redirect_to(:controller => 'campaigns', :action => 'list')
-	end
+		victim = Victim.find_by_id(params[:id])
+		if victim.nil?
+			flash[:notice] = "Victim Does not Exist"
+			redirect_to(:controller => 'campaigns', :action => 'list')
+		end
 
-	victim_id_to_destroy = victim.id
+		victim_id_to_destroy = victim.id
 
-	victim.destroy
-	flash[:notice] = "Deleted #{victim.email_address}"
-	respond_to do |format|
-		format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
-		# This is kinda hacky, but works until we figure out the 'rails' way
-		format.js { render :text => "$('#victim-#{victim_id_to_destroy}').remove();
-									if (!$('.notice').length > 0) { $('div #content').prepend('<div class=\"notice\"></div>'); }
-									$('.notice').html(\"#{escape_javascript(flash[:notice])}\");
-									$('.notice').show(300);" }
+		victim.destroy
+		flash[:notice] = "Deleted #{victim.email_address}"
+		respond_to do |format|
+			format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
+			# This is kinda hacky, but works until we figure out the 'rails' way
+			format.js { render :text => "$('#victim-#{victim_id_to_destroy}').remove();
+										if (!$('.notice').length > 0) { $('div #content').prepend('<div class=\"notice\"></div>'); }
+										$('.notice').html(\"#{escape_javascript(flash[:notice])}\");
+										$('.notice').show(300);" }
 		end
 	end
 
