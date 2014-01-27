@@ -17,4 +17,3 @@ rerun.txt
 config/initializers/secret_token.rb
 .idea
 public/templates/*
-Gemfile.lock
