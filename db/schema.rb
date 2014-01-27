@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131214025854) do
+ActiveRecord::Schema.define(:version => 20140109211528) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20131214025854) do
     t.boolean  "test",              :default => false
     t.integer  "number_of_targets"
     t.integer  "emails_sent",       :default => 0
-    t.string   "message",           :default => "Started"
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.string   "message",           :default => "Started  "
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
   end
 
   create_table "campaign_settings", :force => true do |t|
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(:version => 20131214025854) do
 
   create_table "victims", :force => true do |t|
     t.string   "email_address"
-    t.string   "campaign_id"
+    t.integer  "campaign_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
