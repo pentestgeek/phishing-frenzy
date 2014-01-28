@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def system_status
+    @show_status = true
     @apache = SYSTEM_MONITOR.apache
     @vhosts = SYSTEM_MONITOR.vhosts
     @msf = SYSTEM_MONITOR.metasploit

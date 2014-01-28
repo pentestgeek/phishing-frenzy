@@ -21,11 +21,11 @@
             <% end %></li>
       <% end %>
       <% if @sidekiq %>
-          <li><%= link_to(sidekiq_web_path, target: "_blank") do %>
+          <li><%= link_to(main_app.sidekiq_web_path, target: "_blank") do %>
                 <span class="label label-success">Sidekiq</span>
             <% end %></li>
       <% else %>
-          <li><%= link_to(sidekiq_web_path, target: "_blank") do %>
+          <li><%= link_to(main_app.sidekiq_web_path, target: "_blank") do %>
                 <span class="label label-default">Sidekiq</span>
             <% end %></li>
       <% end %>
@@ -48,12 +48,14 @@
                 <span class="label label-default">Metasploit</span>
             <% end %></li>
       <% end %>
-      <li class="divider"></li>
-      <li class="dropdown-header">Virtual Hosts</li>
-      <% @vhosts.each do |vh| %>
-        <li>
-          <a href="#"><%=  vh %></a>
-        </li>
+      <% if @vhosts %>
+          <li class="divider"></li>
+          <li class="dropdown-header">Virtual Hosts</li>
+          <% @vhosts.each do |vh| %>
+              <li>
+                <a href="#"><%= vh %></a>
+              </li>
+          <% end %>
       <% end %>
     </ul>
   </li>

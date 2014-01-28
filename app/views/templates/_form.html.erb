@@ -1,24 +1,50 @@
 <%= error_messages_for(@template) %>
 
 <table summary="Template Form fields">
-	<tr>
-		<th>Name</th>
-		<td><span class="ui-icon ui-icon-help" title="Template name to distinguish itself"></span></td>
-		<td><%= f.text_field(:name) %></td>
-	</tr>
-	<tr>
-		<th>Location</th>
-		<td><span class="ui-icon ui-icon-help" title="template_location - Enter the name of the folder used to store the phishing template"></span></td>
-		<td><%= f.text_field(:location) %></td>
-	</tr>
-	<tr>
-		<th>Description</th>
-		<td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
-		<td><%= f.text_area(:description, :size => "35x2") %></td>
-	</tr>
-	<tr>
-		<th>Notes</th>
-		<td><span class="ui-icon ui-icon-help" title="Enter any notes or details pertaining to the phishing template"></span></td>
-		<td><%= f.text_area(:notes, :size => "35x2") %></td>
-	</tr>
+  <tr>
+    <th>Name</th>
+    <td><span class="ui-icon ui-icon-help" title="Template name to distinguish itself"></span></td>
+    <td><%= f.text_field(:name) %></td>
+  </tr>
+  <tr>
+    <th>Description</th>
+    <td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
+    <td><%= f.text_area(:description, :size => "35x2") %></td>
+  </tr>
+  <tr>
+    <th>Notes</th>
+    <td>
+      <span class="ui-icon ui-icon-help" title="Enter any notes or details pertaining to the phishing template"></span>
+    </td>
+    <td><%= f.text_area(:notes, :size => "35x2") %></td>
+  </tr>
+  <tr>
+    <th>Index</th>
+    <td>
+      <span class="ui-icon ui-icon-help" title="This is the file displayed at the root URL. Defaults to index.html"/>
+    </td>
+    <td><%= f.text_field(:directory_index) %></td>
+  </tr>
 </table>
+<h3>Template Files</h3>
+<div id="attachments">
+</div>
+
+
+<%= f.fields_for :attachments do |attachment_form| %>
+    <div class="row">
+      <div class="col-xs-1">
+        <%= attachment_form.link_to_remove "Remove" %>
+      </div>
+      <div class="col-xs-1">
+        <%= attachment_form.object[:file] %>
+      </div>
+      <div class="col-xs-3">
+        <%= attachment_form.select(:function, %w(website email attachment)) %>
+      </div>
+      <div class="col-xs-3">
+        <%= attachment_form.file_field :file %>
+      </div>
+    </div>
+<% end %>
+<%= f.link_to_add "Add attachment", :attachments, "data-target" => "#attachments" %>

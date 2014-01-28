@@ -16,14 +16,7 @@ class TemplatesController < ApplicationController
 			render('list')
 		end
 
-		@images = Dir[File.join(Rails.root.to_s, 'public', 'templates', @template.location, '*.{jpg,png,gif}')]
-
-		# determine if location exists
-		if File.directory? File.join(Rails.root.to_s, 'public', 'templates', @template.location)
-			@template_exists = true
-		else
-			@template_exists = false
-		end
+		@images = @template.images
 	end
 
 	def new
@@ -47,12 +40,6 @@ class TemplatesController < ApplicationController
 			list
 			render('list')
 		end
-
-		# list of template files
-		template_www_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', '**')
-		@template_files = Dir["#{template_www_location}"]
-		template_email_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'email', '**')
-		@email_files= Dir["#{template_email_location}"]
 	end
 
 	def update
@@ -76,10 +63,6 @@ class TemplatesController < ApplicationController
 	def destroy
 		# delete folder if_exists?
 		@template = Template.find_by_id(params[:id])
-
-		if Template.folder_exists?(@template.location)
-			FileUtils.rm_rf(File.join(Rails.root.to_s, 'public', 'templates', @template.location))
-		end
 
 		Template.find(params[:id]).destroy
 		flash[:notice] = "Template Destroyed"
@@ -374,4 +357,5 @@ class TemplatesController < ApplicationController
 			redirect_to list_templates_path, notice: "Issues Saving Template"
 		end
 	end
+
 end

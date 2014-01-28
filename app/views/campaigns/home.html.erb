@@ -21,7 +21,7 @@
 			
 			<tr>
 				<td><%= image_tag('fishing_pole.png', :size => '28x28') %></td>      
-				<td><%= campaign.name %></td>
+				<td><%= link_to campaign.name, campaign %></td>
 				<td><%= campaign.description %></td>
 				<td><%= campaign.scope %></td>
 				<td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>

@@ -3,40 +3,14 @@
 <%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
 
 <div class='page-header'>
-	<h2>Update Phishing Template</h2>
+  <h2>Update Phishing Template</h2>
 </div>
 <div class="template update">
-	
-	<%= form_for(:template, :url => {:action => 'update', :id => @template.id}, method: :put) do |f| %>
-		<%= render(:partial => "form", :locals => {:f => f}) %>
-		<%= submit_tag("Update Template", class:'btn') %>
+	<%= nested_form_for @template, :html => {:multipart => true} do |f| %>
+	<%= render(:partial => "form", :locals => {:f => f}) %>
+	<p>
+		<%= submit_tag("Update Template", class: 'btn') %>
+	</p>
 	<% end %>
-
-	<h2>Phishing Website Files</h2>
-
-	<div class="buttons">
-		<%= link_to("New File", {:controller => 'templates', :action => 'new_www_file', :id => @template.id}, class:'btn') %> 
-	</div>
-
-	<ul>
-		<% @template_files.each do |file| %>
-			<li>
-				<%= link_to("Delete", {:action => 'delete_www_template_file', :filename => File.basename(file), :id => @template.id}) %>
-
-				<%= link_to(file, {:action => 'edit_www', :filename => File.basename(file), :id => @template.id}) %>
-			</li>
-		<% end %>
-	</ul>
-
-	<h2>Phishing Email Files</h2>
-
-	<ul>
-		<% @email_files.each do |file| %>
-			<li>
-				<%= link_to("Delete", {:action => 'delete_email_template_file', :filename => File.basename(file), :id => @template.id}) %>
-
-				<%= link_to(file, {:action => 'edit_email', :filename => File.basename(file), :id => @template.id}) %>
-			</li>
-		<% end %>
-	</ul>
 </div>
+<hr/>

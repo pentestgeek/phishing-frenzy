@@ -39,6 +39,27 @@ ActiveRecord::Schema.define(:version => 20140109211528) do
   add_index "admins", ["email"], :name => "index_admins_on_email", :unique => true
   add_index "admins", ["reset_password_token"], :name => "index_admins_on_reset_password_token", :unique => true
 
+  create_table "attachments", :force => true do |t|
+    t.string   "file"
+    t.integer  "attachable_id"
+    t.string   "attachable_type"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.string   "function",        :default => "website"
+  end
+
+  add_index "attachments", ["attachable_id"], :name => "index_attachments_on_attachable_id"
+
+  create_table "baits", :force => true do |t|
+    t.string   "to"
+    t.string   "from"
+    t.string   "status"
+    t.string   "message"
+    t.integer  "blast_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "blasts", :force => true do |t|
     t.integer  "campaign_id"
     t.boolean  "test",              :default => false
@@ -95,9 +116,13 @@ ActiveRecord::Schema.define(:version => 20140109211528) do
     t.integer  "smtp_port"
     t.string   "smtp_username"
     t.string   "smtp_password"
-    t.integer  "emails_sent",     :default => 0
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.integer  "emails_sent",          :default => 0
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.string   "openssl_verify_mode"
+    t.string   "domain"
+    t.string   "authentication"
+    t.boolean  "enable_starttls_auto"
   end
 
   add_index "email_settings", ["campaign_id"], :name => "index_email_settings_on_campaign_id"
@@ -141,8 +166,9 @@ ActiveRecord::Schema.define(:version => 20140109211528) do
     t.string   "description"
     t.string   "location"
     t.string   "notes"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "directory_index"
   end
 
   add_index "templates", ["campaign_id"], :name => "index_templates_on_campaign_id"
