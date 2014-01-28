@@ -40,20 +40,4 @@ class Template < ActiveRecord::Base
 		directory_index.blank? ? 'index.html' : directory_index
 	end
 
-	def move_template_folders(from, to)
-		FileUtils.mv(File.join(Rails.root.to_s, 'public', 'templates', from), 
-			File.join(Rails.root.to_s, 'public', 'templates', to))
-	end
-
-	def self.folder_exists?(location)
-		if File.directory? File.join(Rails.root.to_s, 'public', 'templates', location)
-			return true
-		else
-			return false
-		end
-	end
-
-	def self.random_string
-		(0...8).map { (65 + rand(26)).chr }.join
-	end
 end
