@@ -47,6 +47,7 @@ namespace :templates do
     a.file = File.open("#{Rails.root}/vendor/templates/intel/intel.jpg")
     a.save!
     t = Template.create(name: 'Efax', directory_index: 'index.php', description: 'User received a efax which requires them to open the PDF')
+    a = t.attachments.create(function: 'website')    
     a.file = File.open("#{Rails.root}/vendor/templates/efax/index.php")
     a.save!
     a = t.attachments.create(function: 'email')
