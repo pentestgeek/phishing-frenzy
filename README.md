@@ -106,8 +106,8 @@ Install all the gems for the Ruby on Rails application:
 
 Create Rails Database for Phishing Frenzy:
 
-	mysql> create database phishing_frenzy_development;
-	mysql> grant all privileges on phishing_frenzy_development.* to 'phishing_frenzy'@'localhost' identified by 'password';
+	mysql> create database pf_dev;
+	mysql> grant all privileges on pf_dev.* to 'pf_dev'@'localhost' identified by 'password';
 
 ### Ruby on Rails Configuration
 
@@ -182,8 +182,8 @@ Using our rails helper 'rake' we can precompile all of our assets which is requi
 
 Now we must migrate and seed the data for our production database.  If you have not created a seperate production account within mysql you need to do that now.
 
-	mysql> create database phishing_frenzy_production;
-	mysql> grant all privileges on phishing_frenzy_production.* to 'phishing_frenzy_production'@'localhost' identified by 'password';
+	mysql> create database pf_prod;
+	mysql> grant all privileges on pf_prod.* to 'pf_prod'@'localhost' identified by 'password';
 
 Rake will assist with creating the database schema and seeding the database
 
@@ -222,10 +222,10 @@ If you receive an error im the browser such as "rails no such file tmp/cache/ass
 
 Try the following:
 
-	#rake tmp:pids:clear
-	#rake tmp:sessions:clear
-	#rake tmp:sockets:clear
-	#rake tmp:cache:clear
+	# rake tmp:pids:clear
+	# rake tmp:sessions:clear
+	# rake tmp:sockets:clear
+	# rake tmp:cache:clear
 
 If you receive an error in production mode the errors will not be displayed in the web browser (this is intended for security). If you need to diagnose the problem, tail the production.log file located in 'approot/log/production.log'
 
