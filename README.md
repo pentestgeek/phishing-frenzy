@@ -1,3 +1,5 @@
+# This branch is unstable atm and has missing features. Do not use it on live systems.
+
 Phishing Frenzy
 ===============
 

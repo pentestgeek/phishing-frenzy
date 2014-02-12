@@ -1,6 +1,9 @@
 PhishingFramework::Application.routes.draw do
 	devise_for :admins
 
+	# image tracking routes.
+	get '/reports/image/:uid.png' => 'reports#image'
+
 	# only allow emails to be send from POST request
 	get '/email/send_email/:id' => 'campaigns#list'
 	get '/email/launch_email/:id' => 'campaigns#list'
@@ -37,6 +40,8 @@ PhishingFramework::Application.routes.draw do
 		collection do
 			get 'list'
 			get 'stats'
+			get 'results'
+			post 'results'
 		end
 	end
 
@@ -124,3 +129,4 @@ PhishingFramework::Application.routes.draw do
 	# Note: This route will make all actions in every controller accessible via GET requests.
 	match ':controller(/:action(/:id))(.:format)'
 end
+

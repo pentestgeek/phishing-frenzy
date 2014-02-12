@@ -1,5 +1,7 @@
 class CampaignsController < ApplicationController
+
 	include ActionView::Helpers::JavaScriptHelper # to be able to use escape_javascript
+	
 	def index
 		list
 		render('list')

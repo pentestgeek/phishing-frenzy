@@ -1,5 +1,27 @@
+<?php 
 
+  $uid = $_GET['uid'];
+  $ip = $_SERVER["REMOTE_ADDR"];
+  $browser = $_SERVER['HTTP_USER_AGENT'];
+  $host = $_SERVER['HTTP_HOST'];
 
+  $url = "http://" . explode(".",$host,2)[1] . '/reports/results/'; 
+  $data = array('uid' => $uid, 'browser_info' => $browser, 'ip_address' => $ip);
+
+  // use key 'http' even if you send the request to https://...
+  $options = array(
+          'http' => array(
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+          'method'  => 'POST',
+          'content' => http_build_query($data),
+          ),
+  );
+  $context  = stream_context_create($options);
+  $result = file_get_contents($url, false, $context);
+
+  //echo(null);
+  var_dump($result);
+?>
 
 
 
@@ -568,4 +590,4 @@
 
 
 </body>
-</html>
+<

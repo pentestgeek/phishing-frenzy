@@ -61,5 +61,7 @@ module PhishingFramework
 
     # Default url for __Devise__ emails
     config.action_mailer.default_url_options = { :host => 'phishing-frenzy.com' }
+
   end
+
 end
