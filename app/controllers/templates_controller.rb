@@ -363,12 +363,13 @@ class TemplatesController < ApplicationController
 
 		# copy template attributes to new_template object
 		new_template = template.dup
-
 		# change location and name for template
 		new_template.name = "#{template.name} #{random_string}"
 		new_template.location = "#{template.location}_#{random_string}"
 
-		if new_template.save
+		if new_template.save(validate: false)
+			FileUtils.cp_r(File.join(Rails.root.to_s, 'public', 'templates', template.location), 
+					File.join(Rails.root.to_s, 'public', 'templates', new_template.location))
 			redirect_to list_templates_path, notice: "Template copy complete"
 		else
 			redirect_to list_templates_path, notice: "Issues Saving Template"
