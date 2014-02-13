@@ -136,12 +136,19 @@ class ReportsController < ApplicationController
 		# Total visits to the website.
 		@visits = 0
 
+		# Total opened
+		@opened = 0
+
 
 		Victim.where(campaign_id: params[:id]).each do |victim|
 			s = Visit.where(Victim_id: victim.id).size
 			if (s > 0)
 				@uvic = @uvic + 1
 				@visits = @visits + s
+			end
+			o = Visit.where(:Victim_id => victim.id, :extra => "SOURCE: EMAIL").size
+			if (o > 0)
+				@opened = @opened + 1
 			end
 		end
 
@@ -150,9 +157,9 @@ class ReportsController < ApplicationController
 		@jsonToSend["time"] = @time
 		@jsonToSend["active"] = @campaign.active
 		@jsonToSend["template"] = @template_name
-		@jsonToSend["sent"] = 10 #@emails_sent
-		@jsonToSend["opened"] = 6
-		@jsonToSend["clicked"] = @visits
+		@jsonToSend["sent"] = @emails_sent
+		@jsonToSend["opened"] = @opened
+		@jsonToSend["clicked"] = @uvic
 
 		render json: @jsonToSend
 	end
