@@ -17,37 +17,37 @@ h3 {
   <div class="wrapper" style="position:relative">
         <div class='colorBox' style="width:800px;height:100px;top:0px;left:0px;background-color: #9edae5"> 
           <h3 class='textItems' style="color:grey;">Campaign Name: </h2>
-          <h2 id='campaign_name' class='textItems' style="color:black;">This is a test campaign.</h2>
+          <h2 id='campaign_name' class='textItems' style="color:black;">Not Loaded.</h2>
         </div>
         <div class='colorBox' style="width:395px;height:100px;top:110px;left:0px;background-color: #9ecae1"> 
           <h3 class='textItems' style="color:grey;">Active: </h2>
-          <h2 id='active' class='textItems' style="color:black;">True</h2>
+          <h2 id='active' class='textItems' style="color:black;">-</h2>
         </div>
         <div class='colorBox' style="width:395px;height:100px;top:220px;left:0px;background-color: #9edae5"> 
           <h3 class='textItems' style="color:grey;">Time Elapsed: </h2>
-          <h2 id='time' class='textItems' style="color:black;">02d 13h 26m 12s</h2>
+          <h2 id='time' class='textItems' style="color:black;">-</h2>
         </div>
         <div class='colorBox' style="width:395px;height:100px;top:330px;left:0px;background-color: #9ecae1"> 
           <h3 class='textItems' style="color:grey;">Template Used: </h2>
-          <h2 id='template_name' class='textItems' style="color:black;">Intel Password Checker</h2>
+          <h2 id='template_name' class='textItems' style="color:black;">-</h2>
         </div>
         <div id="chartDiv" class='colorBox' style="width:395px;height:320px;top:110px;left:405px;background-color: #FFF;border: 0px">
         </div>
         <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:405px;margin-bottom:20px;background-color: #9edae5">
           <h3 class='textItems' style="color:grey;">Sent: </h2>
-          <h2 id='sent' class='textItems' style="color:black;">23</h2>
+          <h2 id='sent' class='textItems' style="color:black;">-</h2>
         </div>
         <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:607.5px;background-color: #9ecae1">
           <h3 class='textItems' style="color:grey;">Opened: </h2>
-          <h2 id='opened' class='textItems' style="color:black;">15</h2>
+          <h2 id='opened' class='textItems' style="color:black;">-</h2>
         </div>
         <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:405px;background-color: #9ecae1">
           <h3 class='textItems' style="color:grey;">Clicked: </h2>
-          <h2 id='clicked' class='textItems' style="color:black;">8</h2>
+          <h2 id='clicked' class='textItems' style="color:black;">-</h2>
         </div>
         <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:607.5px;background-color: #9edae5">
           <h3 class='textItems' style="color:grey;">Sucess Rate: </h2>
-          <h2 id='sucess_rate' class='textItems' style="color:black;">34%</h2>
+          <h2 id='sucess_rate' class='textItems' style="color:black;">-</h2>
         </div>
         <svg id="barChart" class='colorBox' style="width:395px;height:210px;top:440px;left:0px;background-color: #FFF;">
 
@@ -77,8 +77,8 @@ var w = 395,
     inner =  (Math.min(w, h) / 4),
     color = d3.scale.category20c();
 
-data = [{"label":"Clicked", "value":23},
-        {"label":"No Action", "value":8}]
+data = [{"label":"Clicked", "value":0},
+        {"label":"No Action", "value":0}]
 
 
 var total = d3.sum(data, function(d) {
