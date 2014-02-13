@@ -114,7 +114,7 @@ fclass CampaignMailer
 		end
 
 		# email image tracking tag
-		image_url = "#{@campaign.email_settings.phishing_url}/reports/image/#{victim.uid}.png"
+		image_url = "#{root_url}/reports/image/#{victim.uid}.png"
 
 		# prepare email message
 		email_message.each_line do |line|
