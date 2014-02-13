@@ -1,4 +1,4 @@
-class CampaignMailer
+fclass CampaignMailer
 	attr_reader :messages, :emails_sent
 
 	def initialize(campaign, blast)
@@ -108,11 +108,13 @@ class CampaignMailer
 		# track user clicks?
 		if @campaign.campaign_settings.track_uniq_visitors?
 			# append uniq identifier
-			encode = "#{Base64.encode64(victim.email_address)}"
-			full_url = "#{@campaign.email_settings.phishing_url}?id=#{encode.chomp}"
+-			full_url = "#{@campaign.email_settings.phishing_url}?id=#{victim.uid}"
 		else
 			full_url = "#{@campaign.email_settings.phishing_url}"
 		end
+
+		# email image tracking tag
+		image_url = "#{@campaign.email_settings.phishing_url}/reports/image/#{victim.uid}.png"
 
 		# prepare email message
 		email_message.each_line do |line|
@@ -128,6 +130,8 @@ class CampaignMailer
 				message << line.gsub(/\#{subject}/, "#{@campaign.email_settings.subject}")
 			elsif line =~ /\#{date}/
 				message << line.gsub(/\#{date}/, Time.now.to_formatted_s(:long_ordinal))
+			elsif line =~ /\#{image_url}/
+				message << line.gsub(/\#{image_url}/, "#{image_url}}")
 			else
 				message << line
 			end
