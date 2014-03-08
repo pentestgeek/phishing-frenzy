@@ -31,6 +31,7 @@ PhishingFramework::Application.routes.draw do
 			get 'list'
 			get 'restore'
 			get 'edit_email'
+			get 'update_attachment'
 			delete 'destroy'
 		end
 	end

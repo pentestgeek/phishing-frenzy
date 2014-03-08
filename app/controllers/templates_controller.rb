@@ -46,7 +46,7 @@ class TemplatesController < ApplicationController
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
 			flash[:notice] = "Template Updated"
-			redirect_to(:action => 'list')
+			render('edit')
 		else
 			render('edit')
 		end
@@ -179,38 +179,16 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit_email
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:back)
-		else
-			# text_box with email.txt displaying
-			email_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", "email.txt")
-			@email_content = File.read(email_location)
-		end
+		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
+		@attachment_content = File.read(Dir.glob(attachment_location)[0])
 	end
 
-	def edit_www
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controlloer => 'templates', :action => 'list')
+	def update_attachment
+		attachment_location = File.join(Rails.root.to_s, "public", Attachment.find(params[:format]).file.to_s)
+		File.open(attachment_location, "w+") do |f|
+			f.write(params[:attachment_content])
 		end
-
-		# text_box displaying file contents
-		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
-
-		begin
-			if File.binary?(file_location)
-				flash[:notice] = "Cannot Edit Binary Files"
-				redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
-			else
-				@file_content = File.read(file_location)	
-			end
-		rescue => e
-			flash[:notice] = "Error: #{e}"
-			redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
-		end
+		redirect_to :back, notice: 'Attachment Updated'
 	end
 
 	def preview_email
