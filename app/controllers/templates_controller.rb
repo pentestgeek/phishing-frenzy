@@ -43,6 +43,20 @@ class TemplatesController < ApplicationController
 	end
 
 	def update
+		#binding.pry
+		attachments = params[:template][:attachments_attributes]
+		unless attachments.to_s.empty?
+			attachments.each do |attachment|
+				#binding.pry
+				#if attachment[1][:_destroy] == "1"
+					#binding.pry
+					#attachment.delete_if {|key, value| value == "testC@test.com" } 
+					#attachment_record = Attachment.find_by_id(attachment[1][:id])
+					#attachment_record.destroy if attachment_record
+				end
+			end
+		end
+
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
 			flash[:notice] = "Template Updated"
@@ -82,7 +96,6 @@ class TemplatesController < ApplicationController
 
 	def backup
 		@template = Template.find(params[:id])
-
 		if @template.attachments.empty?
 			list
 			render('list')
@@ -147,6 +160,10 @@ class TemplatesController < ApplicationController
 	def edit_email
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
 		@attachment_content = File.read(Dir.glob(attachment_location)[0])
+		if File.binary?(Dir.glob(attachment_location)[0])
+			flash[:notice] = "Cannot Edit Binary Files"
+			redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+		end
 	end
 
 	def update_attachment
@@ -180,7 +197,8 @@ private
 	def download(template)
 		begin
 			zipfile_name = @template.name? ? "#{@template.name.parameterize}.zip" : "backup.zip"
-			Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+			zipfile_location = Rails.root.join('tmp', 'cache', zipfile_name)
+			Zip::File.open(zipfile_location, Zip::File::CREATE) do |zipfile|
 				zipfile.get_output_stream("template.yml") { |f| f.puts @template.to_yaml }
 				zipfile.get_output_stream("attachments.yml") { |f| f.puts @template.attachments.to_yaml }
 				template.attachments.each do |attachment|
@@ -188,8 +206,8 @@ private
 				end
 			end
 
-			# force browser to download file
-			send_file zipfile_name, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@template.name}.zip".gsub(' ', '_').downcase
+			# send archive to browser for download
+			send_file zipfile_location, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@template.name}.zip".gsub(' ', '_').downcase
 		rescue => e
 			flash[:notice] = "Issues Zipping: #{e}"
 			redirect_to(:action => 'show', :id => @template.id)
