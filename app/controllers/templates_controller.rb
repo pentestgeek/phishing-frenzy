@@ -53,7 +53,7 @@ class TemplatesController < ApplicationController
 					#attachment.delete_if {|key, value| value == "testC@test.com" } 
 					#attachment_record = Attachment.find_by_id(attachment[1][:id])
 					#attachment_record.destroy if attachment_record
-				end
+				#end
 			end
 		end
 
