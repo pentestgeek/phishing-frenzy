@@ -43,19 +43,16 @@ class TemplatesController < ApplicationController
 	end
 
 	def update
-		#binding.pry
-		attachments = params[:template][:attachments_attributes]
-		unless attachments.to_s.empty?
-			attachments.each do |attachment|
-				#binding.pry
+		#attachments = params[:template][:attachments_attributes]
+		#unless attachments.to_s.empty?
+			#attachments.each do |attachment|
 				#if attachment[1][:_destroy] == "1"
-					#binding.pry
 					#attachment.delete_if {|key, value| value == "testC@test.com" } 
 					#attachment_record = Attachment.find_by_id(attachment[1][:id])
 					#attachment_record.destroy if attachment_record
 				#end
-			end
-		end
+			#end
+		#end
 
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
@@ -109,6 +106,11 @@ class TemplatesController < ApplicationController
 	end
 
 	def upload
+		if params[:restore_template].nil?
+			redirect_to :back, notice: 'No File Chosen'
+			return false
+		end
+
 		uploaded_io = params[:restore_template]
 		zip_upload_location = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
 
@@ -125,28 +127,38 @@ class TemplatesController < ApplicationController
   		end
 
 		# unzip uploaded template archive
-		yaml_file = Zip::File.open(zip_upload_location).find { |file| file.name =~ /\.yaml$/ }
+		yaml_file = Zip::File.open(zip_upload_location).find { |file| file.name =~ /template.yml$/ }
+		if yaml_file.nil?
+			redirect_to :back, notice: 'Not a backup archive: Missing template.yaml'
+			return false
+		end
+
+		# load template.yml from 
 		template = YAML.load(yaml_file.get_input_stream.read)
 		new_template = template.dup
 		new_template.save!(validate: false)
 
-		template_location = File.join(Rails.root.to_s, "public", "templates", "#{new_template.location}")
-		if Template.folder_exists?(template_location)
-			# append random location and update db
-			random_string = Template.random_string
-			new_template.location += "_#{random_string}"
-			new_template.save!
-		end
+		attachments_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /attachments.yml$/ }
+		#attachments = YAML.load(attachments_yml.get_input_stream.read)
 
-		# create directory for new template
-		Dir.mkdir(template_location, 0700)
+		#new_template.id
+		binding.pry
+		#template_location = File.join(Rails.root.to_s, "public", "templates", "#{new_template.location}")
+		#binding.pry
+		## TODO FIX ME
+		#if Template.folder_exists?(template_location)
+			# append random location and update db
+		#	random_string = Template.random_string
+		#	new_template.location += "_#{random_string}"
+		#	new_template.save!
+		#end
 
 		Zip::File.open(zip_upload_location) { |zipfile|
 			zipfile.each { |file| 
 				# do something with file
-				file_path = File.join(template_location, file.name)
-				FileUtils.mkdir_p(File.dirname(file_path))
-				zipfile.extract(file, file_path) unless File.exist?(file_path)
+				#file_path = File.join(template_location, file.name)
+				#FileUtils.mkdir_p(File.dirname(file_path))
+				#zipfile.extract(file, file_path) unless File.exist?(file_path)
 			}
 		}
 

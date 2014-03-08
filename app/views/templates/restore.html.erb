@@ -1,0 +1,14 @@
+<%= error_messages_for(@template) %>
+<% @page_title = "Restore Template" %>
+
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="page-header">
+	<h2>Restore Phishing Template</h2>
+</div>
+
+<%= form_tag({action: :upload}, multipart: true) do %>
+	<%= file_field_tag 'restore_template' %>
+	<p></p>
+	<%= submit_tag("Restore Template", class:'btn btn-default') %>
+<% end %>
