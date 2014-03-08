@@ -50,7 +50,6 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 # For email previewing
 gem 'letter_opener_web'
 
-
 # To use google charts
 gem 'googlecharts'
 
