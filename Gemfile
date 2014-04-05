@@ -64,6 +64,7 @@ gem 'rubyzip', "~>1.0.0"
 
 # To use pry for debugging
 gem 'pry'
+gem 'pry-nav'
 
 # To assist with pagination
 gem 'kaminari'
