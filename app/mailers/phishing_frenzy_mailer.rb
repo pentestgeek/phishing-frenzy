@@ -19,7 +19,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
       @url = full_url(@target, phishing_url, track)
       bait = mail(
           to: @target,
-          from: @campaign.email_settings.from,
+          from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
           subject: @campaign.email_settings.subject,
           template_path: @campaign.template.email_template_path,
           template_name: @campaign.template.email_files.first[:file],
