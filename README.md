@@ -134,6 +134,10 @@ Change ownership of apache config to allow Phishing Fenzy manage virtual hosts. 
 
 If you are running Kali linux or a distro that does not have the httpd.conf file you will need to create one so Phishing Frenzy can manage the virtual hosts.
 
+If you would like to install the 2 default templates (efax and intel password checker) you can do so by simply running the following rake task.
+
+	# rake templates:load
+
 ### Background Jobs
 
 Phishing Frenzy uses Sidekiq to send emails in the background. Sidekiq depends on Redis to manage the job queue. At this
