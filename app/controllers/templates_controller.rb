@@ -45,10 +45,12 @@ class TemplatesController < ApplicationController
 	def update
 		@template = Template.find(params[:id])
 		attachments = params[:template][:attachments_attributes]
-		attachments.each do |a| 
-			if a[1]["_destroy"].eql? "1"
-				@template.attachments.destroy(a[1]["id"])
-				params[:template][:attachments_attributes].delete(a[0])
+		unless attachments.nil?
+			attachments.each do |a| 
+				if a[1]["_destroy"].eql? "1"
+					@template.attachments.destroy(a[1]["id"])
+					params[:template][:attachments_attributes].delete(a[0])
+				end
 			end
 		end
 
