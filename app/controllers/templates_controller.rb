@@ -43,21 +43,17 @@ class TemplatesController < ApplicationController
 	end
 
 	def update
-		#attachments = params[:template][:attachments_attributes]
-		#unless attachments.to_s.empty?
-			#attachments.each do |attachment|
-				#if attachment[1][:_destroy] == "1"
-					#attachment.delete_if {|key, value| value == "testC@test.com" } 
-					#attachment_record = Attachment.find_by_id(attachment[1][:id])
-					#attachment_record.destroy if attachment_record
-				#end
-			#end
-		#end
-
 		@template = Template.find(params[:id])
+		attachments = params[:template][:attachments_attributes]
+		attachments.each do |a| 
+			if a[1]["_destroy"].eql? "1"
+				@template.attachments.destroy(a[1]["id"])
+				params[:template][:attachments_attributes].delete(a[0])
+			end
+		end
+
 		if @template.update_attributes(params[:template])
-			flash[:notice] = "Template Updated"
-			render('edit')
+			redirect_to edit_template_path, notice: "Template Updated"
 		else
 			render('edit')
 		end
@@ -112,8 +108,6 @@ class TemplatesController < ApplicationController
 		end
 
 		uploaded_io = params[:restore_template]
-		zip_upload_location = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
-
 		# check to make sure a zip file was retrieved
 		unless uploaded_io.original_filename =~ /zip/
 			flash[:notice] = "Error: Must be Zip File"
@@ -121,52 +115,56 @@ class TemplatesController < ApplicationController
 			return false		
 		end
 
+		zip_upload_location = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+		tmp_location = Rails.root.join('tmp', 'cache')
+
 		# upload template archive
-		File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'w+b') do |file|
+		File.open(Rails.root.join(zip_upload_location), 'w+b') do |file|
 			file.write(uploaded_io.read)
   		end
 
 		# unzip uploaded template archive
-		yaml_file = Zip::File.open(zip_upload_location).find { |file| file.name =~ /template.yml$/ }
-		if yaml_file.nil?
+		template_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /template.yml$/ }
+		attachments_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /attachments.yml$/ }
+		if template_yml.nil? or attachments_yml.nil?
 			redirect_to :back, notice: 'Not a backup archive: Missing template.yaml'
 			return false
 		end
 
-		# load template.yml from 
-		template = YAML.load(yaml_file.get_input_stream.read)
+		# load template.yml file and create template db entry
+		template = YAML.load(template_yml.get_input_stream.read)
 		new_template = template.dup
 		new_template.save!(validate: false)
 
-		attachments_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /attachments.yml$/ }
-		#attachments = YAML.load(attachments_yml.get_input_stream.read)
+		# read attachments object from yml file
+		Attachment.new
+		attachments = YAML.load(attachments_yml.get_input_stream.read)
 
-		#new_template.id
-		binding.pry
-		#template_location = File.join(Rails.root.to_s, "public", "templates", "#{new_template.location}")
-		#binding.pry
-		## TODO FIX ME
-		#if Template.folder_exists?(template_location)
-			# append random location and update db
-		#	random_string = Template.random_string
-		#	new_template.location += "_#{random_string}"
-		#	new_template.save!
-		#end
-
+		template_location = File.join(tmp_location, template.name.parameterize)
+		# for each file in zip archive
 		Zip::File.open(zip_upload_location) { |zipfile|
-			zipfile.each { |file| 
+			zipfile.each { |file|
 				# do something with file
-				#file_path = File.join(template_location, file.name)
-				#FileUtils.mkdir_p(File.dirname(file_path))
-				#zipfile.extract(file, file_path) unless File.exist?(file_path)
+				next if file.name.eql? "template.yml" or file.name.eql? "attachments.yml"
+				FileUtils.mkdir_p(template_location) unless Dir.exists?(template_location)
+				zipfile.extract(file, File.join(template_location, file.name))
 			}
 		}
 
-		# cleanup original uploaded zip file
-		FileUtils.rm(zip_upload_location)
+		filenames = Dir.glob(File.join(template_location, '*')).map{|filepath| File.basename(filepath)}
+		attachments.each do |attachment|
+			# add each attachment to template
+			filename = File.basename(attachment.file.to_s)
+			t = new_template.attachments.create(function: attachment.function)
+			t.file = File.new(File.join(template_location, filename))
+			t.save!		
+		end
 
-		flash[:notice] = "File Uploaded"
-		redirect_to(:controlloer => 'templates', :action => 'list')
+		# cleanup original uploaded zip file and tmp template
+		FileUtils.rm(zip_upload_location)
+		FileUtils.rm_rf(template_location)
+
+		redirect_to list_templates_path, notice: "Template Restored"
 	end
 
 	def edit_email
@@ -196,7 +194,7 @@ private
 		new_template = template.dup
 
 		# change location and name for template
-		new_template.name = "#{template.name} #{random_string}"
+		new_template.name ="#{template.name} #{random_string}"
 		new_template.location = "#{template.location}_#{random_string}"
 
 		if new_template.save
@@ -208,21 +206,21 @@ private
 
 	def download(template)
 		begin
-			zipfile_name = @template.name? ? "#{@template.name.parameterize}.zip" : "backup.zip"
+			zipfile_name = template.name? ? "#{template.name.parameterize}.zip" : "backup.zip"
 			zipfile_location = Rails.root.join('tmp', 'cache', zipfile_name)
 			Zip::File.open(zipfile_location, Zip::File::CREATE) do |zipfile|
-				zipfile.get_output_stream("template.yml") { |f| f.puts @template.to_yaml }
-				zipfile.get_output_stream("attachments.yml") { |f| f.puts @template.attachments.to_yaml }
+				zipfile.get_output_stream("template.yml") { |f| f.puts template.to_yaml }
+				zipfile.get_output_stream("attachments.yml") { |f| f.puts template.attachments.to_yaml }
 				template.attachments.each do |attachment|
 					zipfile.add(attachment.file.file.identifier, attachment.file.current_path) {true}
 				end
 			end
 
 			# send archive to browser for download
-			send_file zipfile_location, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@template.name}.zip".gsub(' ', '_').downcase
+			send_file zipfile_location, :type => 'application/zip', :disposition => 'attachment', :filename => "#{template.name}.zip".gsub(' ', '_').downcase
 		rescue => e
 			flash[:notice] = "Issues Zipping: #{e}"
-			redirect_to(:action => 'show', :id => @template.id)
+			redirect_to(:action => 'show', :id => template.id)
 		end
 	end
 
