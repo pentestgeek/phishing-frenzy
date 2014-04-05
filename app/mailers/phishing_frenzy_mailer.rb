@@ -2,7 +2,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
   PREVIEW = 0
   ACTIVE = 1
 
-
   def phish(campaign_id, target, blast_id, method=PREVIEW)
     @campaign = Campaign.find(campaign_id)
     @display_from = @campaign.email_settings.display_from
@@ -76,14 +75,14 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
   def campaign_smtp_settings
     {
-        :openssl_verify_mode => @campaign.email_settings.openssl_verify_mode_class,
-        address: @campaign.email_settings.smtp_server,
-        port: @campaign.email_settings.smtp_port,
-        user_name: @campaign.email_settings.smtp_username,
-        password: @campaign.email_settings.smtp_password,
-        authentication: @campaign.email_settings.authentication.to_sym,
-        enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
-        return_response: true
+      :openssl_verify_mode => @campaign.email_settings.openssl_verify_mode_class,
+      address: @campaign.email_settings.smtp_server_out,
+      port: @campaign.email_settings.smtp_port,
+      user_name: @campaign.email_settings.smtp_username,
+      password: @campaign.email_settings.smtp_password,
+      authentication: @campaign.email_settings.authentication.to_sym,
+      enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
+      return_response: true
     }
   end
 end
