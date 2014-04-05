@@ -44,6 +44,11 @@
   <h2>Campaign Settings</h2>
   <table class='table' summary="Campaign Settings">
 	<tr>
+	  <th>Name</th>
+	  <td><span class="ui-icon ui-icon-help" title="Insert campaign name"></span></td>
+	  <td><%= f.text_field(:name, class: 'span9') %></td>
+	</tr>
+	<tr>
 	  <th>Description</th>
 	  <td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
 	  <td><%= f.text_field(:description, class: 'span9') %></td>
