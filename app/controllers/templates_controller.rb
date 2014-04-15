@@ -123,7 +123,7 @@ class TemplatesController < ApplicationController
 		# upload template archive
 		File.open(Rails.root.join(zip_upload_location), 'w+b') do |file|
 			file.write(uploaded_io.read)
-  		end
+		end
 
 		# unzip uploaded template archive
 		template_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /template.yml$/ }
@@ -190,10 +190,20 @@ private
 
 	def copy_template(template)
 		# generate random string
-		random_string = Template.random_string
+		random_string = (0...8).map { (65 + rand(26)).chr }.join
 
 		# copy template attributes to new_template object
 		new_template = template.dup
+
+		# copy template attachments to newly created template object
+		template.attachments.each do |a|
+			#new_template.attachments << a.dup
+			# add each attachment to template
+			filename = File.basename(a.file.to_s)
+			t = new_template.attachments.new(function: a.function)
+			t.file = a.file
+			t.save!		
+		end
 
 		# change location and name for template
 		new_template.name ="#{template.name} #{random_string}"

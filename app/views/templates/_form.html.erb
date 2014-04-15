@@ -27,18 +27,17 @@
   </tr>
 </table>
 <h3>Template Files</h3>
-<div id="attachments">
-</div>
 
+<div id="attachments">
 <%= f.fields_for :attachments do |attachment_form| %>
     <div class="row">
       <div class="col-xs-1">
         <%= attachment_form.link_to_remove "Remove" %>
       </div>
-      <div class="col-xs-1">
+      <div class="col-xs-2">
         <%= link_to attachment_form.object[:file], edit_email_templates_path(attachment_form.object[:id]) unless attachment_form.object[:file].nil? %>
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-4">
         <%= attachment_form.select(:function, %w(website email attachment)) %>
       </div>
       <div class="col-xs-3">
@@ -46,4 +45,5 @@
       </div>
     </div>
 <% end %>
+</div>
 <%= f.link_to_add "Add attachment", :attachments, "data-target" => "#attachments" %>
