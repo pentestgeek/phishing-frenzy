@@ -48,8 +48,12 @@ class TemplatesController < ApplicationController
 		unless attachments.nil?
 			attachments.each do |a| 
 				if a[1]["_destroy"].eql? "1"
-					@template.attachments.destroy(a[1]["id"])
-					params[:template][:attachments_attributes].delete(a[0])
+					begin
+						@template.attachments.destroy(a[1]["id"])
+						params[:template][:attachments_attributes].delete(a[0])
+					rescue
+						next
+					end
 				end
 			end
 		end
