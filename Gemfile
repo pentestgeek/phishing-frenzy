@@ -85,3 +85,6 @@ gem 'carrierwave'
 
 # For multiple attachments
 gem 'nested_form'
+
+# datatables
+gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'

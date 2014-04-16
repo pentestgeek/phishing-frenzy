@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/rweng/jquery-datatables-rails.git
+  revision: 788a7b24caf8fe58a5493aa3f6a065879a9f752a
+  specs:
+    jquery-datatables-rails (1.12.2)
+      jquery-rails
+      sass-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -194,6 +202,7 @@ DEPENDENCIES
   execjs
   geokit
   googlecharts
+  jquery-datatables-rails!
   jquery-rails
   jquery-ui-rails
   kaminari

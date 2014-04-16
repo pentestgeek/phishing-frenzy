@@ -6,7 +6,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.order("id").page(params[:page] || 1).per(8)
+		@templates = Template.all
 	end
 
 	def show
