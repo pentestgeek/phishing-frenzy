@@ -47,6 +47,8 @@ gem 'paper_trail', '>= 3.0.0.rc2'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 
+# For email previewing
+gem 'letter_opener_web'
 
 # To use google charts
 gem 'googlecharts'
@@ -62,6 +64,7 @@ gem 'rubyzip', "~>1.0.0"
 
 # To use pry for debugging
 gem 'pry'
+gem 'pry-nav'
 
 # To assist with pagination
 gem 'kaminari'
@@ -76,3 +79,12 @@ gem 'execjs'
 # bootstrap
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem "twitter-bootstrap-rails"
+
+# For uploading email attacments
+gem 'carrierwave'
+
+# For multiple attachments
+gem 'nested_form'
+
+# datatables
+gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'

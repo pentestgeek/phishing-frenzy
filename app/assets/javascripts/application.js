@@ -14,8 +14,25 @@
 //= require jquery_ujs
 //= require jquery.ui.accordion
 //= require jquery.ui.tooltip
+//= require dataTables/jquery.dataTables
+//= require dataTables/jquery.dataTables.bootstrap
 //= require bootstrap
+//= require jquery_nested_form
+
 
 $(function() {
 	$( document ).tooltip();
+});
+
+// enable dataTable on campaign#list
+$( document ).ready(function() {
+  $('#campaigns').dataTable( {
+  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+  "sPaginationType": "bootstrap"
+  });
+
+  $('#templates').dataTable( {
+  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+  "sPaginationType": "bootstrap"
+  });
 });

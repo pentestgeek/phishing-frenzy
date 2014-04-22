@@ -9,7 +9,7 @@ class CampaignsController < ApplicationController
 
 	def list
 		# grab the campaigns and sort by id
-		@campaigns = Campaign.order("id").page(params[:page]).per(8)
+		@campaigns = Campaign.all
 	end
 
 	def home
@@ -19,7 +19,7 @@ class CampaignsController < ApplicationController
 
 	def show
 		@campaign = Campaign.find_by_id(params[:id])
-    @blasts = @campaign.blasts.order('created_at DESC').limit(10)
+		@blasts = @campaign.blasts.order('created_at DESC').limit(10)
 		if @campaign.nil?
 			list
 			render('list')
@@ -93,17 +93,21 @@ class CampaignsController < ApplicationController
 	def destroy
 		Campaign.find(params[:id]).destroy
 		flash[:notice] = "Campaign Destroyed"
-		redirect_to campaign_path
+		redirect_to list_campaigns_path
 	end
 
 	def options
 		@templates = Template.all
 		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 		@victims = Victim.where("campaign_id = ?", params[:id])
+		@template = @campaign.template
+		unless @template
+			flash[:warning] = "No template has been selected for this campaign"
+		end
 		if @campaign.nil?
 			flash[:notice] = "Campaign Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')
-		end   
+		end
 	end
 
 	def victims
@@ -121,23 +125,23 @@ class CampaignsController < ApplicationController
 	end
 
 	def delete_victim
-	victim = Victim.find_by_id(params[:id])
-	if victim.nil?
-		flash[:notice] = "Victim Does not Exist"
-		redirect_to(:controller => 'campaigns', :action => 'list')
-	end
+		victim = Victim.find_by_id(params[:id])
+		if victim.nil?
+			flash[:notice] = "Victim Does not Exist"
+			redirect_to(:controller => 'campaigns', :action => 'list')
+		end
 
-	victim_id_to_destroy = victim.id
+		victim_id_to_destroy = victim.id
 
-	victim.destroy
-	flash[:notice] = "Deleted #{victim.email_address}"
-	respond_to do |format|
-		format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
-		# This is kinda hacky, but works until we figure out the 'rails' way
-		format.js { render :text => "$('#victim-#{victim_id_to_destroy}').remove();
-									if (!$('.notice').length > 0) { $('div #content').prepend('<div class=\"notice\"></div>'); }
-									$('.notice').html(\"#{escape_javascript(flash[:notice])}\");
-									$('.notice').show(300);" }
+		victim.destroy
+		flash[:notice] = "Deleted #{victim.email_address}"
+		respond_to do |format|
+			format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
+			# This is kinda hacky, but works until we figure out the 'rails' way
+			format.js { render :text => "$('#victim-#{victim_id_to_destroy}').remove();
+										if (!$('.notice').length > 0) { $('div #content').prepend('<div class=\"notice\"></div>'); }
+										$('.notice').html(\"#{escape_javascript(flash[:notice])}\");
+										$('.notice').show(300);" }
 		end
 	end
 

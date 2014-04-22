@@ -35,37 +35,32 @@
 </div>
 
 	<ul class="list-group">
-		<li class="list-group-item"><%= link_to('View SMTP Communications', {:action => 'smtp', :id => params[:id]}) %></li>
 		<li class="list-group-item"><%= link_to('Manage Campaign Options', {:action => 'options', :id => params[:id]}) %></li>
-		<li class="list-group-item"><%= link_to "Test Emails for Campaign", "/email/send_email/#{@campaign.id}", method: :post %></li>
-    	<li class="list-group-item"><%= link_to "Launch Emails for Campaign", "/email/launch_email/#{@campaign.id}", method: :post, confirm: 'Are you sure you want launch this campaign?' %></li>
+		<li class="list-group-item"><%= link_to "Preview Email for Campaign", preview_email_path(@campaign.id), method: :post %></li>
+		<li class="list-group-item"><%= link_to "Test Email for Campaign", test_email_path(@campaign.id), method: :post %></li>
+		<li class="list-group-item"><%= link_to "Launch Emails for Campaign", launch_path(@campaign.id), method: :post, confirm: 'Are you sure you want launch this campaign?' %></li>
 		<li class="list-group-item"><%= link_to "Delete Campaign", campaign_path(@campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?' %></li>
 	</ul>
 
-  <h3>Recent Blasts</h3>
-  <table summary="Recent email blasts">
-    <thead>
-    <tr>
-      <th>Started</th>
-      <th>Last Updated</th>
-      <th>Test</th>
-      <th>Targets</th>
-      <th>Emails Sent</th>
-      <th>Message</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @blasts.each do |blast| %>
-        <tr>
-          <td><%= blast.created_at %></td>
-          <td><%= blast.updated_at %></td>
-          <td><%= blast.test? %></td>
-          <td><%= blast.number_of_targets %></td>
-          <td><%= blast.emails_sent %></td>
-          <td><%= blast.message %></td>
-        </tr>
-
-    <% end %>
-    </tbody>
-  </table>
+	<h3>Recent Blasts</h3>
+	<table class="table" summary="Recent email blasts">
+		<thead>
+		<tr>
+			<th>Started</th>
+			<th>Test</th>
+			<th>Targets</th>
+			<th>SMTP Failures</th>
+		</tr>
+		</thead>
+		<tbody>
+		<% @blasts.each do |blast| %>
+			<tr>
+				<td><%= link_to "#{time_ago_in_words(blast.created_at)} ago", blast %></td>
+				<td><%= blast.test? %></td>
+				<td><%= blast.baits.size %></td>
+				<td><%= blast.smtp_failures %></td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
 </div>

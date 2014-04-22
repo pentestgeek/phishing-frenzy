@@ -12,9 +12,9 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: phishing_frenzy_development
+  database: pf_dev
   pool: 5
-  username: phishing_frenzy
+  username: pf_dev
   password: password
   host: localhost
 
@@ -25,9 +25,9 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: phishing_frenzy_test
+  database: pf_test
   pool: 5
-  username: phishing_frenzy_test
+  username: pf_test
   password: password
   host: localhost
 
@@ -35,8 +35,8 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: phishing_frenzy_production
+  database: pf_prod
   pool: 5
-  username: phishing_frenzy_production
+  username: pf_prod
   password: password
   host: localhost

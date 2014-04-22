@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  to: MyString
+  from: MyString
+  status: MyString
+  message: MyString
+  blast_id: 1
+
+two:
+  to: MyString
+  from: MyString
+  status: MyString
+  message: MyString
+  blast_id: 1

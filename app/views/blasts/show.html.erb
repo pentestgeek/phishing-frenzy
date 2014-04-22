@@ -1,0 +1,27 @@
+<% @page_title = "Blast Logs" %>
+
+<%= link_to("<< Back to Campaign", @blast.campaign, :class => 'back-link') %>
+
+<h3>SMTP Logs</h3>
+
+<table class="table table-striped" summary="smtp logs">
+  <tr class="header">
+    <th>Date</th>
+    <th>To</th>
+    <th>From</th>
+    <th>Status</th>
+    <th>Message</th>
+  </tr>
+
+  <% @baits.order("created_at DESC").each do |bait| %>
+
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td><%= bait.created_at.to_formatted_s(:db) %></td>
+        <td><%= bait.to %></td>
+        <td><%= bait.from %></td>
+        <td><%= bait.status %></td>
+        <td><%= bait.message %></td>
+      </tr>
+
+  <% end %>
+</table>
