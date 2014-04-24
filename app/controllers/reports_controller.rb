@@ -45,7 +45,7 @@ class ReportsController < ApplicationController
 		visit.browser = request.env["HTTP_USER_AGENT"]
 		visit.ip_address = request.env["REMOTE_ADDR"]
 		visit.extra = "SOURCE: EMAIL"
-		visit.save
+		visit.save()
 		send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
 	end
 
@@ -128,7 +128,7 @@ class ReportsController < ApplicationController
 		@template_name = Template.where(id: ((@campaign).template_id)).first.name
 
 		# Total number of emails sent.
-		@emails_sent =  EmailSettings.find_by_id(params[:id]).emails_sent
+		@emails_sent =  Victim.where(:campaign_id => @campaign.id).count
 
 		# Unique vistors.
 		@uvic = 0
@@ -169,7 +169,11 @@ class ReportsController < ApplicationController
 		jsonToSend["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
 		i = 0
 		Victim.where(campaign_id: params[:id]).each do |victim|
-			jsonToSend["aaData"][i] = [victim.uid,victim.email_address,"Yes","Yes","No","N/A"]
+			imageSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
+			emailSent = Campaign.where(:id => victim.campaign_id).first().email_sent ? "Yes" : "No"
+			emailClicked =  Visit.where(:victim_id => 1).where(:extra => nil).count + Visit.where(:victim_id => 1).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
+			emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
+			jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,emailSeen]
 			i += 1
 		end
 

@@ -60,7 +60,10 @@ class EmailController < ApplicationController
         PhishingFrenzyMailer.phish(@campaign.id, target.email_address, @blast, ACTIVE)
       end
       flash[:notice] = "Campaign blast launched"
+      @campaign.email_sent = true
+      @campaign.save
     end
     redirect_to :back
+
   end
 end

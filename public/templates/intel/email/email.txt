@@ -2,7 +2,7 @@
 <head>
 
 </head>
-<img src="#{image_url}" alt="" />
+<img src="<%= @image_url %>" alt="" />
 <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN Class=435293017-13022007>Intel just released a great tool for checking the strength of passwords.  Our IT policy dictates that everyone use strong passwords. Ensure that you are in allignment with our policies by ensuring your password is strong. </SPAN></FONT></DIV>
 <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN Class=435293017-13022007></SPAN></FONT>&nbsp;</DIV>
 <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN Class=435293017-13022007>Thanks,</SPAN></FONT></DIV>

@@ -17,6 +17,9 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
     if method==ACTIVE
       @url = full_url(@target, phishing_url, track)
+      uid = Victim.where(:email_address => @target).first().uid
+      @url =  "#{phishing_url}?uid=#{uid}"
+      @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
       bait = mail(
           to: @target,
           from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",

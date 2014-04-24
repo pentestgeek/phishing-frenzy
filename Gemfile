@@ -87,4 +87,4 @@ gem 'carrierwave'
 gem 'nested_form'
 
 # datatables
-gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'

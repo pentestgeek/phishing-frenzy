@@ -10,6 +10,10 @@ if defined?(Bundler)
 end
 
 module PhishingFramework
+  # Default website for reports stuff, must change to callback.
+  SITE_URL = "http://localhost"
+
+
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -64,6 +68,7 @@ module PhishingFramework
     # Default url for __Devise__ emails
     config.action_mailer.default_url_options = { :host => 'phishingfrenzy.com' }
     #config.action_mailer.delivery_method = :letter_opener_web
+
   end
 
 end

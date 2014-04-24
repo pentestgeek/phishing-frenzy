@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require jquery.ui.accordion
 //= require jquery.ui.tooltip
-//= require dataTables/jquery.dataTables
 //= require dataTables/jquery.dataTables.bootstrap
 //= require bootstrap
 //= require jquery_nested_form
