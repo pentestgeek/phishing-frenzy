@@ -292,3 +292,11 @@ A:hover
 input {
     height: 28px !important;
 }
+
+#new-button {
+  margin-bottom: 1em;
+}
+
+#template-buttons .btn {
+  margin-bottom: 1em;
+}

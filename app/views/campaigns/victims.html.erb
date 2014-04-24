@@ -2,22 +2,28 @@
 <h3>Targets</h3>
 
 <div class="form-button-victims">
-	<%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => @victims.first.campaign_id}) %>
+	<%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => @victims.first.campaign_id}, class: "btn btn-danger") %>
 </div>
 
 <% counter = 1 %>
-<% @victims.each do |victim| %>
-
-		<table id="victim-<%= victim.id %>">
-			<tr class="<%= cycle('odd', 'even') %>">
-				<td width="320">
-					<p><%= counter %>: <%= victim.email_address %></p>
-					<% counter += 1 %>
-				</td>
-				<td>
-					<%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
-				</td>
-			</tr>
-		</table>
-	
-<% end %>
+<table class="table table-hover">
+	<tr>
+		<th>Email</th>
+		<th>UID</th>
+		<th>Delete</th>
+	</tr>
+	<% @victims.each do |victim| %>
+	<tr>
+		<td width="320">
+			<p><%= counter %>: <%= victim.email_address %></p>
+			<% counter += 1 %>
+		</td>
+		<td>
+			<%= victim.uid %>
+		</td>
+		<td>
+			<%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
+		</td>
+	</tr>
+	<% end %>
+</table>

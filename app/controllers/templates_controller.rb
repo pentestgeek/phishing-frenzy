@@ -6,7 +6,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.order("id").page(params[:page] || 1).per(8)
+		@templates = Template.all
 	end
 
 	def show
@@ -16,14 +16,7 @@ class TemplatesController < ApplicationController
 			render('list')
 		end
 
-		@images = Dir[File.join(Rails.root.to_s, 'public', 'templates', @template.location, '*.{jpg,png,gif}')]
-
-		# determine if location exists
-		if File.directory? File.join(Rails.root.to_s, 'public', 'templates', @template.location)
-			@template_exists = true
-		else
-			@template_exists = false
-		end
+		@images = @template.images
 	end
 
 	def new
@@ -47,19 +40,26 @@ class TemplatesController < ApplicationController
 			list
 			render('list')
 		end
-
-		# list of template files
-		template_www_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'www', '**')
-		@template_files = Dir["#{template_www_location}"]
-		template_email_location = File.join(Rails.root.to_s, 'public', 'templates', @template.location, 'email', '**')
-		@email_files= Dir["#{template_email_location}"]
 	end
 
 	def update
 		@template = Template.find(params[:id])
+		attachments = params[:template][:attachments_attributes]
+		unless attachments.nil?
+			attachments.each do |a| 
+				if a[1]["_destroy"].eql? "1"
+					begin
+						@template.attachments.destroy(a[1]["id"])
+						params[:template][:attachments_attributes].delete(a[0])
+					rescue
+						next
+					end
+				end
+			end
+		end
+
 		if @template.update_attributes(params[:template])
-			flash[:notice] = "Template Updated"
-			redirect_to(:action => 'list')
+			redirect_to edit_template_path, notice: "Template Updated"
 		else
 			render('edit')
 		end
@@ -76,10 +76,6 @@ class TemplatesController < ApplicationController
 	def destroy
 		# delete folder if_exists?
 		@template = Template.find_by_id(params[:id])
-
-		if Template.folder_exists?(@template.location)
-			FileUtils.rm_rf(File.join(Rails.root.to_s, 'public', 'templates', @template.location))
-		end
 
 		Template.find(params[:id]).destroy
 		flash[:notice] = "Template Destroyed"
@@ -98,48 +94,13 @@ class TemplatesController < ApplicationController
 	end
 
 	def backup
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
+		@template = Template.find(params[:id])
+		if @template.attachments.empty?
 			list
 			render('list')
 		end
 
-		# create yaml file
-		location = File.join(Rails.root.to_s, 'public', 'templates', @template.location)
-		File.open(File.join(location, 'backup.yaml'), "w+") do |f|
-			f.write(@template.to_yaml)
-		end
-
-		download(location)		
-	end
-
-	def download(location)
-		begin
-			@template = Template.find_by_id(params[:id])
-			if @template.nil?
-				list
-				render('list')
-			end
-
-			zipfile_name = File.join(location, 'backup.zip')
-
-			# if backup file exists, delete it before archiving
-			if File.exist?(zipfile_name)
-				File.delete(zipfile_name)
-			end
-
-			Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
-				Dir[File.join(location, '**', '**')].each do |file|
-					zipfile.add(file.sub(location, '').gsub(/\A\//, ''), file) { true }
-				end
-			end
-
-			# force browser to download file
-			send_file zipfile_name, :type => 'application/zip', :disposition => 'attachment', :filename => "#{@template.name}.zip".gsub(' ', '_').downcase
-		rescue => e
-			flash[:notice] = "Issues Zipping Folder + #{e}"
-			redirect_to(:action => 'show', :id => @template.id)
-		end
+		download(@template)		
 	end
 
 	def restore
@@ -147,9 +108,12 @@ class TemplatesController < ApplicationController
 	end
 
 	def upload
-		uploaded_io = params[:restore_template]
-		zip_upload_location = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+		if params[:restore_template].nil?
+			redirect_to :back, notice: 'No File Chosen'
+			return false
+		end
 
+		uploaded_io = params[:restore_template]
 		# check to make sure a zip file was retrieved
 		unless uploaded_io.original_filename =~ /zip/
 			flash[:notice] = "Error: Must be Zip File"
@@ -157,214 +121,96 @@ class TemplatesController < ApplicationController
 			return false		
 		end
 
+		zip_upload_location = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+		tmp_location = Rails.root.join('tmp', 'cache')
+
 		# upload template archive
-		File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'w+b') do |file|
+		File.open(Rails.root.join(zip_upload_location), 'w+b') do |file|
 			file.write(uploaded_io.read)
-  		end
+		end
 
 		# unzip uploaded template archive
-		yaml_file = Zip::File.open(zip_upload_location).find { |file| file.name =~ /\.yaml$/ }
-		template = YAML.load(yaml_file.get_input_stream.read)
+		template_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /template.yml$/ }
+		attachments_yml = Zip::File.open(zip_upload_location).find { |file| file.name =~ /attachments.yml$/ }
+		if template_yml.nil? or attachments_yml.nil?
+			redirect_to :back, notice: 'Not a backup archive: Missing template.yaml'
+			return false
+		end
+
+		# load template.yml file and create template db entry
+		template = YAML.load(template_yml.get_input_stream.read)
 		new_template = template.dup
 		new_template.save!(validate: false)
 
-		template_location = File.join(Rails.root.to_s, "public", "templates", "#{new_template.location}")
-		if Template.folder_exists?(template_location)
-			# append random location and update db
-			random_string = Template.random_string
-			new_template.location += "_#{random_string}"
-			new_template.save!
-		end
+		# read attachments object from yml file
+		Attachment.new
+		attachments = YAML.load(attachments_yml.get_input_stream.read)
 
-		# create directory for new template
-		Dir.mkdir(template_location, 0700)
-
+		template_location = File.join(tmp_location, template.name.parameterize)
+		# for each file in zip archive
 		Zip::File.open(zip_upload_location) { |zipfile|
-			zipfile.each { |file| 
+			zipfile.each { |file|
 				# do something with file
-				file_path = File.join(template_location, file.name)
-				FileUtils.mkdir_p(File.dirname(file_path))
-				zipfile.extract(file, file_path) unless File.exist?(file_path)
+				next if file.name.eql? "template.yml" or file.name.eql? "attachments.yml"
+				FileUtils.mkdir_p(template_location) unless Dir.exists?(template_location)
+				zipfile.extract(file, File.join(template_location, file.name))
 			}
 		}
 
-		# cleanup original uploaded zip file
-		FileUtils.rm(zip_upload_location)
+		filenames = Dir.glob(File.join(template_location, '*')).map{|filepath| File.basename(filepath)}
+		attachments.each do |attachment|
+			# add each attachment to template
+			filename = File.basename(attachment.file.to_s)
+			t = new_template.attachments.create(function: attachment.function)
+			t.file = File.new(File.join(template_location, filename))
+			t.save!		
+		end
 
-		flash[:notice] = "File Uploaded"
-		redirect_to(:controlloer => 'templates', :action => 'list')
+		# cleanup original uploaded zip file and tmp template
+		FileUtils.rm(zip_upload_location)
+		FileUtils.rm_rf(template_location)
+
+		redirect_to list_templates_path, notice: "Template Restored"
 	end
 
 	def edit_email
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:back)
-		else
-			# text_box with email.txt displaying
-			email_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", "email.txt")
-			@email_content = File.read(email_location)
-		end
-	end
-
-	def edit_www
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controlloer => 'templates', :action => 'list')
-		end
-
-		# text_box displaying file contents
-		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
-
-		begin
-			if File.binary?(file_location)
-				flash[:notice] = "Cannot Edit Binary Files"
-				redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
-			else
-				@file_content = File.read(file_location)	
-			end
-		rescue => e
-			flash[:notice] = "Error: #{e}"
+		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
+		@attachment_content = File.read(Dir.glob(attachment_location)[0])
+		if File.binary?(Dir.glob(attachment_location)[0])
+			flash[:notice] = "Cannot Edit Binary Files"
 			redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
 		end
 	end
 
-	def preview_email
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
+	def update_attachment
+		attachment_location = File.join(Rails.root.to_s, "public", Attachment.find(params[:format]).file.to_s)
+		File.open(attachment_location, "w+") do |f|
+			f.write(params[:attachment_content])
 		end
-
-		# make sure email file exists
-		@errors = []
-		@preview = []
-
-		email_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", "email.txt")
-		if File.exist?(email_location)
-			@errors << "[+] File exists"
-			email_message = File.open(email_location, 'r')
-		else
-			@errors << "[-] Unable to Read #{email_location}"
-		end
-
-		# read email headers
-
-		# read email contents
-		email_message.each_line do |line|
-			@preview << line
-		end
+		redirect_to :back, notice: 'Attachment Updated'
 	end
 
-	def update_email_template
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
-		end
-
-		email_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", "email.txt")
-
-		# write params[:email_content] out to a file
-		File.open(email_location, "w+") do |f|
-			f.write(params[:email_content])
-		end
-
-		flash[:notice] = "Email Message Updated"
-		redirect_to(:controlloer => 'templates', :action => 'edit_email', :id => params[:id])
-	end	
-
-	def delete_email_template_file
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
-		end
-
-		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "email", params[:filename])
-		FileUtils.rm(file_location)
-
-		flash[:notice] = "#{params[:filename]} Removed"
-		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
-	end
-
-	def update_www_template
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
-		end
-
-		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
-
-		# write params[:file_content] out to a file
-		File.open(file_location, "w+") do |f|
-			f.write(params[:file_content])
-		end
-
-		flash[:notice] = "Website Updated"
-		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
-	end
-
-	def delete_www_template_file
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
-		end
-
-		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
-		FileUtils.rm(file_location)
-
-		flash[:notice] = "#{params[:filename]} Removed"
-		redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
-	end
-
-	def new_www_file
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
-		end
-	end
-
-	def create_www_file
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			flash[:notice] = "Template not found"
-			redirect_to(:controller => 'templates', :action => 'list')
-			return
-		end
-
-		file_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", params[:filename])
-
-		begin
-			FileUtils.touch(file_location)
-			flash[:notice] = "File Created"
-			redirect_to(:controller => 'templates', :action => 'edit', :id => @template.id)
-		rescue => e
-			flash[:notice] = "#{e}"
-			redirect_to(:controller => 'templates', :action => 'edit', :id => @template.id)
-		end
-	end
-
-	private
+private
 
 	def copy_template(template)
 		# generate random string
-		random_string = Template.random_string
+		random_string = (0...8).map { (65 + rand(26)).chr }.join
 
 		# copy template attributes to new_template object
 		new_template = template.dup
+
+		# copy template attachments to newly created template object
+		template.attachments.each do |a|
+			#new_template.attachments << a.dup
+			# add each attachment to template
+			filename = File.basename(a.file.to_s)
+			t = new_template.attachments.new(function: a.function)
+			t.file = a.file
+			t.save!		
+		end
+
 		# change location and name for template
-		new_template.name = "#{template.name} #{random_string}"
+		new_template.name ="#{template.name} #{random_string}"
 		new_template.location = "#{template.location}_#{random_string}"
 
 		if new_template.save(validate: false)
@@ -375,4 +221,25 @@ class TemplatesController < ApplicationController
 			redirect_to list_templates_path, notice: "Issues Saving Template"
 		end
 	end
+
+	def download(template)
+		begin
+			zipfile_name = template.name? ? "#{template.name.parameterize}.zip" : "backup.zip"
+			zipfile_location = Rails.root.join('tmp', 'cache', zipfile_name)
+			Zip::File.open(zipfile_location, Zip::File::CREATE) do |zipfile|
+				zipfile.get_output_stream("template.yml") { |f| f.puts template.to_yaml }
+				zipfile.get_output_stream("attachments.yml") { |f| f.puts template.attachments.to_yaml }
+				template.attachments.each do |attachment|
+					zipfile.add(attachment.file.file.identifier, attachment.file.current_path) {true}
+				end
+			end
+
+			# send archive to browser for download
+			send_file zipfile_location, :type => 'application/zip', :disposition => 'attachment', :filename => "#{template.name}.zip".gsub(' ', '_').downcase
+		rescue => e
+			flash[:notice] = "Issues Zipping: #{e}"
+			redirect_to(:action => 'show', :id => template.id)
+		end
+	end
+
 end

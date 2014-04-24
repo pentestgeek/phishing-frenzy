@@ -8,8 +8,7 @@
 </div>
 
 <%= form_tag({action: :upload}, multipart: true) do %>
-	<%= file_field_tag 'restore_template', class:'btn' %>
+	<%= file_field_tag 'restore_template' %>
 	<p></p>
-	<%= submit_tag("Restore Template", class:'btn') %>
+	<%= submit_tag("Restore Template", class:'btn btn-default') %>
 <% end %>
-

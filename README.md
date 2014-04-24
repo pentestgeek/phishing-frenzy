@@ -1,3 +1,5 @@
+# This branch is unstable atm and has missing features. Do not use it on live systems.
+
 Phishing Frenzy
 ===============
 
@@ -133,6 +135,10 @@ Change ownership of apache config to allow Phishing Fenzy manage virtual hosts. 
 	# chown www-data:www-data /etc/apache2/httpd.conf
 
 If you are running Kali linux or a distro that does not have the httpd.conf file you will need to create one so Phishing Frenzy can manage the virtual hosts.
+
+If you would like to install the 2 default templates (efax and intel password checker) you can do so by simply running the following rake task.
+
+	# rake templates:load
 
 ### Background Jobs
 

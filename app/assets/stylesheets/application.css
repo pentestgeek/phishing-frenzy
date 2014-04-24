@@ -11,6 +11,9 @@
  *= require bootstrap.min
  *= require_self
  *= require_tree .
+ *= require jquery.ui.core
+ *= require jquery.ui.theme
+ *= require dataTables/jquery.dataTables.bootstrap
  *= require jquery.ui.accordion
  *= require jquery.ui.tooltip 
  */

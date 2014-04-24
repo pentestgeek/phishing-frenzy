@@ -1,3 +1,26 @@
 // Place all the styles related to the Reports controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.slice path {
+    stroke: #fff;
+    stroke-width: 1px;
+}
+.textTop {
+    font-family: 'Segoe UI';
+    font-size: 12pt;
+    fill: #bbb;
+}
+#barChart text {
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+.colorBox {
+  background-color:  #99FFCC;
+  position: absolute;
+}
+.textItems {
+  text-align:center;
+  vertical-align:middle;
+}
+

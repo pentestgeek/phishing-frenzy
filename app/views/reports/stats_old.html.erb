@@ -1,0 +1,109 @@
+<% @page_title = "Report Details" %>
+<%= link_to("<< Back to Reports", {:action => 'list'}, :class => 'back-link') %>
+
+<meta http-equiv="refresh" content="20" />
+
+<script>
+	$(document).ready(function() {
+			$('#visitors').hover(function() {
+					$('#visitors_popup').show();
+			}, function() {
+					$('#visitors_popup').hide();
+			});
+
+			$('#browsers').hover(function() {
+					$('#browsers_popup').show();
+			}, function() {
+					$('#browsers_popup').hide();
+			});
+	});
+</script>
+
+<!--Load the AJAX API-->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+	// Load the Visualization API and the piechart package.
+	google.load('visualization', '1.0', {'packages':['corechart']});
+
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.setOnLoadCallback(drawChart);
+
+	// Callback that creates and populates a data table,
+	// instantiates the pie chart, passes in the data and
+	// draws it.
+	function drawChart() {
+
+		// Create the data table.
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Description');
+		data.addColumn('number', 'Count');
+		data.addRows([
+			['User Clicked', <%= @apache_data[:visitors].length %>],
+			['No Action', <%= @email_settings.emails_sent %> - <%= @apache_data[:visitors].length %> ],
+		]);
+
+		// Set chart options
+		var options = {'title':'Click Success',
+									 'width':350,
+									 'height':250,
+									 'is3D':true};
+
+		// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+	}
+</script>
+
+<div class="page-header">
+	<h2>Report Details for <%= @campaign.name %></h2>
+</div>
+
+<table>
+	<tr>
+		<th width="200">
+			<p>Email Sent (<%= @email_settings.emails_sent %>)</p>
+			<p>Clicks (<%= @apache_data[:visitors].length %>)</p>
+			<div id="visitors">
+				<p>Visitors: (<%= link_to(@apache_data[:visitors].length, {:action => 'visitors', :id => @campaign.id}) %>) </p>
+			</div>
+			<div id="visitors_popup" class="popup">
+				<% visitor_counter = 1 %>
+				<% @apache_data[:visitors].each do |visitor| %>
+					<%= simple_format("#{visitor_counter} #{visitor}") %>
+					<% visitor_counter += 1 %>
+				<% end %>
+			</div>
+			<p>Logs: (<%= link_to(@apache_data[:logs].length, {:action => 'logs', :id => @campaign.id}) %>)</p>
+			<p>IP Addresses: (<%= link_to(@apache_data[:ip_addresses].length, {:action => 'ip_addresses', :id => @campaign.id}) %>)</p>
+			<div id="browsers">
+				<p>Browsers (<%= link_to(@apache_data[:browsers].length, {:action => 'browsers', :id => @campaign.id}, :target => "_blank") %>)</p>
+			</div>
+			<div id="browsers_popup" class="popup">
+				<% counter = 1 %>
+				<% @apache_data[:browsers].each do |browser| %>
+					<table>
+						<tr class="<%= cycle('odd', 'even') %>">
+							<td width="450">
+								<p><%= simple_format(browser) %></p>
+								<% counter += 1 %>
+							</td>
+						</tr>
+					</table>
+				<% end %>
+			</div>
+			<% if @passwd %>
+				<p>Passwords (<%= link_to(@passwd.lines.count, {:action => 'passwords', :id => @campaign.id}) %>)</p>
+			<% end %>
+			<%= button_to("Clear Logs", {:controller => 'reports', :action => 'clear_logs', :id => @campaign.id}, class:'btn btn-mini') %>
+		</th>
+		<td>
+			<div id="chart_div" class="style_image"></div>
+			<% markers = "" %>
+			<% @location_object.each do |location| %>
+				<% markers += "&markers=#{location}" %>
+			<% end %>
+			<div id="google_map" style="padding-top: 10px"><%= image_tag "http://maps.google.com/maps/api/staticmap?size=350x250&sensor=false#{markers}", :class => 'style_image' %></div>
+		</td>
+	</tr>
+</table>

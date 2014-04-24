@@ -1,0 +1,11 @@
+#<!--start <%= @campaign_id %>-->
+<VirtualHost *:80>
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    ServerAlias www.<%= @fqdn %>
+    DocumentRoot <%= @template_location %>
+    DirectoryIndex <%= @directory_index %>
+    CustomLog     <%= @approot %>/log/www-<%= @fqdn %>-<%= @campaign_id %>-access.log combined
+    ErrorLog      <%= @approot %>/log/www-<%= @fqdn %>-<%= @campaign_id %>-error.log
+</VirtualHost>
+#<!--end <%= @campaign_id %>-->                                                     `
