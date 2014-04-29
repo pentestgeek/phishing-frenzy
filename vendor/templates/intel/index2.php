@@ -849,7 +849,7 @@ loadAsyncScript('http://apis.google.com/js/plusone.js', 'https://apis.google.com
   <![endif]-->
  <div id="passwordContent">
 
-<form method="POST" action="index2.php?id=<?php echo $hash ?>" name="NFuseForm" autocomplete="off">
+<form method="POST" action="index2.php?uid=<?php echo $uid ?>" name="NFuseForm" autocomplete="off">
   <div  id="page" class="clearfix wapwrapper" data-component="consumer-security" data-component-id="1"><!-- column -->
    <div class="position_content" id="page_position_content">
     <div class="clearfix colelem" id="pu1279"><!-- group -->

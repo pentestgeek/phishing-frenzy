@@ -8,7 +8,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     @date = Time.now.to_formatted_s(:long_ordinal)
     track = @campaign.campaign_settings.track_uniq_visitors?
     phishing_url = @campaign.email_settings.phishing_url
-    @target = target
+    target.class == String ? @target = Victim.new(email_address: target) : @target = target
     blast = @campaign.blasts.find(blast_id)
 
     @campaign.template.images.each do |image|
@@ -16,16 +16,15 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     if method==ACTIVE
-      @url = full_url(@target, phishing_url, track)
-      if Victim.where(:email_address => @target).empty?
+      if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
         uid = "000000"
       else
-        uid = Victim.where(:email_address => @target).first().uid
+        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first().uid
       end
       @url =  "#{phishing_url}?uid=#{uid}"
       @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
       bait = mail(
-          to: @target,
+          to: @target.email_address,
           from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
           subject: @campaign.email_settings.subject,
           template_path: @campaign.template.email_template_path,
@@ -35,9 +34,13 @@ class PhishingFrenzyMailer < ActionMailer::Base
       bait.delivery_method.settings.merge!(campaign_smtp_settings)
       cast(blast, bait)
     else
-      @url = full_url(@target, phishing_url, track)
+      if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
+        uid = "000000"
+      else
+        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first().uid
+      end
       bait = mail(
-          to: @target,
+          to: @target.email_address,
           subject: @campaign.email_settings.subject,
           template_path: @campaign.template.email_template_path,
           template_name: @campaign.template.email_files.first[:file],

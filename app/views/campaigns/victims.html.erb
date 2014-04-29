@@ -1,29 +1,41 @@
-<%= link_to("<< Back to Campaign Options", {:controller => 'campaigns', :action => 'options', :id => params[:id]}, :class => 'back-link') %>
-<h3>Targets</h3>
+<%= link_to("<< Back to Campaign Options", options_campaigns_path(id: params[:id]), :class => 'back-link') %>
 
+<h3>Targets</h3>
 <div class="form-button-victims">
-	<%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => @victims.first.campaign_id}, class: "btn btn-danger") %>
+  <%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => params[:id]}, class: "btn btn-danger") %>
 </div>
 
 <% counter = 1 %>
-<table class="table table-hover">
-	<tr>
-		<th>Email</th>
-		<th>UID</th>
-		<th>Delete</th>
-	</tr>
-	<% @victims.each do |victim| %>
-	<tr>
-		<td width="320">
-			<p><%= counter %>: <%= victim.email_address %></p>
-			<% counter += 1 %>
-		</td>
-		<td>
-			<%= victim.uid %>
-		</td>
-		<td>
-			<%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
-		</td>
-	</tr>
-	<% end %>
+<table id="victims-table" class="table table-hover table-condensed">
+  <tr>
+    <th></th>
+    <th>First</th>
+    <th>Last</th>
+    <th>Email</th>
+    <th>UID</th>
+    <th>Delete</th>
+  </tr>
+  <% @victims.each do |victim| %>
+  <tr id="victim-<%= victim.id %>">
+    <td>
+      <%= counter %>
+      <% counter += 1 %>
+    </td>
+    <td>
+      <%= victim.firstname %>
+    </td>
+    <td>
+      <%= victim.lastname %>
+    </td>
+    <td>
+      <%= victim.email_address %>
+    </td>
+    <td>
+      <%= victim.uid %>
+    </td>
+    <td>
+      <%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
+    </td>
+  </tr>
+  <% end %>
 </table>

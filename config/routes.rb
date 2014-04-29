@@ -18,6 +18,7 @@ PhishingFramework::Application.routes.draw do
 
 	resources :campaigns do
 		collection do
+			get 'options'
 			get 'home'
 			get 'list'
 			get 'aboutus'
@@ -25,9 +26,11 @@ PhishingFramework::Application.routes.draw do
 		end
 		member do
 			post 'update_settings'
-    end
-    resources :blasts, only: [:show], shallow: true
+			post 'clear_victims'
+		end
 	end
+
+	resources :blasts, only: [:show], shallow: true
 
 	resources :templates do
 		collection do
@@ -66,16 +69,16 @@ PhishingFramework::Application.routes.draw do
 
 	match 'access', :to => 'access#menu', as: 'access'
 
-  require 'sidekiq/web'
+	require 'sidekiq/web'
 
-  authenticate :admin do
-    mount Sidekiq::Web => '/sidekiq'
-  end
+	authenticate :admin do
+		mount Sidekiq::Web => '/sidekiq'
+	end
 
-  require 'sidekiq/api'
-  match "queue-status" => proc { [200, {"Content-Type" => "text/plain"}, [Sidekiq::Queue.new.size < 100 ? "OK" : "UHOH" ]] }
+	require 'sidekiq/api'
+	match "queue-status" => proc { [200, {"Content-Type" => "text/plain"}, [Sidekiq::Queue.new.size < 100 ? "OK" : "UHOH" ]] }
 
-  mount LetterOpenerWeb::Engine, at: 'letter_opener'
+	mount LetterOpenerWeb::Engine, at: 'letter_opener'
 
 	match ':controller(/:action(/:id))(.:format)'
 end

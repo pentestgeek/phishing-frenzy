@@ -38,6 +38,7 @@ h1 {
     cursor: pointer;
 }
 
+/*
 [class^="icon-"], [class*=" icon-"] {
     background-image: url(<%=asset_path "glyphicons-halflings.png"%>);
 }
@@ -45,3 +46,4 @@ h1 {
 .icon-white {
     background-image: url(<%=asset_path "glyphicons-halflings-white.png"%>);
 }
+*/

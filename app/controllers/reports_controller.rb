@@ -1,23 +1,5 @@
 class ReportsController < ApplicationController
-	skip_before_filter :authenticate_admin!, :only => :results
-
-=begin
-		Active
-		Time elapsed
-		Template used
-		Emails Sent
-		Victim Clicks
-		Visits
-
-		Victim Table
-		------------
-		Email address
-		Sent
-		Clicked 
-		How many visits
-
-
-=end
+	skip_before_filter :authenticate_admin!, :only => [ :results, :image  ]
 
 	def index
 		list
@@ -50,41 +32,8 @@ class ReportsController < ApplicationController
 	end
 
 	def stats
-=begin
-		# generate statistics
-		@campaign = Campaign.find_by_id(params[:id])
-		@campaign_settings = CampaignSettings.find_by_id(params[:id])
-		@email_settings = EmailSettings.find_by_id(params[:id])
-		@template = Template.find_by_id(@campaign.template_id)
-		@victims = Victim.where(:campaign_id => params[:id])
 
-		@apache_data = parse_apache_logs(@campaign_settings, @campaign)
-
-		# catch if an error was thrown on parse_apache_logs
-		if @apache_data[:error]
-			flash[:notice] = "#{@apache_data[:error]}"
-			redirect_to(:action => 'list')
-			return false
-		end
-
-		@ip_addresses = @apache_data[:ip_addresses]
-
-		# display password if it exists
-		passwd_location = File.join(Rails.root.to_s, "public", "templates", "#{@template.location}", "www", "passwd.txt")
-		if File.exist?(passwd_location)
-			# read passwd file
-			@passwd = File.read(passwd_location)
-		else
-			@passwd = nil
-		end
-
-		@location_object = []
-		@apache_data[:ip_addresses].each do |ip_address|
-			@location_object << Geokit::Geocoders::MultiGeocoder.geocode(ip_address).ll
-		end
-=end
 	end
-
 
 	def results
 		finish = "start, "
@@ -169,11 +118,12 @@ class ReportsController < ApplicationController
 		jsonToSend["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
 		i = 0
 		Victim.where(campaign_id: params[:id]).each do |victim|
+			passwordSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
 			imageSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
 			emailSent = Campaign.where(:id => victim.campaign_id).first().email_sent ? "Yes" : "No"
-			emailClicked =  Visit.where(:victim_id => 1).where(:extra => nil).count + Visit.where(:victim_id => 1).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
+			emailClicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
 			emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
-			jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,emailSeen]
+			jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen,emailSeen]
 			i += 1
 		end
 

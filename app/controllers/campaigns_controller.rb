@@ -112,10 +112,6 @@ class CampaignsController < ApplicationController
 
 	def victims
 		@victims = Victim.where("campaign_id = ?", params[:id])
-		if @victims.empty?
-			flash[:notice] = "Campaign Does not Exist"
-			redirect_to(:controller => 'campaigns', :action => 'list')
-		end
 	end
 
 	def clear_victims
@@ -137,11 +133,7 @@ class CampaignsController < ApplicationController
 		flash[:notice] = "Deleted #{victim.email_address}"
 		respond_to do |format|
 			format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
-			# This is kinda hacky, but works until we figure out the 'rails' way
-			format.js { render :text => "$('#victim-#{victim_id_to_destroy}').remove();
-										if (!$('.notice').length > 0) { $('div #content').prepend('<div class=\"notice\"></div>'); }
-										$('.notice').html(\"#{escape_javascript(flash[:notice])}\");
-										$('.notice').show(300);" }
+			format.js
 		end
 	end
 

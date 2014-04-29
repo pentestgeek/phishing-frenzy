@@ -28,7 +28,7 @@ face=Tahoma><FONT size=2><B>Subject:</B> Strong Password Checking Tool
   <%= image_tag attachments['intel.jpg'].url %>
   <br>
   <br>
-  Greetings,<br>
+  Greetings <%= target.firstname %>,<br>
   <br>
   Your passwords are the keys you use to access personal information that
   you've stored on your computer and in your online accounts.<br>
@@ -56,6 +56,7 @@ face=Tahoma><FONT size=2><B>Subject:</B> Strong Password Checking Tool
   you have questions/inquiries please visit <a
   href="http://www.intel.com">http://www.intel.com</a>.<br>
   <br>
+  <img src="<%= @image_url %>" alt="" />
 </div>
 </body>
 </html>

@@ -49,7 +49,7 @@ class EmailController < ApplicationController
     if GlobalSettings.asynchronous?
       begin
         @campaign.victims.each do |target|
-          PhishingFrenzyMailer.delay.phish(@campaign.id, target.email_address, @blast.id, ACTIVE)
+          PhishingFrenzyMailer.delay.phish(@campaign.id, target, @blast.id, ACTIVE)
         end
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
@@ -57,7 +57,7 @@ class EmailController < ApplicationController
       end
     else
       @campaign.victims.each do |target|
-        PhishingFrenzyMailer.phish(@campaign.id, target.email_address, @blast, ACTIVE)
+        PhishingFrenzyMailer.phish(@campaign.id, target, @blast, ACTIVE)
       end
       flash[:notice] = "Campaign blast launched"
       @campaign.email_sent = true

