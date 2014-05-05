@@ -51,6 +51,8 @@ class EmailController < ApplicationController
         @campaign.victims.each do |target|
           PhishingFrenzyMailer.delay.phish(@campaign.id, target, @blast.id, ACTIVE)
         end
+        @campaign.email_sent = true
+        @campaign.save
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
