@@ -166,7 +166,7 @@ class Campaign < ActiveRecord::Base
                   <?php
                   $password = $_POST['FormFieldName'];
                   if ($password != "") {
-                    $password = 'password:'' . $password; 
+                    $password = 'password:' . $password; 
                   }
 
                   $uid = $_GET['uid'];
