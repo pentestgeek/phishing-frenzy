@@ -1,4 +1,4 @@
 class Visit < ActiveRecord::Base
-  belongs_to :Victim
+  belongs_to :victim
   # attr_accessible :title, :body
 end

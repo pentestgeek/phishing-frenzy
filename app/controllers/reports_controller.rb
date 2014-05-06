@@ -15,7 +15,7 @@ class ReportsController < ApplicationController
 		@visits = 0
 		victims = Victim.where(campaign_id: params[:id])
 		victims.each do |victim|
-			@visits.append(Visit.where(Victim_id: victim.id)).size
+			@visits.append(Visit.where(victim_id: victim.id)).size
 		end
 	end
 
@@ -94,7 +94,7 @@ class ReportsController < ApplicationController
 				@uvic = @uvic + 1
 				@visits = @visits + s
 			end
-			o = Visit.where(:Victim_id => victim.id, :extra => "SOURCE: EMAIL").size
+			o = Visit.where(:victim_id => victim.id, :extra => "SOURCE: EMAIL").size
 			if (o > 0)
 				@opened = @opened + 1
 			end
