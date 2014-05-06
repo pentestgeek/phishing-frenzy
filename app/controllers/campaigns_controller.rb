@@ -99,7 +99,7 @@ class CampaignsController < ApplicationController
 	def options
 		@templates = Template.all
 		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
-		@victims = Victim.where("campaign_id = ?", params[:id])
+		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
 		@template = @campaign.template
 		unless @template
 			flash[:warning] = "No template has been selected for this campaign"
@@ -111,11 +111,15 @@ class CampaignsController < ApplicationController
 	end
 
 	def victims
-		@victims = Victim.where("campaign_id = ?", params[:id])
+		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
 	end
 
 	def clear_victims
-		Victim.where("campaign_id = ?", params[:id]).delete_all
+		Victim.where("campaign_id = ? and sent = ?", params[:id], false).delete_all
+		archives = Victim.where("campaign_id = ? and sent = ?", params[:id], true)
+		archives.each do |victim|
+			victim.update_attribute(:archive, true)
+		end
 		flash[:notice] = "Victims Cleared"
 		redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
 	end

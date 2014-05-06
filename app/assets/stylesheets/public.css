@@ -51,20 +51,9 @@ A:hover
   margin: 0;
   padding: 0;
 }
-#navigation
-{
-  height: 26px;
-  background: #A40303;
-}
-#main
-{
-  background: #FFFFFF;
-}
 #content
 {
-  min-width: 200px;
-  float: left;
-  padding: 10px;
+  padding-bottom: 20px;
 }
 /*Navigation*/
 #navigation UL
@@ -298,4 +287,13 @@ input {
 
 #template-buttons .btn {
   margin-bottom: 1em;
+}
+
+div.dataTables_info {
+  padding-bottom: 20px;
+}
+
+#stat-info H2 {
+  color: #000000;
+  text-align: center;
 }

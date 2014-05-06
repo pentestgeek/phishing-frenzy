@@ -14,7 +14,7 @@ h3 {
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src='http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.js'></script>
 <body>
-  <div class="wrapper" style="position:relative">
+  <div id="stat-info" class="wrapper" style="position:relative">
         <div class='colorBox' style="width:800px;height:100px;top:0px;left:0px;background-color: #9edae5"> 
           <h3 class='textItems' style="color:grey;">Campaign Name: </h2>
           <h2 id='campaign_name' class='textItems' style="color:black;">Not Loaded.</h2>
@@ -53,7 +53,7 @@ h3 {
 
         </svg>
         <div style="top: 670px; position: absolute; width: 800px">
-            <table id="table_id" class="display">
+            <table id="victims_table" class="display">
               <thead>
                 <tr>
                   <th>Victim UID</th>
@@ -287,7 +287,7 @@ $(document).ready(function() {
 });
 
   $(document).ready(function() {
-        $('#table_id').dataTable( {
+        $('#victims_table').dataTable( {
             "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
             "aoColumnDefs": [            
             {

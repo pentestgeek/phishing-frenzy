@@ -214,8 +214,8 @@ private
 		new_template.location = "#{template.location}_#{random_string}"
 
 		if new_template.save(validate: false)
-			FileUtils.cp_r(File.join(Rails.root.to_s, 'public', 'templates', template.location), 
-					File.join(Rails.root.to_s, 'public', 'templates', new_template.location))
+			#FileUtils.cp_r(File.join(Rails.root.to_s, 'public', 'templates', template.location), 
+			#File.join(Rails.root.to_s, 'public', 'templates', new_template.location))
 			redirect_to list_templates_path, notice: "Template copy complete"
 		else
 			redirect_to list_templates_path, notice: "Issues Saving Template"

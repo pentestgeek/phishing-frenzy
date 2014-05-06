@@ -77,7 +77,7 @@ class ReportsController < ApplicationController
 		@template_name = Template.where(id: ((@campaign).template_id)).first.name
 
 		# Total number of emails sent.
-		@emails_sent =  Victim.where(:campaign_id => @campaign.id).count
+		@emails_sent =  Victim.where(campaign_id: 8, sent: true).count
 
 		# Unique vistors.
 		@uvic = 0
@@ -87,7 +87,6 @@ class ReportsController < ApplicationController
 
 		# Total opened
 		@opened = 0
-
 
 		Victim.where(campaign_id: params[:id]).each do |victim|
 			s = Visit.where(Victim_id: victim.id).size

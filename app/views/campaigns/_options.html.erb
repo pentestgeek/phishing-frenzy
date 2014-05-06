@@ -74,13 +74,9 @@
 	</tr>
 	<tr>
 	  <th>
-		<% if Victim.where("campaign_id = #{@campaign.id}").size != 0 %>
-			Targets
-			( <%= link_to(Victim.where("campaign_id = #{@campaign.id}").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>
-			)
-		<% else %>
-			Targets (<%= Victim.where("campaign_id = #{@campaign.id}").size %>)
-		<% end %>
+		Targets
+		( <%= link_to(Victim.where("campaign_id = #{@campaign.id} and archive = false").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>
+		)
 	  </th>
 	  <td><span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span></td>
 	  <td>

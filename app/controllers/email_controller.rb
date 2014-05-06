@@ -46,10 +46,12 @@ class EmailController < ApplicationController
     @campaign = Campaign.find(params[:id])
     @campaign.update_attributes(active: true)
     @blast = @campaign.blasts.create(test: false)
+    victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
     if GlobalSettings.asynchronous?
       begin
-        @campaign.victims.each do |target|
+        victims.each do |target|
           PhishingFrenzyMailer.delay.phish(@campaign.id, target, @blast.id, ACTIVE)
+          target.update_attribute(:sent, true)
         end
         @campaign.email_sent = true
         @campaign.save
@@ -58,8 +60,9 @@ class EmailController < ApplicationController
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
       end
     else
-      @campaign.victims.each do |target|
+      victims.each do |target|
         PhishingFrenzyMailer.phish(@campaign.id, target, @blast, ACTIVE)
+        target.update_attribute(:sent, true)
       end
       flash[:notice] = "Campaign blast launched"
       @campaign.email_sent = true
