@@ -289,8 +289,8 @@ input {
   margin-bottom: 1em;
 }
 
-div.dataTables_info {
-  padding-bottom: 20px;
+#victims-summary-table_wrapper {
+  padding-bottom: 50px;
 }
 
 #stat-info H2 {

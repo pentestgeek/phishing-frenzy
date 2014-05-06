@@ -1,28 +1,21 @@
-<%= stylesheet_link_tag "demo_table.css" %>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src='http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.js'></script>
-<script>
-    $(document).ready(function() {
-        console.log('/reports/uid_json/' + window.location.href.split("/").pop())
-        $('#table_id').dataTable({
-            "sAjaxSource": '/reports/uid_json/' + window.location.href.split("/").pop()
-        });
-  });
-</script>
-<%= link_to 'Back', :back %>
-<div>
-    <table id="table_id" class="display">
-        <thead>
-            <tr>
-                <th>Visit ID</th>
-                <th>Browser</th>
-                <th>IP Address</th>
-                <th>Time</th>
-                <th>Extra</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+<div class="row">
+  <div class="col-xs-12">
+    <%= link_to '<< Back to List', :back %>
+    <h3>Details: <%= @victim.email_address %></h3>
+
+    <table id="victims-table" class="display table-hover table-condense">
+      <thead>
+        <tr>
+          <th>Visit ID</th>
+          <th>Browser</th>
+          <th>IP Address</th>
+          <th>Time</th>
+          <th>Extra</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
     </table>
+  </div>
 </div>

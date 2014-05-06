@@ -164,10 +164,10 @@ class Campaign < ActiveRecord::Base
         if File.extname(page.file.current_path) == '.php'
           fo.puts "
                   <?php
-                  $password = $_POST['FormFieldName'];
-                  if ($password != "") {
-                    $password = 'password:' . $password; 
-                  }
+                  // $password = $_POST['FormFieldName'];
+                  // if ($password != '') {
+                  //  $password = 'password:' . $password;
+                  // }
 
                   $uid = $_GET['uid'];
                   $ip = $_SERVER['REMOTE_ADDR'];

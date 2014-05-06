@@ -35,4 +35,27 @@ $( document ).ready(function() {
   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
   "sPaginationType": "bootstrap"
   });
+
+  $('#victims-table').dataTable( {
+  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+  "sAjaxSource": '/reports/uid_json/' + window.location.href.split("/").pop(),
+  "sPaginationType": "bootstrap"
+  });
+
+  $('#victims-summary-table').dataTable( {
+    "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+    "sPaginationType": "bootstrap",
+    "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
+    "aoColumnDefs": [            
+    {
+     "aTargets": [ 0 ], // Column to target
+     "mRender": function ( data, type, full ) {
+        // 'full' is the row's data object, and 'data' is this column's data
+        // e.g. 'full[0]' is the comic id, and 'data' is the comic title
+        return '<a href="/reports/uid/' + data + '">' + data + '</a>';
+      }
+    }
+  ],
+  "aaSorting": [[4,'desc']],
+  } );
 });

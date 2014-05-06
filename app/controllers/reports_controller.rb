@@ -23,7 +23,7 @@ class ReportsController < ApplicationController
 		victims = Victim.where(:uid => params[:uid])
 		visit = Visit.new()
 		victim = victims.first()
-		visit.Victim_id = victim.id
+		visit.victim_id = victim.id
 		visit.browser = request.env["HTTP_USER_AGENT"]
 		visit.ip_address = request.env["REMOTE_ADDR"]
 		visit.extra = "SOURCE: EMAIL"
@@ -45,7 +45,7 @@ class ReportsController < ApplicationController
 				finish += "over 1, "
 				v = victims.first()
 				visit = Visit.new()
-				visit.Victim_id = v.id
+				visit.victim_id = v.id
 				if params[:browser_info]
 					finish += "browser info, "
 					visit.browser = params[:browser_info]
@@ -77,7 +77,7 @@ class ReportsController < ApplicationController
 		@template_name = Template.where(id: ((@campaign).template_id)).first.name
 
 		# Total number of emails sent.
-		@emails_sent =  Victim.where(campaign_id: 8, sent: true).count
+		@emails_sent =  Victim.where(campaign_id: @campaign.id, sent: true).count
 
 		# Unique vistors.
 		@uvic = 0
@@ -89,7 +89,7 @@ class ReportsController < ApplicationController
 		@opened = 0
 
 		Victim.where(campaign_id: params[:id]).each do |victim|
-			s = Visit.where(Victim_id: victim.id).size
+			s = Visit.where(:victim_id => victim.id).where('extra is null OR extra not LIKE ?', "%EMAIL%").size
 			if (s > 0)
 				@uvic = @uvic + 1
 				@visits = @visits + s
@@ -130,7 +130,7 @@ class ReportsController < ApplicationController
 	end
 
 	def uid
-
+		@victim = Victim.find_by_uid(params[:id])
 	end
 
 	def uid_json

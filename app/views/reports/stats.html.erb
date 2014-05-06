@@ -10,66 +10,64 @@ h3 {
 }
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src='http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.js'></script>
 <body>
   <div id="stat-info" class="wrapper" style="position:relative">
-        <div class='colorBox' style="width:800px;height:100px;top:0px;left:0px;background-color: #9edae5"> 
-          <h3 class='textItems' style="color:grey;">Campaign Name: </h2>
-          <h2 id='campaign_name' class='textItems' style="color:black;">Not Loaded.</h2>
-        </div>
-        <div class='colorBox' style="width:395px;height:100px;top:110px;left:0px;background-color: #9ecae1"> 
-          <h3 class='textItems' style="color:grey;">Active: </h2>
-          <h2 id='active' class='textItems' style="color:black;">-</h2>
-        </div>
-        <div class='colorBox' style="width:395px;height:100px;top:220px;left:0px;background-color: #9edae5"> 
-          <h3 class='textItems' style="color:grey;">Time Elapsed: </h2>
-          <h2 id='time' class='textItems' style="color:black;">-</h2>
-        </div>
-        <div class='colorBox' style="width:395px;height:100px;top:330px;left:0px;background-color: #9ecae1"> 
-          <h3 class='textItems' style="color:grey;">Template Used: </h2>
-          <h2 id='template_name' class='textItems' style="color:black;">-</h2>
-        </div>
-        <div id="chartDiv" class='colorBox' style="width:395px;height:320px;top:110px;left:405px;background-color: #FFF;border: 0px">
-        </div>
-        <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:405px;margin-bottom:20px;background-color: #9edae5">
-          <h3 class='textItems' style="color:grey;">Sent: </h2>
-          <h2 id='sent' class='textItems' style="color:black;">-</h2>
-        </div>
-        <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:607.5px;background-color: #9ecae1">
-          <h3 class='textItems' style="color:grey;">Opened: </h2>
-          <h2 id='opened' class='textItems' style="color:black;">-</h2>
-        </div>
-        <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:405px;background-color: #9ecae1">
-          <h3 class='textItems' style="color:grey;">Clicked: </h2>
-          <h2 id='clicked' class='textItems' style="color:black;">-</h2>
-        </div>
-        <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:607.5px;background-color: #9edae5">
-          <h3 class='textItems' style="color:grey;">Sucess Rate: </h2>
-          <h2 id='sucess_rate' class='textItems' style="color:black;">-</h2>
-        </div>
-        <svg id="barChart" class='colorBox' style="width:395px;height:210px;top:440px;left:0px;background-color: #FFF;">
-
-        </svg>
-        <div style="top: 670px; position: absolute; width: 800px">
-            <table id="victims_table" class="display">
-              <thead>
-                <tr>
-                  <th>Victim UID</th>
-                  <th>Email Address</th>
-                  <th>Email Sent?</th>
-                  <th>Email Opened?</th>
-                  <th>Link Clicked?</th>
-                  <th>Password Seen?</th>
-                  <th>Time Visited</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-        </div>
+    <div class='colorBox' style="width:800px;height:100px;top:0px;left:0px;background-color: #9edae5"> 
+      <h3 class='textItems' style="color:grey;">Campaign Name: </h2>
+      <h2 id='campaign_name' class='textItems' style="color:black;">Not Loaded.</h2>
     </div>
+    <div class='colorBox' style="width:395px;height:100px;top:110px;left:0px;background-color: #9ecae1"> 
+      <h3 class='textItems' style="color:grey;">Active: </h2>
+      <h2 id='active' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:395px;height:100px;top:220px;left:0px;background-color: #9edae5"> 
+      <h3 class='textItems' style="color:grey;">Time Elapsed: </h2>
+      <h2 id='time' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:395px;height:100px;top:330px;left:0px;background-color: #9ecae1"> 
+      <h3 class='textItems' style="color:grey;">Template Used: </h2>
+      <h2 id='template_name' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div id="chartDiv" class='colorBox' style="width:395px;height:320px;top:110px;left:405px;background-color: #FFF;border: 0px">
+    </div>
+    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:405px;margin-bottom:20px;background-color: #9edae5">
+      <h3 class='textItems' style="color:grey;">Sent: </h2>
+      <h2 id='sent' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:607.5px;background-color: #9ecae1">
+      <h3 class='textItems' style="color:grey;">Opened: </h2>
+      <h2 id='opened' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:405px;background-color: #9ecae1">
+      <h3 class='textItems' style="color:grey;">Clicked: </h2>
+      <h2 id='clicked' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:607.5px;background-color: #9edae5">
+      <h3 class='textItems' style="color:grey;">Sucess Rate: </h2>
+      <h2 id='sucess_rate' class='textItems' style="color:black;">-</h2>
+    </div>
+    <svg id="barChart" class='colorBox' style="width:395px;height:210px;top:440px;left:0px;background-color: #FFF;">
+
+    </svg>
+    <div style="top: 670px; position: absolute; width: 800px">
+      <table id="victims-summary-table" class="display table-hover table-condense">
+        <thead>
+          <tr>
+            <th>Victim UID</th>
+            <th>Email Address</th>
+            <th>Email Sent?</th>
+            <th>Email Opened?</th>
+            <th>Link Clicked?</th>
+            <th>Password Seen?</th>
+            <th>Time Visited</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 <script type="text/javascript" >
 var w = 395,
@@ -285,24 +283,6 @@ $(document).ready(function() {
 
 	}, 3000);
 });
-
-  $(document).ready(function() {
-        $('#victims_table').dataTable( {
-            "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
-            "aoColumnDefs": [            
-            {
-               "aTargets": [ 0 ], // Column to target
-               "mRender": function ( data, type, full ) {
-                  // 'full' is the row's data object, and 'data' is this column's data
-                  // e.g. 'full[0]' is the comic id, and 'data' is the comic title
-                  return '<a href="/reports/uid/' + data + '">' + data + '</a>';
-              }
-            }
-        ],
-        "aaSorting": [[4,'desc']]
-        } );
-  });
-
 
 /*
 $(document).ready(function() {

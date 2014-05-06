@@ -1,10 +1,10 @@
 class CreateVisits < ActiveRecord::Migration
   def change
     create_table :visits do |t|
-      t.references :Victim
+      t.references :victim
 
       t.timestamps
     end
-    add_index :visits, :Victim_id
+    add_index :visits, :victim_id
   end
 end
