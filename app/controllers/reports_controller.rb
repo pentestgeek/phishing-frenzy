@@ -21,9 +21,9 @@ class ReportsController < ApplicationController
 
 	def image
 		victims = Victim.where(:uid => params[:uid])
-		visit = Visit.new()
-		victim = victims.first()
-		visit.victim_id = victim.id
+		visit = Visit.new
+		victim = victims.first
+		visit.Victim_id = victim.id
 		visit.browser = request.env["HTTP_USER_AGENT"]
 		visit.ip_address = request.env["REMOTE_ADDR"]
 		visit.extra = "SOURCE: EMAIL"
@@ -45,7 +45,7 @@ class ReportsController < ApplicationController
 				finish += "over 1, "
 				v = victims.first()
 				visit = Visit.new()
-				visit.victim_id = v.id
+				visit.Victim_id = v.id
 				if params[:browser_info]
 					finish += "browser info, "
 					visit.browser = params[:browser_info]
