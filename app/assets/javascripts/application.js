@@ -57,5 +57,8 @@ $( document ).ready(function() {
     }
   ],
   "aaSorting": [[4,'desc']],
+  "aLengthMenu": [
+      [25, 50, 100, 500, -1],
+      [25, 50, 100, 500, "All"]]
   } );
 });
