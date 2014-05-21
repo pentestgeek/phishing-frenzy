@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(:version => 20140506021435) do
   end
 
   create_table "visits", :force => true do |t|
-    t.integer  "Victim_id"
+    t.integer  "victim_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "browser"
@@ -205,6 +205,6 @@ ActiveRecord::Schema.define(:version => 20140506021435) do
     t.string   "extra"
   end
 
-  add_index "visits", ["Victim_id"], :name => "index_visits_on_Victim_id"
+  add_index "visits", ["victim_id"], :name => "index_visits_on_victim_id"
 
 end
