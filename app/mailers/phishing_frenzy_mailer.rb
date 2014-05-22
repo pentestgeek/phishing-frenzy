@@ -31,7 +31,13 @@ class PhishingFrenzyMailer < ActionMailer::Base
           template_name: @campaign.template.email_files.first[:file],
           delivery_method: :smtp
       )
-      bait.delivery_method.settings.merge!(campaign_smtp_settings)
+      
+      # if no authentication is selected send anonymous smtp
+      if @campaign.email_settings.authentication == "none"
+        bait.delivery_method.settings.merge!(campaign_anonymous_smtp_settings)
+      else
+        bait.delivery_method.settings.merge!(campaign_smtp_settings)
+      end
       cast(blast, bait)
     else
       if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
@@ -46,17 +52,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
           template_name: @campaign.template.email_files.first[:file],
           delivery_method: :letter_opener_web)
       cast(blast, bait)
-    end
-  end
-
-  #private
-  def full_url(target, url, track)
-    if track
-      # append uniq identifier
-      encode = "#{Base64.encode64(target)}"
-      "#{url}?id=#{encode.chomp}"
-    else
-      url
     end
   end
 
@@ -91,6 +86,16 @@ class PhishingFrenzyMailer < ActionMailer::Base
       user_name: @campaign.email_settings.smtp_username,
       password: @campaign.email_settings.smtp_password,
       authentication: @campaign.email_settings.authentication.to_sym,
+      enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
+      return_response: true
+    }
+  end
+
+  def campaign_anonymous_smtp_settings
+    {
+      :openssl_verify_mode => @campaign.email_settings.openssl_verify_mode_class,
+      address: @campaign.email_settings.smtp_server_out,
+      port: @campaign.email_settings.smtp_port,
       enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
       return_response: true
     }

@@ -23,7 +23,7 @@ class EmailSettings < ActiveRecord::Base
             :length => {:maximum => 5}, :allow_nil => true
 
   def authentications
-    [:plain, :login, :cram_md5]
+    [:plain, :login, :cram_md5, :none]
   end
 
   def openssl_verify_modes
