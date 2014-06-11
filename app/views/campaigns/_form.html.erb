@@ -1,19 +1,14 @@
 <%= error_messages_for(@campaign) %>
 
 <table summary="Campaign Form fields">
-	<tr>
-		<th>Name</th>
-		<td><span class="ui-icon ui-icon-help" title='Name your campaign'></span></td>
-		<td><%= f.text_field(:name) %></td>
-	</tr>
-	<tr>
-		<th>Description</th>
-		<td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
-		<td><%= f.text_field(:description) %></td>
-	</tr>
-	<tr>
-		<th>Scope</th>
-		<td><span class="ui-icon ui-icon-help" title="How many email addresses are in scope?"></span></td>
-		<td><%= f.text_field(:scope) %></td>
-	</tr>
+  <tr>
+    <th>Name</th>
+    <td><span class="ui-icon ui-icon-help" title='Name your campaign'></span></td>
+    <td><%= f.text_field(:name, required: true, class: 'form-control') %></td>
+  </tr>
+  <tr>
+    <th>Description</th>
+    <td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
+    <td><%= f.text_field(:description, class: 'form-control') %></td>
+  </tr>
 </table>

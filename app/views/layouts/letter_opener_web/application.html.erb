@@ -45,19 +45,18 @@
     <%= render partial: 'layouts/navigation' %>
 <% end %>
 
-<div class="container-fluid">
-  <div class="row-fluid">
+<div class="container">
+  <div class="row">
 
     <% flash.each do |key, value| %>
         <%= content_tag(:div, value, class: "alert alert-#{key}") %>
     <% end %>
-    <div class="row-fluid">
+
+    <div class="row">
       <%= yield %>
     </div>
-  </div>
-  <!--/row-->
-</div>
-<!-- /container -->
+  </div><!--/row-->
+</div><!-- /container -->
 
 </body>
 </html>

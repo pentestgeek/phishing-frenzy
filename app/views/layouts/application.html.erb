@@ -38,32 +38,31 @@
   <%= javascript_include_tag "application" %>
 </head>
 <body>
+
 <% if admin_signed_in? %>
     <%= render partial: 'layouts/navigation' %>
 <% end %>
 
 <div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span2">
-      <div class="row-fluid">
-        <div class="span12 pagination-centered">
-          <%= image_tag('logo.png', :size => '150x150') %>
-        </div>
-      </div>
-    </div>
-    <!--/span-->
+  <div class="row">
 
-    <div id="content" class="span10">
+  <div class="sidebar">
+    <div class="col-xs-2 visible-lg visible-md visible-sm">
+      <%= image_tag('logo.png', :size => '150x150') %>
+    </div>
+  </div>
+
+    <div id="flash-notice" class="col-xs-10">
       <% flash.each do |key, value| %>
           <%= content_tag(:div, value, class: "alert alert-#{key}") %>
       <% end %>
+    </div>
 
+    <div id="content" class="col-xs-6 col-sm-9">
       <%= yield %>
     </div>
-  </div>
-  <!--/row-->
-</div>
-<!-- /container -->
+  </div><!--/row-->
+</div><!-- /container -->
 
 <div id="footer" class="navbar-fixed-bottom">
   <div class="container">

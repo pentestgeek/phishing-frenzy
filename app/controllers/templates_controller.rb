@@ -174,6 +174,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit_email
+		@attachment = Attachment.find(params[:format])
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
 		@attachment_content = File.read(Dir.glob(attachment_location)[0])
 		if File.binary?(Dir.glob(attachment_location)[0])

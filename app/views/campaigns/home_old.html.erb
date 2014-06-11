@@ -1,0 +1,43 @@
+<% @page_title = "Home" %>
+<div class="page-header">
+  <h2>Dashboard</h2>
+</div>
+<h3>Active Phishing Campaigns</h3>
+
+<div><%= pluralize(@campaigns.size, 'campaign') %> active</div>
+  <% if @campaigns.size > 0 %>
+    <table class="table table-striped table-hover" summary="Campiagn list">
+      <tr class="header">
+        <th>&nbsp;</th>
+        <th>Client</th>
+        <th>Description</th>
+        <th>Scope</th>
+        <th>Active</th>
+        <th>Emails</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @campaigns.each do |campaign| %>
+      
+      <tr>
+        <td><%= image_tag('fishing_pole.png', :size => '28x28') %></td>      
+        <td><%= link_to campaign.name, campaign %></td>
+        <td><%= campaign.description %></td>
+        <td><%= campaign.scope %></td>
+        <td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
+        <td>
+          <% if Victim.where("campaign_id = ?", campaign.id).size != 0 %>
+            <%= image_tag('green-light.png', :size => '11x11') %>
+          <% else %>
+            <%= image_tag('red-light.png', :size => '11x11') %>
+          <% end %>
+        </td>
+        <td class="actions">
+          <%= link_to("Options", {:action => 'options', :id => campaign.id}, class:'btn btn-default btn-sm') %>
+        </td>
+
+      </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>

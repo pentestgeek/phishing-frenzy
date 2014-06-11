@@ -1,39 +1,22 @@
 <% @page_title = "Campaign Settings" %>
 
-<style>
-    <div class="accordion">
-    #accordion
-    </div>
-</style>
-
 <div>
-  <%= link_to("<< Back to List", list_campaigns_path, :class => 'back-link') %>
-</div>
-<div>
-  <%= link_to("<< Back to Campaign", campaign_path(@campaign), :class => 'back-link') %>
+  <%= link_to "<< Back to Campaign", campaign_path(@campaign), class: 'back-link' %>
 </div>
 
 <div class="page-header">
   <h1><%= @campaign.name %></h1>
 </div>
 
-
 <div class="campaign settings">
   <div class="col-md-9 col-sm-9">
     <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
-
-        <%= render(:partial => "options", :locals => {:f => f}) %>
-
-        <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
-
-        <%= link_to("Preview", preview_email_path(@campaign.id), class: 'btn', :method => :post) %>
-
-        <%= link_to("Test", test_email_path(@campaign.id), class: 'btn', :method => :post) %>
-
-        <%= link_to("Launch", launch_path(@campaign.id), class: 'btn', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
-
-        <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn') unless @template.nil? %>
-
+      <%= render(:partial => "options", :locals => {:f => f}) %>
+      <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
+      <%= link_to("Preview", preview_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
+      <%= link_to("Test", test_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
+      <%= link_to("Launch", launch_path(@campaign.id), class: 'btn btn-default', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
+      <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn btn-default') unless @template.nil? %>
     <% end %>
   </div>
 </div>

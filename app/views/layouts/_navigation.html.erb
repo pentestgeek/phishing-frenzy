@@ -1,24 +1,28 @@
-<div class="navbar navbar-fluid-top navbar-inverse">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-      </a>
-      <%= link_to "Phishing Frenzy", main_app.home_campaigns_path, class: 'brand' %>
-      <div class="container-fluid">
-        <ul class="nav nav-collapse collapse">
+      </button>
+      <%= link_to "Phishing Frenzy", main_app.root_path, class: "navbar-brand" %>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
           <li><%= link_to "Campaigns", main_app.list_campaigns_path %></li>
           <li><%= link_to "Templates", main_app.list_templates_path %></li>
           <li><%= link_to "Reports", main_app.list_reports_path %></li>
           <li><%= link_to "About", main_app.aboutus_campaigns_path %></li>
           <li><%= link_to "Admin", main_app.access_path %></li>
           <li><%= link_to "Logout", main_app.destroy_admin_session_path, :method => :delete %></li>
-        </ul>
-        <%= render(partial: 'layouts/system_status') if @show_status%>
-      </div>
-      <!--/.nav-collapse -->
-    </div>
-  </div>
-</div>
+      </ul>
+
+      <%= render(partial: 'layouts/system_status') if @show_status %>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

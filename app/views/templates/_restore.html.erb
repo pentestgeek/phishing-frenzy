@@ -1,0 +1,8 @@
+<%= error_messages_for(@template) %>
+<% @page_title = "Restore Template" %>
+
+<%= form_tag({action: :upload}, multipart: true) do %>
+  <%= file_field_tag 'restore_template', class: 'btn btn-file', required: 'true', class: "form-control" %>
+  <p></p>
+  <%= submit_tag("Restore Template", class: 'btn btn-primary') %>
+<% end %>

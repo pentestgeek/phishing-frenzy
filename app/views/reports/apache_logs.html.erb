@@ -1,0 +1,12 @@
+<%= link_to '<< Back to Stats', :back, class: "back-link" %>
+
+<h3>Apache Logs - <%= @campaign.name %></h3>
+<hr>
+
+<table class="table table-striped table-hover table-condensed">
+  <% @logs.each_line do |log| %>
+  <tr>
+    <td><%= simple_format(log) %></td>
+  </tr>
+  <% end %>
+</table>

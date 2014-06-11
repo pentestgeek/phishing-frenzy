@@ -1,0 +1,21 @@
+<div id="dashboard-campaign" class="col-sm-6">
+  <div class="thumbnail">
+    <div class="caption">
+      <h3 class="text-center"><%= campaign.name %></h3>
+        <div class="pull-right">
+          <div class="pie-<%= campaign.id %>"></div>
+        </div>
+        <%= render partial: "pie", locals: {campaign: campaign} if Campaign.sent(campaign) > 0 %>
+      <p><span class="glyphicon glyphicon-envelope"></span> 
+        Sent: <%= Campaign.sent(campaign) %></p> 
+      <p><span class="glyphicon glyphicon-plus-sign"></span> 
+        Clicks: <%= Campaign.clicks(campaign) %></p>
+      <p><span class="glyphicon glyphicon-signal"></span> 
+        Success: <%= Campaign.success(campaign) %>%</p>
+      <p>
+        <a href="<%= stats_reports_url(id: campaign.id) %>" class="btn btn-primary btn-xs" role="button">Reports</a> 
+        <a href="<%= campaign_url(campaign.id) %>" class="btn btn-default btn-xs" role="button">Manage</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<%= error_messages_for(@template) %>
+
+<%= form_for(:template, :url => {:action => 'create'}) do |f| %>
+  <table calss="table borderless" summary="Template Form fields">
+    <tr>
+      <th>Name</th>
+      <td><span class="ui-icon ui-icon-help" title="Template name to distinguish itself"></span></td>
+      <td><%= f.text_field(:name, required: true, class: "form-control") %></td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
+      <td><%= f.text_area(:description, :size => "31x2", class: "form-control") %></td>
+    </tr>
+  </table>
+  <br>
+  <%= submit_tag("Create Template", class: 'btn btn-primary') %>
+<% end %>
