@@ -35,21 +35,11 @@ class Campaign < ActiveRecord::Base
             :length => {:maximum => 4}, :allow_nil => true
 
   def self.clicks(campaign)
-    @uvic = 0
-    s = campaign.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").size
-    if (s.size > 0)
-      @uvic = @uvic + 1
-    end
-    return @uvic
+    campaign.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
   end
 
   def self.opened(campaign)
-    @opened = 0
-    o = campaign.visits.where(:extra => "SOURCE: EMAIL")
-    if (o.size > 0)
-      @opened = @opened + 1
-    end
-    return @opened
+    campaign.visits.where(:extra => "SOURCE: EMAIL").pluck(:victim_id).uniq.size
   end
 
   def self.sent(campaign)
@@ -58,7 +48,7 @@ class Campaign < ActiveRecord::Base
 
   def self.success(campaign)
     Campaign.sent(campaign) == 0 ? 
-        0 : (Campaign.clicks(campaign).to_f / Campaign.sent(campaign).to_f * 100.0)
+        0 : (Campaign.clicks(campaign).to_f / Campaign.sent(campaign).to_f * 100.0).round(2)
   end
 
   def self.logfile(campaign)

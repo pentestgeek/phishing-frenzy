@@ -4,8 +4,6 @@
 </div>
 <h3>Launched Phishing Campaigns</h3>
 
-<div><%= pluralize(@campaigns.size, 'campaign') %> active</div>
-
 <div class="container-fluid">
   <div class="row">
     <%= render partial: "campaign", collection: @campaigns %>
