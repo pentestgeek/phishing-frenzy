@@ -16,6 +16,7 @@ BODY
   margin: 0;
   padding: 0;
   color: #000000;
+  padding-top: 50px;
 }
 P, TD, UL, OL, LI, DL, DT, DD
 {
@@ -53,7 +54,7 @@ A:hover
 }
 #content
 {
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 }
 /*Navigation*/
 #navigation UL
@@ -108,6 +109,12 @@ A:hover
   text-align: center;
   background: #A41400;
   color: #FFFFFF;
+  max-height: 5px;
+  margin-top: 5px;
+}
+
+#flash-notice {
+  line-height: 5px;
 }
 
 .back-link
@@ -274,11 +281,7 @@ A:hover
   margin-right: -20px;
   padding-left: 20px;
   padding-right: 20px;
-}
-}
-
-input {
-    height: 28px !important;
+  }
 }
 
 #new-button {
@@ -289,6 +292,10 @@ input {
   margin-bottom: 1em;
 }
 
+#campaign-buttons .btn {
+  margin-bottom: 1em;
+}
+
 #victims-summary-table_wrapper {
   padding-bottom: 50px;
 }
@@ -296,4 +303,46 @@ input {
 #stat-info H2 {
   color: #000000;
   text-align: center;
+}
+
+#stat-info {
+  margin-top: 5px;
+}
+
+#victims-summary-table_wrapper {
+  top: 670px; 
+  position: absolute;
+  width: 800px;
+}
+
+#actions-buttons {
+  margin-top: 2px;
+}
+
+#report-options {
+  top: 630px; 
+  position: absolute;  
+}
+
+.navbar .nav > li > a {
+  float: none;
+  padding: 15px 10px 15px;
+  text-decoration: none;
+}
+
+#stat-info h3 {
+  margin-top: 5px;
+}
+
+#stat-info h2 {
+  margin-bottom: 5px;
+}
+
+.borderless > tbody > tr > th,
+.borderless > tbody > tr > td {
+  border: none;
+}
+
+#dashboard-campaign:hover > div {
+  background-color: #F5F5F5;
 }

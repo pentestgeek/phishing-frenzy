@@ -1,0 +1,15 @@
+<%= link_to '<< Back to Stats', :back, class: "back-link" %>
+
+<h3>SMTP Logs - <%= @campaign.name %></h3>
+<hr>
+
+<table class="table table-responsive table-condensed table-hover table-striped">
+  <tr>
+    <th>From</th>
+    <th>To</th>
+    <th>Status</th>
+    <th>Message</th>
+    <th>Sent</th>
+  </tr>
+    <%= render partial: "log", collection: @campaign.baits %>
+</table>

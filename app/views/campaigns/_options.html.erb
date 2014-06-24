@@ -2,236 +2,281 @@
 <%= error_messages_for(@email_settings) %>
 
 <script>
-	$(function() {
-		$( "#accordion" ).accordion({
-			collapsible:true, 
-			active:false, 
-			heightStyle: "content"
-		});
-		$('#smtpPreFill').change(function () {
-			var myValue = $(this).val();
-			switch (myValue) {
-				case 'google':
-					$('#smtp_server').val('smtp.gmail.com');
-					$('#smtp_server_out').val('smtp.gmail.com');
-					$('#email_settings_authentication').val('plain');
-					$('#domain').val('gmail.com');
-					$('#email_settings_enable_starttls_auto').prop('checked', true);
-					$('#email_settings_openssl_verify_mode').val('VERIFY_NONE');
-					$('#smtp_port').val('587');
-					break;
-				case 'outlook':
-					$('#smtp_server').val('smtp.outlook.com');
-					$('#smtp_server_out').val('smtp.outlook.com');
-					$('#smtp_port').val('25');
-					break;
-				case 'godaddy':
-					$('#smtp_server').val('smtp.secureserver.net');
-					$('#smtp_server_out').val('smtpout.secureserver.net');
-					$('#smtp_port').val('3535');
-					break;
-				case 'sendgrid':
-					$('#smtp_server').val('smtp.sendgrid.net');
-					$('#smtp_server_out').val('smtp.sendgrid.net');
-					$('#smtp_port').val('465');
-					break;
-			}
-		});
-	});
+  $(function() {
+    $('#smtpPreFill').change(function () {
+      var myValue = $(this).val();
+      switch (myValue) {
+        case 'google':
+          $('#smtp_server').val('smtp.gmail.com');
+          $('#smtp_server_out').val('smtp.gmail.com');
+          $('#email_settings_authentication').val('plain');
+          $('#domain').val('gmail.com');
+          $('#email_settings_enable_starttls_auto').prop('checked', true);
+          $('#email_settings_openssl_verify_mode').val('VERIFY_NONE');
+          $('#smtp_port').val('587');
+          break;
+        case 'outlook':
+          $('#smtp_server').val('smtp.outlook.com');
+          $('#smtp_server_out').val('smtp.outlook.com');
+          $('#smtp_port').val('25');
+          break;
+        case 'godaddy':
+          $('#smtp_server').val('smtp.secureserver.net');
+          $('#smtp_server_out').val('smtpout.secureserver.net');
+          $('#smtp_port').val('3535');
+          break;
+        case 'sendgrid':
+          $('#smtp_server').val('smtp.sendgrid.net');
+          $('#smtp_server_out').val('smtp.sendgrid.net');
+          $('#smtp_port').val('25');
+          break;
+      }
+    });
+  });
 </script>
 
-<div id="accordion">
-  <h2>Campaign Settings</h2>
-  <table class='table' summary="Campaign Settings">
-	<tr>
-	  <th>Name</th>
-	  <td><span class="ui-icon ui-icon-help" title="Insert campaign name"></span></td>
-	  <td><%= f.text_field(:name, class: 'span9') %></td>
-	</tr>
-	<tr>
-	  <th>Description</th>
-	  <td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
-	  <td><%= f.text_field(:description, class: 'span9') %></td>
-	</tr>
-	<tr>
-	  <th>Scope</th>
-	  <td><span class="ui-icon ui-icon-help" title="How many email addresses are in scope?"></span></td>
-	  <td><%= f.text_field(:scope, class: 'span9') %></td>
-	</tr>
-	<tr>
-	  <th>Active</th>
-	  <td>
-		<span class="ui-icon ui-icon-help" title="Making campaign active will enable the phishing website using Apache's virtual host. Ensure a Fully Qualified Domain Name is populated below before going active."></span>
-	  </td>
-	  <td><%= f.check_box(:active) %></td>
-	</tr>
-	<tr>
-	  <th>Test Target</th>
-	  <td>
-		<span class="ui-icon ui-icon-help" title="This is the only email that will be used when you click 'Test Email'."></span>
-	  </td>
-	  <td><%= f.text_field(:test_email, class: 'span9') %></td>
-	</tr>
-	<tr>
-	  <th>
-		Targets
-		( <%= link_to(Victim.where("campaign_id = #{@campaign.id} and archive = false").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>
-		)
-	  </th>
-	  <td><span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span></td>
-	  <td>
-		<%= f.text_area(:emails, :size => "35x2", :value => '', class: 'span9') %>
-	  </td>
-	</tr>
-  </table>
-
-  <h2>Template Selection</h2>
-  <table class='table' summary="Campaign Settings">
-	<tr>
-	  <th>Phishing Scenario</th>
-	  <td>
-		<span class="ui-icon ui-icon-help" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
-	  </td>
-	  <td>
-		<%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] }, @campaign.template_id), class: 'span9') %>
-	  </td>
-	</tr>
-  </table>
-
-  <h2>SMTP Settings</h2>
-
-  <table class='table' summary="Campaign Settings">
-	<%= fields_for @campaign.email_settings do |es| %>
-		<tr>
-		  <th>Pre-populate:</th>
-		  <td>
-			<span class="ui-icon ui-icon-help" title='Pre-populate SMTP and Port settings for commonly used email providers'></span>
-		  </td>
-		  <td>
-			<select id="smtpPreFill" class="span9">
-			  <option>--Select--</option>
-			  <option value="google">Gmail</option>
-			  <option value="outlook">Outlook.com</option>
-			  <option value="godaddy">GoDaddy</option>
-			  <option value="sendgrid">Sendgrid</option>
-			</select>
-		  </td>
-		</tr>
-		<tr>
-		  <th>SMTP Server:</th>
-		  <td><span class="ui-icon ui-icon-help" title='SMTP server used to received emails'></span></td>
-		  <td><%= es.text_field(:smtp_server, :id => 'smtp_server', class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>SMTP Outbound Server:</th>
-		  <td><span class="ui-icon ui-icon-help" title='SMTP server used to relay emails through'></span></td>
-		  <td><%= es.text_field(:smtp_server_out, :id => 'smtp_server_out', class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>SMTP Domain:</th>
-		  <td><span class="ui-icon ui-icon-help" title='Domain of email address'></span></td>
-		  <td><%= es.text_field(:domain, :id => 'domain', class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>SMTP Authentication:</th>
-		  <td><span class="ui-icon ui-icon-help" title='SMTP Authentication Method'></span></td>
-		  <td><%= es.select(:authentication, @campaign.email_settings.authentications.collect { |a| [a, a] }, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>SMTP Username:</th>
-		  <td><span class="ui-icon ui-icon-help" title='SMTP username to authenticate sending emails'></span></td>
-		  <td><%= es.text_field(:smtp_username, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>SMTP Password:</th>
-		  <td><span class="ui-icon ui-icon-help" title='SMTP password to authenticate sending emails'></span></td>
-		  <td><%= es.password_field(:smtp_password, :value => @campaign.email_settings.smtp_password, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>Openssl Verify Mode:</th>
-		  <td><span class="ui-icon ui-icon-help" title='Session verification mode'></span></td>
-		  <td><%= es.select(:openssl_verify_mode, @campaign.email_settings.openssl_verify_modes.collect { |m| [m, m] }, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>Enable Start TLS Automatically?:</th>
-		  <td><span class="ui-icon ui-icon-help" title='Enable Start TLS Automatically?'></span></td>
-		  <td><%= es.check_box(:enable_starttls_auto, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>SMTP Port:</th>
-		  <td><span class="ui-icon ui-icon-help" title='SMTP port used to relay emails through'></span></td>
-		  <td><%= es.text_field(:smtp_port, :id => 'smtp_port', class: 'span9') %></td>
-		</tr>
-	<% end %>
-  </table>
-
-  <h2>Email Settings</h2>
-  <table class='table' summary="Campaign Settings">
-	<%= fields_for @campaign.email_settings do |es| %>
-		<tr>
-		  <th>Subject:</th>
-		  <td><span class="ui-icon ui-icon-help" title='Subject used for SMTP and email headers'></span></td>
-		  <td><%= es.text_field(:subject, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>From:</th>
-		  <td><span class="ui-icon ui-icon-help" title='From: used for email headers'></span></td>
-		  <td><%= es.text_field(:from, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>Display From:</th>
-		  <td>
-			<span class="ui-icon ui-icon-help" title='What you want displayed for the from category within the email headers'></span>
-		  </td>
-		  <td><%= es.text_field(:display_from, class: 'span9') %></td>
-		</tr>
-		<tr>
-		  <th>Phishing URL:</th>
-		  <td>
-			<span class="ui-icon ui-icon-help" title='Phishing URL that you would like the target to click on. This URL is embeded within the email message before sending'></span>
-		  </td>
-		  <td><%= es.text_field(:phishing_url, class: 'span9') %></td>
-		</tr>
-	<% end %>
-	<%= fields_for @campaign.campaign_settings do |cs| %>
-		<tr>
-		  <th>FQDN</th>
-		  <td>
-			<span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'></span>
-		  </td>
-		  <td><%= cs.text_field(:fqdn, class: 'span9') %></td>
-		</tr>
-		</table>
-
-		<h2>Phishing Options</h2>
-		<table class='table' summary="Campaign Settings">
-		  <tr>
-			<th>Track User Clicks?</th>
-			<td>
-			  <span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span>
-			</td>
-			<td><%= cs.check_box(:track_uniq_visitors) %></td>
-		  </tr>
-		  <tr>
-			<th>Track Number of Hits?</th>
-			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-			<td><%= cs.check_box(:track_hits, :disabled => true) %></td>
-		  </tr>
-		  <tr>
-			<th>Use BeeF?</th>
-			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-			<td><%= cs.check_box(:use_beef, :disabled => true) %></td>
-		  </tr>
-		  <tr>
-			<th>Iptables Restrictions?</th>
-			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-			<td><%= cs.check_box(:iptable_restrictions, :disabled => true) %></td>
-		  </tr>
-		  <tr>
-			<th>Schedule Campaign?</th>
-			<td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-			<td><%= cs.check_box(:schedule_campaign, :disabled => true) %></td>
-		  </tr>
-	<% end %>
-	</table>
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapseOne">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Campaign Settings
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class='table borderless' summary="Campaign Settings">
+          <tr>
+            <th>Name</th>
+            <td><span class="ui-icon ui-icon-help" title="Insert campaign name"></span></td>
+            <td><%= f.text_field(:name, class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
+            <td><%= f.text_field(:description, class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>Active</th>
+            <td>
+            <span class="ui-icon ui-icon-help" title="Making campaign active will enable the phishing website using Apache's virtual host. Ensure a Fully Qualified Domain Name is populated below before going active."></span>
+            </td>
+            <td><%= f.check_box(:active) %></td>
+          </tr>
+          <tr>
+            <th>Test Target</th>
+            <td>
+            <span class="ui-icon ui-icon-help" title="This is the only email that will be used when you click 'Test Email'."></span>
+            </td>
+            <td><%= f.text_field(:test_email, class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>
+            Targets
+            ( <%= link_to(Victim.where("campaign_id = #{@campaign.id} and archive = false").size, {:controller => 'campaigns', :action => 'victims', :id => @campaign.id}) %>
+            )
+            </th>
+            <td><span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span></td>
+            <td>
+            <%= f.text_area(:emails, :size => "31x2", :value => '', class: 'form-control') %>
+            </td>
+          </tr>
+          </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapseTwo">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          Template Selection
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class='table borderless'>
+        <tr>
+          <th>Phishing Scenario</th>
+          <td>
+          <span class="ui-icon ui-icon-help" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
+          </td>
+          <td>
+          <%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] }, @campaign.template_id),{} , {class: 'form-control'}) %>
+          </td>
+        </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapseThree">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+          SMTP Settings
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class='table borderless' summary="Campaign Settings">
+        <%= fields_for @campaign.email_settings do |es| %>
+          <tr>
+            <th>Pre-populate:</th>
+            <td>
+            <span class="ui-icon ui-icon-help" title='Pre-populate SMTP and Port settings for commonly used email providers'></span>
+            </td>
+            <td>
+            <select id="smtpPreFill" class="form-control">
+              <option>--Select--</option>
+              <option value="google">Gmail</option>
+              <option value="outlook">Outlook.com</option>
+              <option value="godaddy">GoDaddy</option>
+              <option value="sendgrid">Sendgrid</option>
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <th>SMTP Server:</th>
+            <td><span class="ui-icon ui-icon-help" title='SMTP server used to received emails'></span></td>
+            <td><%= es.text_field(:smtp_server, :id => 'smtp_server', class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>SMTP Outbound Server:</th>
+            <td><span class="ui-icon ui-icon-help" title='SMTP server used to relay emails through'></span></td>
+            <td><%= es.text_field(:smtp_server_out, :id => 'smtp_server_out', class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>SMTP Domain:</th>
+            <td><span class="ui-icon ui-icon-help" title='Domain of email address'></span></td>
+            <td><%= es.text_field(:domain, :id => 'domain', class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>SMTP Authentication:</th>
+            <td><span class="ui-icon ui-icon-help" title='SMTP Authentication Method'></span></td>
+            <td><%= es.select(:authentication, @campaign.email_settings.authentications.collect { |a| [a, a] },{}, {class: 'form-control'}) %></td>
+          </tr>
+          <tr>
+            <th>SMTP Username:</th>
+            <td><span class="ui-icon ui-icon-help" title='SMTP username to authenticate sending emails'></span></td>
+            <td><%= es.text_field(:smtp_username, class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>SMTP Password:</th>
+            <td><span class="ui-icon ui-icon-help" title='SMTP password to authenticate sending emails'></span></td>
+            <td><%= es.password_field(:smtp_password, :value => @campaign.email_settings.smtp_password, class: 'form-control') %></td>
+          </tr>
+          <tr>
+            <th>Openssl Verify Mode:</th>
+            <td><span class="ui-icon ui-icon-help" title='Session verification mode'></span></td>
+            <td><%= es.select(:openssl_verify_mode, @campaign.email_settings.openssl_verify_modes.collect { |m| [m, m] },{}, {class: 'form-control'}) %></td>
+          </tr>
+          <tr>
+            <th>Enable Start TLS Automatically?:</th>
+            <td><span class="ui-icon ui-icon-help" title='Enable Start TLS Automatically?'></span></td>
+            <td><%= es.check_box(:enable_starttls_auto, class: 'span9') %></td>
+          </tr>
+          <tr>
+            <th>SMTP Port:</th>
+            <td><span class="ui-icon ui-icon-help" title='SMTP port used to relay emails through'></span></td>
+            <td><%= es.text_field(:smtp_port, :id => 'smtp_port', class: 'form-control') %></td>
+          </tr>
+        <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapseFour">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+          Email Settings
+        </a>
+      </h4>
+    </div>
+    <div id="collapseFour" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class='table borderless' summary="Campaign Settings">
+          <%= fields_for @campaign.email_settings do |es| %>
+            <tr>
+              <th>Subject:</th>
+              <td><span class="ui-icon ui-icon-help" title='Subject used for SMTP and email headers'></span></td>
+              <td><%= es.text_field(:subject, class: 'form-control') %></td>
+            </tr>
+            <tr>
+              <th>From:</th>
+              <td><span class="ui-icon ui-icon-help" title='From: used for email headers'></span></td>
+              <td><%= es.text_field(:from, class: 'form-control') %></td>
+            </tr>
+            <tr>
+              <th>Display From:</th>
+              <td>
+              <span class="ui-icon ui-icon-help" title='What you want displayed for the from category within the email headers'></span>
+              </td>
+              <td><%= es.text_field(:display_from, class: 'form-control') %></td>
+            </tr>
+            <tr>
+              <th>Phishing URL:</th>
+              <td>
+              <span class="ui-icon ui-icon-help" title='Phishing URL that you would like the target to click on. This URL is embeded within the email message before sending'></span>
+              </td>
+              <td><%= es.text_field(:phishing_url, class: 'form-control') %></td>
+            </tr>
+          <% end %>
+          <%= fields_for @campaign.campaign_settings do |cs| %>
+            <tr>
+              <th>FQDN</th>
+              <td>
+              <span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'></span>
+              </td>
+              <td><%= cs.text_field(:fqdn, class: 'form-control') %></td>
+            </tr>
+          </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapseFive">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+          Phishing Options
+        </a>
+      </h4>
+    </div>
+    <div id="collapseFive" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class='table borderless' summary="Campaign Settings">
+          <tr>
+            <th>Track User Clicks?</th>
+            <td>
+              <span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span>
+            </td>
+            <td><%= cs.check_box(:track_uniq_visitors) %></td>
+          </tr>
+          <tr>
+            <th>Track Number of Hits?</th>
+            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+            <td><%= cs.check_box(:track_hits, :disabled => true) %></td>
+          </tr>
+          <tr>
+            <th>Use BeeF?</th>
+            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+            <td><%= cs.check_box(:use_beef, :disabled => true) %></td>
+          </tr>
+          <tr>
+            <th>Iptables Restrictions?</th>
+            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+            <td><%= cs.check_box(:iptable_restrictions, :disabled => true) %></td>
+          </tr>
+          <tr>
+            <th>Schedule Campaign?</th>
+            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
+            <td><%= cs.check_box(:schedule_campaign, :disabled => true) %></td>
+          </tr>
+        <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

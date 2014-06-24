@@ -11,4 +11,19 @@ class Victim < ActiveRecord::Base
 		self.uid = (0...8).map { (65 + rand(26)).chr }.join 	
 	end
 
+  def clicked?
+    # determine if victim has clicked on link or not
+    self.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").empty? ? false : true
+  end
+
+  def opened?
+    # determine if victim has opened on link or not
+    self.visits.where(extra: "SOURCE: EMAIL").empty? ? false : true
+  end
+
+  def password?
+    # determine if victim has enetered a password or not
+    self.visits.where('extra LIKE ?', "%password%").empty? ? false : true
+  end
+
 end

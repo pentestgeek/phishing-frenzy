@@ -12,17 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.accordion
-//= require jquery.ui.tooltip
 //= require dataTables/jquery.dataTables
-//= require dataTables/jquery.dataTables.bootstrap
+//= require dataTables/jquery.dataTables.bootstrap3
 //= require bootstrap
+//= require d3
 //= require jquery_nested_form
-
-
-$(function() {
-	$( document ).tooltip();
-});
 
 // enable dataTable on campaign#list
 $( document ).ready(function() {
@@ -37,13 +31,14 @@ $( document ).ready(function() {
   });
 
   $('#victims-table').dataTable( {
-  "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
   "sAjaxSource": '/reports/uid_json/' + window.location.href.split("/").pop(),
-  "sPaginationType": "bootstrap"
+  "sPaginationType": "bootstrap",
+  "aLengthMenu": [
+      [25, 50, 100, 500, -1],
+      [25, 50, 100, 500, "All"]]
   });
 
   $('#victims-summary-table').dataTable( {
-    "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
     "sPaginationType": "bootstrap",
     "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
     "aoColumnDefs": [            

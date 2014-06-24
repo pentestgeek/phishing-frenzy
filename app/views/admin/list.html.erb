@@ -2,45 +2,45 @@
 <%= link_to("<< Back to Admin Menu", access_path, :class => 'back-link') %>
 
 <div class="page-header">
-	<h2>Your Registration</h2>
+  <h2>Your Registration</h2>
 </div>
 
 <div class="Admin list">
-	<%= link_to('Manage Account', edit_admin_registration_path(current_admin)) %>
-	<h2>Users</h2>
+  <%= link_to('Manage Account', edit_admin_registration_path(current_admin), class: 'btn btn-default') %>
+  <h2>Users</h2>
 
-	<% if params[:approved] == "false" %>
-			<%= link_to "All Admins", :action => "list" %>
-	<% else %>
-			<%= link_to "Admins awaiting approval", :action => "list", :approved => "false" %>
-	<% end %>
+  <% if params[:approved] == "false" %>
+      <%= link_to "All Admins", :action => "list" %>
+  <% else %>
+      <%= link_to "Admins awaiting approval", :action => "list", :approved => "false" %>
+  <% end %>
 
 
-	<div><%= pluralize(@admins.size, 'admin') %> found</div>
-	<table class="table table-striped" summary="Campiagn list">
-		<tr class="header">
-			<th>&nbsp;</th>
-			<th>Name</th>
-			<th>Username</th>
-			<th>Actions</th>
-		</tr>
+  <div><%= pluralize(@admins.size, 'admin') %> found</div>
+  <table class="table table-striped" summary="Campiagn list">
+    <tr class="header">
+      <th>&nbsp;</th>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Actions</th>
+    </tr>
 
-		<% @admins.each do |admin| %>
-			<tr>
-				<td width="37"><%= image_tag('administrator.png', :size => '35x35') %></td>
-				<td><%= admin.name %></td>
-				<td><%= admin.username %></td>
-				<td class="actions">
-					<% if admin.approved? %>
-							<%= link_to "Revoke", revoke_admin_path(admin), method: :post, class: 'btn btn-mini' %>
-					<% else %>
-							<%= link_to "Approve", approve_admin_path(admin), method: :post, class: 'btn btn-mini' %>
-					<% end %>
-					<%=  link_to "Logins", logins_admin_path(admin), class: 'btn btn-mini' %>
-					<%= link_to "Delete", admin_path(admin), method: :delete, confirm: 'Are you sure you want to permanently delete this admin?', class: 'btn btn-mini' %>
-				</td>
-			</tr>
-		<% end %>
-	</table>
+    <% @admins.each do |admin| %>
+      <tr>
+        <td><%= image_tag('administrator.png', :size => '35x35') %></td>
+        <td><%= admin.name %></td>
+        <td><%= admin.username %></td>
+        <td class="actions">
+          <% if admin.approved? %>
+              <%= link_to "Revoke", revoke_admin_path(admin), method: :post, class: 'btn btn-default btn-xs' %>
+          <% else %>
+              <%= link_to "Approve", approve_admin_path(admin), method: :post, class: 'btn btn-default btn-xs' %>
+          <% end %>
+          <%=  link_to "Logins", logins_admin_path(admin), class: 'btn btn-default btn-xs' %>
+          <%= link_to "Delete", admin_path(admin), method: :delete, confirm: 'Are you sure you want to permanently delete this admin?', class: 'btn btn-default btn-xs' %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
 
 </div>

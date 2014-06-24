@@ -47,6 +47,11 @@ PhishingFramework::Application.routes.draw do
 			get 'list'
 			get 'stats'
 			get 'results'
+			get 'download_logs'
+			get 'download_stats'
+			get 'apache_logs'
+			get 'smtp'
+			get 'passwords'
 			post 'results'
 		end
 	end

@@ -9,8 +9,7 @@
 	<%= nested_form_for @template, :html => {:multipart => true} do |f| %>
 	<%= render(:partial => "form", :locals => {:f => f}) %>
 	<p>
-		<%= submit_tag("Update Template", class: 'btn') %>
+		<%= submit_tag("Update Template", class: 'btn btn-primary') %>
 	</p>
 	<% end %>
 </div>
-<hr/>

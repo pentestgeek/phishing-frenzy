@@ -37,7 +37,7 @@ class Template < ActiveRecord::Base
 	end
 
 	def index_file
-		directory_index.blank? ? 'index.html' : directory_index
+		directory_index.blank? ? 'index.php' : directory_index
 	end
 
 end

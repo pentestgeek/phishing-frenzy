@@ -14,14 +14,12 @@
   </tr>
 
   <% @baits.order("created_at DESC").each do |bait| %>
-
-      <tr class="<%= cycle('odd', 'even') %>">
-        <td><%= bait.created_at.to_formatted_s(:db) %></td>
-        <td><%= bait.to %></td>
-        <td><%= bait.from %></td>
-        <td><%= bait.status %></td>
-        <td><%= bait.message %></td>
-      </tr>
-
+  <tr class="<%= cycle('odd', 'even') %>">
+    <td><%= bait.created_at.to_formatted_s(:db) %></td>
+    <td><%= bait.to %></td>
+    <td><%= bait.from %></td>
+    <td><%= bait.status %></td>
+    <td><%= bait.message %></td>
+  </tr>
   <% end %>
 </table>

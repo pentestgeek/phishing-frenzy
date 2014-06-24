@@ -1,15 +1,17 @@
-<%= link_to("<< Back", :back, :class => 'back-link') %>
+<%= link_to("<< Back", 
+            edit_template_path(@attachment.attachable_id), 
+            :class => 'back-link') %>
 
-<h2>Edit Attachment</h2>
+<h2>Edit Attachment - <%= File.basename(@attachment.file.to_s) %></h2>
 
 <div class='row'>
 	<div class='col-md-12'>
 		<%= form_for(:attachment, :url => {:action => 'update_attachment', :format => params[:format]}) do |f| %>
 			<div class="form-buttons">
-				<%= submit_tag("Save", class: 'btn btn-primary pull-left') %>
+				<%= submit_tag("Save", class: 'btn btn-primary') %>
 			</div>
 
-			<%= text_area_tag("attachment_content", @attachment_content, :rows => 35, class: 'span12') %>
+			<%= text_area_tag("attachment_content", @attachment_content, size: "130x32") %>
 		<% end %>
 	</div>
 </div>

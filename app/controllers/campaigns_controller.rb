@@ -9,20 +9,23 @@ class CampaignsController < ApplicationController
 
 	def list
 		# grab the campaigns and sort by id
-		@campaigns = Campaign.all
+		@campaigns = Campaign.order("created_at DESC")
 	end
 
 	def home
-		# grab only the active campaigns
-		@campaigns = Campaign.active.page(params[:page]).per(8)
+		# grab only the launched campaigns
+		@campaigns = Campaign.launched.page(params[:page]).per(16)
+
 	end
 
 	def show
-		@campaign = Campaign.find_by_id(params[:id])
+		@templates = Template.all
+		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 		@blasts = @campaign.blasts.order('created_at DESC').limit(10)
-		if @campaign.nil?
-			list
-			render('list')
+		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
+		@template = @campaign.template
+		unless @template
+			flash.now[:warning] = "No template has been selected for this campaign"
 		end
 	end
 
@@ -37,7 +40,7 @@ class CampaignsController < ApplicationController
 			@email_settings = EmailSettings.new(:campaign_id => @campaign.id)
 			if @campaign_settings.save and @email_settings.save
 				flash[:notice] = "Campaign Created"
-				redirect_to(:action => 'options', id: @campaign.id)
+				redirect_to @campaign
 			else
 				render('new')
 			end
@@ -59,7 +62,7 @@ class CampaignsController < ApplicationController
 		@campaign = Campaign.find(params[:id])
 		if @campaign.update_attributes(params[:campaign])
 			flash[:notice] = "Campaign Updated"
-			redirect_to(:action => 'list')
+			redirect_to @campaign
 		else
 			render('edit')
 		end
@@ -72,17 +75,17 @@ class CampaignsController < ApplicationController
 		if params[:campaign][:active] == "1"
 			if params[:campaign_settings][:fqdn] == ""
 				flash[:notice] = "FQDN cannot be blank when active"
-				redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
+				redirect_to(:controller => 'campaigns', :action => 'form', :id => params[:id])
 				return false
 			end
 		end
 
 		if @campaign.update_attributes(params[:campaign]) and @campaign.email_settings.update_attributes(params[:email_settings]) and @campaign.campaign_settings.update_attributes(params[:campaign_settings])
 			flash[:notice] = "Campaign Updated"
-			redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
+			redirect_to @campaign
 		else
 			@templates = Template.all
-			render('options')
+			render('form')
 		end
 	end
 
@@ -102,7 +105,7 @@ class CampaignsController < ApplicationController
 		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
 		@template = @campaign.template
 		unless @template
-			flash[:warning] = "No template has been selected for this campaign"
+			flash.now[:warning] = "No template has been selected for this campaign"
 		end
 		if @campaign.nil?
 			flash[:notice] = "Campaign Does not Exist"
@@ -121,7 +124,7 @@ class CampaignsController < ApplicationController
 			victim.update_attribute(:archive, true)
 		end
 		flash[:notice] = "Victims Cleared"
-		redirect_to(:controller => 'campaigns', :action => 'options', :id => params[:id])
+		redirect_to campaign_path(id: params[:id])
 	end
 
 	def delete_victim
@@ -139,17 +142,5 @@ class CampaignsController < ApplicationController
 			format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
 			format.js
 		end
-	end
-
-	def smtp
-		@campaign = Campaign.find_by_id(params[:id])
-	end
-
-	def delete_smtp_entry
-		smtp = SmtpCommunication.find_by_id(params[:id])
-		campaign_id = smtp[:campaign_id]
-		SmtpCommunication.find_by_id(params[:id]).destroy
-		flash[:notice] = "SMTP Entry Deleted"
-		redirect_to(:controller => 'campaigns', :action => 'smtp', :id => campaign_id)	
 	end
 end
