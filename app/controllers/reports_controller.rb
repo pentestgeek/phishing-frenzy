@@ -92,10 +92,8 @@ class ReportsController < ApplicationController
     @uvic = 0
 
     # Total visits to the website.
-    @visits = 0
-
-    # Total opened
-    @opened = 0
+    @visits = Campaign.clicks(@campaign)
+    @opened = Campaign.opened(@campaign)
 
     Victim.where(campaign_id: params[:id]).each do |victim|
       s = Visit.where(:victim_id => victim.id).where('extra is null OR extra not LIKE ?', "%EMAIL%").size
@@ -103,10 +101,7 @@ class ReportsController < ApplicationController
         @uvic = @uvic + 1
         @visits = @visits + s
       end
-      o = Visit.where(:victim_id => victim.id, :extra => "SOURCE: EMAIL").size
-      if (o > 0)
-        @opened = @opened + 1
-      end
+      @opened = Campaign.opened(@campaign)
     end
 
     @jsonToSend = Hash.new()
@@ -127,7 +122,7 @@ class ReportsController < ApplicationController
     i = 0
     Victim.where(campaign_id: params[:id]).each do |victim|
       passwordSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
-      imageSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
+      imageSeen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
       emailSent = Campaign.where(:id => victim.campaign_id).first().email_sent ? "Yes" : "No"
       emailClicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
       emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"

@@ -18,7 +18,7 @@ class Victim < ActiveRecord::Base
 
   def opened?
     # determine if victim has opened on link or not
-    self.visits.where(extra: "SOURCE: EMAIL").empty? ? false : true
+    self.visits.empty? ? false : true
   end
 
   def password?

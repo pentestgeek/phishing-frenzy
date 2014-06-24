@@ -39,7 +39,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def self.opened(campaign)
-    campaign.visits.where(:extra => "SOURCE: EMAIL").pluck(:victim_id).uniq.size
+    campaign.visits.pluck(:victim_id).uniq.size
   end
 
   def self.sent(campaign)
