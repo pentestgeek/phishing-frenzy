@@ -93,3 +93,4 @@ gem 'jquery-datatables-rails'
 gem 'd3-rails'
 
 gem 'prawn'
+

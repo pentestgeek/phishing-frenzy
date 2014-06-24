@@ -123,7 +123,7 @@ class ReportsController < ApplicationController
     Victim.where(campaign_id: params[:id]).each do |victim|
       passwordSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
       imageSeen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
-      emailSent = Campaign.where(:id => victim.campaign_id).first().email_sent ? "Yes" : "No"
+      emailSent = victim.sent ? "Yes" : "No"
       emailClicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
       emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
       jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen,emailSeen]
