@@ -53,6 +53,7 @@ PhishingFramework::Application.routes.draw do
 			get 'smtp'
 			get 'passwords'
 			post 'results'
+			delete 'clear'
 		end
 	end
 

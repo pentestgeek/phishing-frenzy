@@ -106,6 +106,12 @@
               <%= link_to "View raw Apache Logs from Campaign", 
                           apache_logs_reports_path(id: params[:id]) %>
             </li>
+            <li class="list-group-item">
+              <span class="glyphicon glyphicon-remove"></span>
+              <%= link_to "Clear Campaign Statistics", 
+                          clear_reports_path(id: params[:id]), method: :delete, 
+                          data: { confirm: "Are you sure?" } %>
+            </li>
           </ul>
         </div>
         <div class="modal-footer">

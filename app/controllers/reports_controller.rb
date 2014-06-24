@@ -195,5 +195,12 @@ class ReportsController < ApplicationController
     @campaign = Campaign.find(params[:id])
   end
 
+  def clear
+    # clear campaign statistics
+    campaign = Campaign.find(params[:id])
+    campaign.victims.destroy_all
+    redirect_to :back, notice: "Cleared Campaign Stats"
+  end
+
 end
 
