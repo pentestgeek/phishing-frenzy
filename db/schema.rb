@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140506021435) do
+ActiveRecord::Schema.define(:version => 20140624025030) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -101,6 +101,15 @@ ActiveRecord::Schema.define(:version => 20140506021435) do
   end
 
   add_index "campaigns", ["template_id"], :name => "index_campaigns_on_template_id"
+
+  create_table "clones", :force => true do |t|
+    t.string   "name"
+    t.string   "status"
+    t.text     "url"
+    t.text     "page"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "email_settings", :force => true do |t|
     t.integer  "campaign_id"

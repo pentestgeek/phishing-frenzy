@@ -1,0 +1,49 @@
+<h1>Websites Cloned</h1>
+
+<div id="new-clone-button">
+  <button class="btn btn-primary" data-toggle="modal" data-target="#newClone">
+    New Website Clone
+  </button>
+</div>
+
+<table class="table table-hover">
+  <tr>
+    <th>Name</th>
+    <th>URL</th>
+    <th>Status</th>
+    <th>Page</th>
+    <th>Actions</th>
+  </tr>
+
+<% @clones.each do |clone| %>
+  <tr>
+    <td><%= clone.name %></td>
+    <td><%= clone.url %></td>
+    <td><%= clone.status %></td>
+    <td><%= truncate(clone.page) %></td>
+    <td>
+      <%= link_to 'Show', clone, class: 'btn btn-xs btn-default' %>
+      <%= link_to 'Edit', edit_clone_path(clone), class: 'btn btn-xs btn-default' %>
+      <%= link_to 'Destroy', clone, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-default' %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="newClone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Clone Website</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'form' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

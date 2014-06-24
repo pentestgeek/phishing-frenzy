@@ -1,0 +1,25 @@
+<%= form_for(@clone) do |f| %>
+  <% if @clone.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@clone.errors.count, "error") %> prohibited this clone from being saved:</h2>
+
+      <ul>
+      <% @clone.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, placeholder: 'website clone', required: true, class: 'form-control' %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br />
+    <%= f.text_field :url, placeholder: 'http://www.domain.net', required: true, class: 'form-control' %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Clone Website', class: 'btn btn-primary' %>
+  </div>
+<% end %>

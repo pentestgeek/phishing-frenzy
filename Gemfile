@@ -92,4 +92,8 @@ gem 'jquery-datatables-rails'
 # d3 reports
 gem 'd3-rails'
 
+# pdf reports
 gem 'prawn'
+
+# site cloning
+gem 'mechanize'

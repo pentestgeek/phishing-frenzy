@@ -1,4 +1,7 @@
 PhishingFramework::Application.routes.draw do
+  resources :clones
+
+
 	devise_for :admins
 
 	# image tracking routes.
