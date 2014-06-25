@@ -103,8 +103,6 @@ GEM
       letter_opener (~> 1.0)
       rails (>= 3.2)
     libv8 (3.16.14.3)
-    local_time (1.0.0)
-      coffee-rails
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -218,7 +216,6 @@ DEPENDENCIES
   kaminari
   less-rails
   letter_opener_web
-  local_time
   mysql2
   nested_form
   paper_trail (>= 3.0.0.rc2)
