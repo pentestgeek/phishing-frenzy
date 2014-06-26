@@ -44,9 +44,9 @@ class ClonesController < ApplicationController
     @clone = Clone.new(params[:clone])
 
     # run the cloning magic
-    page = clone_website(params[:clone])
-    @clone.page = page.content
-    @clone.status = page.code
+    page, code = clone_website(params[:clone])
+    @clone.page = page
+    @clone.status = code
 
     respond_to do |format|
       if @clone.save
@@ -82,16 +82,48 @@ class ClonesController < ApplicationController
     @clone.destroy
 
     respond_to do |format|
-      format.html { redirect_to clones_url }
+      format.html { redirect_to clones_url, notice: 'Website Deleted' }
       format.json { head :no_content }
     end
+  end
+
+  def download
+    #binding.pry
+    #send_data 
+    clone = Clone.find(params[:id])
+    send_data clone.page, filename: 'download.html'
+    #redirect_to :back, notice: 'website downloaded'
+  end
+
+  def preview
+    @clone = Clone.find(params[:id])
+    render layout: false
   end
 
   private
 
   def clone_website(clone)
     agent = Mechanize.new
+    agent.user_agent_alias = 'Mac Firefox'
     page = agent.get clone[:url]
-    return page
+
+    doc = Nokogiri::HTML(page.content)
+    doc.css("a").each do |link|
+      if link.attributes['href']
+        if link.attributes['href'].value[0].eql?('/')
+          link.attributes['href'].value = "#{params[:clone][:url]}#{link.attributes['href'].value}"
+        end
+      end
+    end
+
+    doc.css("img").each do |image|
+      if image.attributes['src']
+        if image.attributes['src'].value[0].eql?('/')
+          image.attributes['src'].value = "#{params[:clone][:url]}#{image.attributes['src'].value}"
+        end
+      end
+    end
+
+    return doc.to_s, page.code
   end
 end

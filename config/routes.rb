@@ -1,6 +1,4 @@
 PhishingFramework::Application.routes.draw do
-  resources :clones
-
 
 	devise_for :admins
 
@@ -72,6 +70,15 @@ PhishingFramework::Application.routes.draw do
 			delete 'destroy'
 		end
 	end
+
+  resources :clones do
+  	member do
+  		get 'download'
+  		get 'preview'
+  	end
+  end
+
+  resources :tools
 
 	root :to => 'campaigns#home'
 

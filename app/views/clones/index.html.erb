@@ -2,11 +2,11 @@
 
 <div id="new-clone-button">
   <button class="btn btn-primary" data-toggle="modal" data-target="#newClone">
-    New Website Clone
+    Clone Website
   </button>
 </div>
 
-<table class="table table-hover">
+<table class="table table-hover table-condensed">
   <tr>
     <th>Name</th>
     <th>URL</th>
@@ -18,13 +18,13 @@
 <% @clones.each do |clone| %>
   <tr>
     <td><%= clone.name %></td>
-    <td><%= clone.url %></td>
+    <td><%= truncate(clone.url) %></td>
     <td><%= clone.status %></td>
     <td><%= truncate(clone.page) %></td>
     <td>
-      <%= link_to 'Show', clone, class: 'btn btn-xs btn-default' %>
-      <%= link_to 'Edit', edit_clone_path(clone), class: 'btn btn-xs btn-default' %>
-      <%= link_to 'Destroy', clone, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-default' %>
+      <%= link_to '<span class="glyphicon glyphicon-search"></span>'.html_safe, preview_clone_path(clone), target: '_blank', class: 'btn btn-xs btn-default', title: 'Preview' %>
+      <%= link_to '<span class="glyphicon glyphicon-download-alt"></span>'.html_safe, download_clone_path(clone), class: 'btn btn-xs btn-default', title: 'Download' %>
+      <%= link_to '<span class="glyphicon glyphicon-remove"></span>'.html_safe, clone, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger', title: 'Delete' %>
     </td>
   </tr>
 <% end %>
