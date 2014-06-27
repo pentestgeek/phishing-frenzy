@@ -88,11 +88,8 @@ class ClonesController < ApplicationController
   end
 
   def download
-    #binding.pry
-    #send_data 
     clone = Clone.find(params[:id])
-    send_data clone.page, filename: 'download.html'
-    #redirect_to :back, notice: 'website downloaded'
+    send_data clone.page, filename: clone.url.parameterize + '.html'
   end
 
   def preview
