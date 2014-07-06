@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140506021435) do
+ActiveRecord::Schema.define(:version => 20140706224849) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20140506021435) do
     t.boolean  "use_beef",               :default => false
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.integer  "smtp_delay",             :default => 0
   end
 
   add_index "campaign_settings", ["campaign_id"], :name => "index_campaign_settings_on_campaign_id"

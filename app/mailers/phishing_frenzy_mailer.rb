@@ -60,6 +60,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     response= nil
     error = nil
     begin
+      sleep(@campaign.campaign_settings.smtp_delay)
       response = bait.deliver!
     rescue => e
       error = e
