@@ -226,7 +226,7 @@
           <% end %>
           <%= fields_for @campaign.campaign_settings do |cs| %>
             <tr>
-              <th>FQDN</th>
+              <th>FQDN:</th>
               <td>
               <span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'></span>
               </td>
@@ -263,7 +263,7 @@
             <th>Use BeeF?</th>
             <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
             <td><%= cs.check_box(:use_beef, :disabled => true) %></td>
-          </tr>
+          </tr>      
           <tr>
             <th>Iptables Restrictions?</th>
             <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
@@ -274,6 +274,11 @@
             <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
             <td><%= cs.check_box(:schedule_campaign, :disabled => true) %></td>
           </tr>
+          <tr>
+            <th>SMTP Sending Delay:</th>
+            <td><span class="ui-icon ui-icon-help" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email. Note this will not work if you are configured to send emails in the background with sidekiq.'></span></td>
+            <td><%= cs.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %></td>
+          </tr>   
         <% end %>
         </table>
       </div>
