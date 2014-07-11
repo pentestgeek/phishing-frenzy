@@ -265,6 +265,11 @@
             <td><%= cs.check_box(:use_beef, :disabled => true) %></td>
           </tr>      
           <tr>
+            <th>SMTP Sending Delay:</th>
+            <td><span class="ui-icon ui-icon-help" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email'></span></td>
+            <td><%= cs.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %></td>
+          </tr>             
+          <tr>
             <th>Iptables Restrictions?</th>
             <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
             <td><%= cs.check_box(:iptable_restrictions, :disabled => true) %></td>
