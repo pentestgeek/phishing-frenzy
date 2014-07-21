@@ -19,8 +19,8 @@ class SystemMonitor
 
   # determine if BeeF is running
   def beef
-    beef_output = `ps aux | grep beef`
-    beef_output =~ /beef.py/
+    beef_output = `ps aux | grep beef | grep -v color`
+    beef_output =~ /beef/
   end
 
   def sidekiq

@@ -189,7 +189,9 @@ class Campaign < ActiveRecord::Base
         File.open(loc, 'w') do |fo|
           # add php tracking tags to each website file
           tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-          fo.puts tags.result
+          # add beef script tags if enabled
+          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result
+          fo.puts tags
           File.foreach(page.file.current_path) do |li|
             fo.puts li
           end
@@ -199,6 +201,11 @@ class Campaign < ActiveRecord::Base
         inflate(loc, deployment_directory)
       end
     end
+  end
+
+  def tag_beef(tags)
+    beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
+    return beef.result + tags.result
   end
 
   def deployment_directory

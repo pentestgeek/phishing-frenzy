@@ -255,24 +255,9 @@
             <td><%= cs.check_box(:track_uniq_visitors) %></td>
           </tr>
           <tr>
-            <th>Track Number of Hits?</th>
-            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-            <td><%= cs.check_box(:track_hits, :disabled => true) %></td>
-          </tr>
-          <tr>
             <th>Use BeeF?</th>
-            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-            <td><%= cs.check_box(:use_beef, :disabled => true) %></td>
-          </tr>      
-          <tr>
-            <th>Iptables Restrictions?</th>
-            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-            <td><%= cs.check_box(:iptable_restrictions, :disabled => true) %></td>
-          </tr>
-          <tr>
-            <th>Schedule Campaign?</th>
-            <td><span class="ui-icon ui-icon-help" title='Functionality not available yet'></span></td>
-            <td><%= cs.check_box(:schedule_campaign, :disabled => true) %></td>
+            <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
+            <td><%= cs.check_box(:use_beef) %></td>
           </tr>
           <tr>
             <th>SMTP Sending Delay:</th>
