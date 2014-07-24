@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140706224849) do
+ActiveRecord::Schema.define(:version => 20140724073404) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(:version => 20140706224849) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "email_searches", :force => true do |t|
+    t.string   "domain"
+    t.integer  "harvested_email_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "email_searches", ["harvested_email_id"], :name => "index_email_searches_on_harvested_email_id"
+
   create_table "email_settings", :force => true do |t|
     t.integer  "campaign_id"
     t.string   "to"
@@ -146,7 +155,19 @@ ActiveRecord::Schema.define(:version => 20140706224849) do
     t.string   "command_apache_status"
     t.string   "command_apache_vhosts",  :default => "apache2ctl -S"
     t.boolean  "asynchronous",           :default => false
+    t.string   "bing_api"
   end
+
+  create_table "harvested_emails", :force => true do |t|
+    t.string   "email"
+    t.string   "group"
+    t.text     "url"
+    t.integer  "email_search_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "harvested_emails", ["email_search_id"], :name => "index_harvested_emails_on_email_search_id"
 
   create_table "smtp_communications", :force => true do |t|
     t.string   "to"

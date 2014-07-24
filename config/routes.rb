@@ -16,12 +16,20 @@ PhishingFramework::Application.routes.draw do
 	get "reports/show"
 	get "reports/delete"
 
+	get "tools/emails" => "tools#emails"
+	get "tools/show_emails/:id" => "tools#show_emails", as: 'show_emails'
+	post "tools/enumerate_emails" => "tools#enumerate_emails"
+	delete "tools/emails/:id" => "tools#destroy_email", as: 'destroy_email'
+	get "tools/download_emails/:id" => "tools#download_emails", as: "download_emails"
+	get "tools/import_emails" => "tools#import_emails"
+
 	resources :campaigns do
 		collection do
 			get 'options'
 			get 'home'
 			get 'list'
 			get 'aboutus'
+			get 'victims'
 			delete 'destroy'
 		end
 		member do

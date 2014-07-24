@@ -9,7 +9,7 @@
 
   <%= form_for(:global_settings, :url => {:action => 'update_global_settings'}) do |f| %>
 
-  <table summary="Global Settings fields">
+  <table class="table borderless" summary="Global Settings fields">
     <tr>
       <th>Apache Restart Command</th>
       <td><span class="ui-icon ui-icon-help" title='Command used on the Operating System to restart Apache. This is required to manage the virtual hosts for phishing websites'></span></td>
@@ -34,6 +34,11 @@
       <th>SMTP Timeout</th>
       <td><span class="ui-icon ui-icon-help" title='Timeout in seconds to allow when sending phishing emails through the SMTP server'></span></td>
       <td><%= f.text_field(:smtp_timeout, class: 'form-control') %></td>
+    </tr>
+    <tr>
+      <th>Bing API Key</th>
+      <td><span class="ui-icon ui-icon-help" title='Bing API Key required for email enumeration'></span></td>
+      <td><%= f.text_field(:bing_api, class: 'form-control') %></td>
     </tr>
     <tr>
       <th>Background Email</th>

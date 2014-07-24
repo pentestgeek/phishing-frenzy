@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal fade" id="importEmails-<%= search.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">
+          <span class="glyphicon glyphicon-log-in"></span> Assign Addresses to Campaign
+        </h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag(tools_import_emails_path) do %>
+          <%= label :campaign, "Campaign Name" %>
+          <% campaigns_array = Campaign.all.map { |campaign| [campaign.name, campaign.id] } %>
+          <%= select_tag :campaign, options_for_select(campaigns_array), class: 'form-control' %><br>
+          <%= label :search_id, "Search ID" %>
+          <%= text_field :search_id, "", value: search.id, readonly: true, class: 'form-control' %><br>
+          <%= submit_tag "Import", class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

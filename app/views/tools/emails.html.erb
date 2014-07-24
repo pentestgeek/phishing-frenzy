@@ -1,0 +1,59 @@
+<div class="page-header">
+  <h2>Email Enumeration</h2>
+</div>
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#enumerateEmail">
+  <span class="glyphicon glyphicon-search"></span> Enumerate
+</button>
+
+<% unless @email_searches.empty? %>
+<div class="">
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>Domain</th>
+        <th>Emails Found</th>
+        <th class="pull-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @email_searches.each do |search| %>
+      <tr>
+        <td><%= link_to search.domain, show_emails_path(search) %></td>
+        <td><%= search.harvested_emails.size %></td>
+        <td>
+          <div class="pull-right">
+          <%= link_to "<span class='glyphicon glyphicon-new-window'></span>".html_safe, 
+                "#", class: 'btn btn-xs btn-primary', 
+                data: {toggle: 'modal', target: "#importEmails-#{search.id}", 
+                placement: 'bottom'}, title: 'Import Emails', 
+                id: 'import-emails', rel: 'tooltip' %>
+          <%= link_to "<span class='glyphicon glyphicon-envelope'></span>".html_safe,
+                show_emails_path(search), class: 'btn btn-xs btn-default', 
+                data: {toggle: 'tooltip', placement: 'bottom'}, 
+                title: 'Show Emails', id: 'show-emails' %>
+          <%= link_to "<span class='glyphicon glyphicon-download-alt'></span>".html_safe,
+                download_emails_path(search), class: 'btn btn-xs btn-default', 
+                data: {toggle: 'tooltip', placement: 'bottom'}, 
+                title: 'Download Emails', id: 'download-emails' %>
+          <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe,
+                destroy_email_path(search), method: :delete, 
+                confirm: 'Are you sure you want to permanently delete this Email Search?',
+                class: 'btn btn-danger btn-xs',
+                data: {toggle: 'tooltip', placement: 'bottom'}, 
+                title: 'Delete Emails', id: 'delete-emails' %>
+          </div>
+          <%= render partial: 'import_emails', locals: {search: search} %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="pull-right">
+    <%= paginate @email_searches, :theme => 'twitter-bootstrap-3' %>
+  </div>
+</div>
+<% end %>
+
+<%= render partial: 'harvester' %>

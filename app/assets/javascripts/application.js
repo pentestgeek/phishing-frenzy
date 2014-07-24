@@ -17,6 +17,7 @@
 //= require bootstrap
 //= require d3
 //= require jquery_nested_form
+//= require tools
 
 // enable dataTable on campaign#list
 $( document ).ready(function() {

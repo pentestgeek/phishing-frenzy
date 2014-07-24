@@ -1,0 +1,26 @@
+<%= link_to '<< Back to Email Searches', tools_emails_path, class: "back-link" %>
+
+<h2>Harvested Emails</h2>
+
+<table class="table table-condensed table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Email</th>
+      <th>Found URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @emails_found.each do |email| %>
+    <tr>
+      <td><span class='glyphicon glyphicon-globe'></span></td>
+      <td><%= email.email %></td>
+      <td><%= link_to truncate(email.url, length: 80), email.url, target: '_blank' %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="pull-right">
+  <%= paginate @emails_found, :theme => 'twitter-bootstrap-3' %>
+</div>

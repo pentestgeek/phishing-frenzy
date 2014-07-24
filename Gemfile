@@ -92,5 +92,8 @@ gem 'jquery-datatables-rails'
 # d3 reports
 gem 'd3-rails'
 
+# pdf creation
 gem 'prawn'
 
+# email enumeration
+gem 'searchbing'
