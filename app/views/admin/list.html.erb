@@ -1,5 +1,4 @@
 <% @page_title = "Admins" %>
-<%= link_to("<< Back to Admin Menu", access_path, :class => 'back-link') %>
 
 <div class="page-header">
   <h2>Your Registration</h2>
@@ -17,14 +16,16 @@
 
 
   <div><%= pluralize(@admins.size, 'admin') %> found</div>
-  <table class="table table-striped" summary="Campiagn list">
-    <tr class="header">
-      <th>&nbsp;</th>
-      <th>Name</th>
-      <th>Username</th>
-      <th>Actions</th>
-    </tr>
-
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
     <% @admins.each do |admin| %>
       <tr>
         <td><%= image_tag('administrator.png', :size => '35x35') %></td>
@@ -41,6 +42,6 @@
         </td>
       </tr>
     <% end %>
+    </tbody>
   </table>
-
 </div>

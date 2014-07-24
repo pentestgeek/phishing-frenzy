@@ -1,4 +1,5 @@
 PhishingFramework::Application.routes.draw do
+
 	devise_for :admins
 
 	# image tracking routes.
@@ -78,6 +79,15 @@ PhishingFramework::Application.routes.draw do
 			delete 'destroy'
 		end
 	end
+
+  resources :clones do
+  	member do
+  		get 'download'
+  		get 'preview'
+  	end
+  end
+
+  resources :tools
 
 	root :to => 'campaigns#home'
 

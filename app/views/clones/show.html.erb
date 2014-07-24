@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @clone.name %>
+</p>
+
+<p>
+  <b>URL:</b>
+  <%= @clone.url %>
+</p>
+
+<p>
+  <b>Page:</b>
+  <%= render :inline => @clone.page %>
+</p>
+
+<%= link_to 'Edit', edit_clone_path(@clone) %> |
+<%= link_to 'Back', clones_path %>

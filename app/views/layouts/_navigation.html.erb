@@ -23,10 +23,17 @@
               <li><%= link_to "About", main_app.aboutus_campaigns_path %></li>
               <li class="divider"></li>
               <li><%= link_to "Email Enumeration", main_app.tools_emails_path %></li>
-              <li><%= link_to "Website Cloner", "#" %></li>
+              <li><%= link_to "Website Cloner", main_app.clones_path %></li>
             </ul>
           </li>
-          <li><%= link_to "Admin", main_app.access_path %></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "<span class='glyphicon glyphicon-user'></span> Manage Users".html_safe, main_app.list_admin_index_path %></li>
+              <li><%= link_to "<span class='glyphicon glyphicon-cog'></span> Global Settings".html_safe, main_app.global_settings_admin_index_path %>
+              </li>
+            </ul>
+          </li>
           <li><%= link_to "Logout", main_app.destroy_admin_session_path, :method => :delete %></li>
       </ul>
 

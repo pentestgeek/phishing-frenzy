@@ -4,7 +4,7 @@ class ToolsController < ApplicationController
   def emails
     # warn user if bing api key is not configured
     if GlobalSettings.first.bing_api.to_s.empty?
-      flash[:notice] = "Bing API Key Required for Email Enumeration"
+      flash.now[:notice] = "Bing API Key Required for Email Enumeration"
     end
 
     @email_searches = EmailSearch.includes(:harvested_emails).page(params[:page]).per(25).reverse_order

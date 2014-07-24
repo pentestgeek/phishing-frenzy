@@ -1,0 +1,68 @@
+<h2>Websites Cloned</h2>
+<hr>
+
+<div id="new-clone-button">
+  <button class="btn btn-primary" data-toggle="modal" data-target="#newClone">
+    Clone Website
+  </button>
+</div>
+
+<table class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>URL</th>
+      <th>Status</th>
+      <th><div class="pull-right">Actions</div></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @clones.each do |clone| %>
+    <tr>
+      <td><%= clone.name %></td>
+      <td><%= truncate(clone.url) %></td>
+      <td><%= clone.status %></td>
+      <td>
+        <div class="pull-right">
+          <%= link_to '<span class="glyphicon glyphicon-search"></span>'.html_safe,
+                preview_clone_path(clone), target: '_blank', 
+                class: 'btn btn-xs btn-default', title: 'Preview',
+                rel: 'tooltip', data: {placement: 'bottom'} %>
+          <%= link_to '<span class="glyphicon glyphicon-download-alt"></span>'.html_safe,
+                download_clone_path(clone), class: 'btn btn-xs btn-default', 
+                title: 'Download',rel: 'tooltip', 
+                data: {placement: 'bottom'} %>
+          <%= link_to '<span class="glyphicon glyphicon-remove"></span>'.html_safe,
+                clone, method: :delete, 
+                data: { confirm: 'Are you sure?', placement: 'bottom' },
+                class: 'btn btn-xs btn-danger', title: 'Delete',
+                id: 'delete-emails' %>
+        </div>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="pull-right">
+  <%= paginate @clones, :theme => 'twitter-bootstrap-3' %>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newClone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Clone Website</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'form' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

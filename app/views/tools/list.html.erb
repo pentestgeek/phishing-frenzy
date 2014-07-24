@@ -1,11 +1,13 @@
 <% @page_title = "Tools Menu" %>
 
 <div class="menu">
-	
-<h2>Tools</h2>
-	<ul>
-		<li><%= link_to("Email Address Harvester", '#') %></li>
-		<li><%= link_to("MX Enumeration", '#') %></li>
-		<li><%= link_to("SMTP Gateway Spoofing Test", '#') %></li>
-	</ul> 
+  <div class="page-header">
+    <h2>Tools</h2>
+  </div>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+      <%= link_to "Website Cloner", clones_path %>
+    </li>
+  </ul> 
 </div>

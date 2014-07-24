@@ -15,10 +15,10 @@
   </button>
 </div>
 
-<table id="templates" class="table table-striped table-hover table-condensed" summary="Templates">
+<table id="templates" class="table table-striped table-hover table-condensed">
   <thead>
     <tr class="header">
-      <th>&nbsp;</th>
+      <th></th>
       <th>Name</th>
       <th>Description</th>
       <th>Index</th>
@@ -28,16 +28,28 @@
   <tbody>
     <% @templates.each do |template| %>
     <tr>
-      <td><%= image_tag('template.png', :size => '35x35') %></td>      
+      <td><span class='glyphicon glyphicon-tags'></span></td>      
       <td><%= template.name %></td>
-      <td><%= template.description %></td>
+      <td><%= truncate(template.description) %></td>
       <td><%= template.index_file %></td>
       <td class="actions">
-        <%= link_to("Show", {:action => 'show', :id => template.id}, class: 'btn btn-default btn-xs') %>
-        <%= link_to("Edit", {:action => 'edit', :id => template.id}, class: 'btn btn-default btn-xs') %>
-        <%= link_to("Copy", {:action => 'copy', :id => template.id}, class: 'btn btn-default btn-xs') %>
-        <%= link_to "Delete", template_path(template), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'btn btn-default btn-xs' %>
-        <%= link_to("Backup", {:action => 'backup', :id => template.id}, class: 'btn btn-default btn-xs') %>
+        <%= link_to("<span class='glyphicon glyphicon-edit'></span>".html_safe,
+              {:action => 'edit', :id => template.id}, data: {placement: 'bottom'},
+              class: 'btn btn-primary btn-xs', rel: 'tooltip', title: 'Edit Template') %>
+        <%= link_to("<span class='glyphicon glyphicon-search'></span>".html_safe,
+              {:action => 'show', :id => template.id}, data: {placement: 'bottom'},
+              class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Show Template') %>
+        <%= link_to("<span class='glyphicon glyphicon-retweet'></span>".html_safe,
+              {:action => 'copy', :id => template.id}, data: {placement: 'bottom'},
+              class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Copy Template') %>
+        <%= link_to("<span class='glyphicon glyphicon-download-alt'></span>".html_safe,
+              {:action => 'backup', :id => template.id}, data: {placement: 'bottom'},
+              class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Backup Template') %>
+        <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe, 
+              template_path(template), method: :delete,
+              confirm: 'Are you sure you want to permanently delete this campaign?',
+              class: 'btn btn-danger btn-xs', id: 'delete-emails',
+              data: {placement: 'bottom'}, title: 'Delete Template' %>
       </td>
     </tr>
     <% end %>

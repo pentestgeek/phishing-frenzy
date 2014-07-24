@@ -16,7 +16,7 @@
 <table id="campaigns" class="table table-striped table-hover table-condensed display" summary="Campiagn list">
   <thead>
     <tr class="header">
-      <th>&nbsp;</th>
+      <th></th>
       <th>Client</th>
       <th>Description</th>
       <th>Active</th>
@@ -28,9 +28,9 @@
     <% @campaigns.each do |campaign| %>
     
     <tr>
-      <td><%= image_tag('fishing_pole.png', :size => '28x28') %></td>      
+      <td><span class='glyphicon glyphicon-envelope'></span></td>      
       <td><%= campaign.name %></td>
-      <td><%= campaign.description %></td>
+      <td><%= truncate(campaign.description) %></td>
       <td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
       <td>
         <% if Victim.where("campaign_id = ?", campaign.id).size != 0 %>
@@ -41,8 +41,15 @@
       </td>
       <td class="actions">
         <div id="actions-buttons">
-          <%= link_to("Show", campaign_path(campaign.id), :class => 'btn btn-default btn-xs') %>
-          <%= link_to "Delete", campaign_path(campaign), method: :delete,confirm: 'Are you sure you want to permanently delete this campaign?', class: 'btn btn-default btn-xs' %>
+          <%= link_to("<span class='glyphicon glyphicon-search'></span>".html_safe,
+                campaign_path(campaign.id), data: {placement: 'bottom'},
+                class: 'btn btn-default btn-xs', rel: 'tooltip',
+                title: 'Campaign Options') %>
+          <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe,
+                campaign_path(campaign), method: :delete,
+                confirm: 'Are you sure you want to permanently delete this campaign?',
+                class: 'btn btn-danger btn-xs', id: 'delete-emails',
+                data: {placement: 'bottom'}, title: 'Delete Campaign' %>
         </div>
       </td>
     </tr>
