@@ -1,15 +1,18 @@
 ---
 driver:
   name: vagrant
+  network:
+  - ["forwarded_port", {guest: 80, host: 8080}]
+  - ["private_network", {ip: "192.168.33.33"}]
 
 provisioner:
   name: chef_solo
 
 platforms:
-  - name: ubuntu-12.04
-  - name: centos-6.4
+  - name: debian-7.4
 
 suites:
   - name: default
     run_list:
+      - recipe[phishing-frenzy::default]
     attributes:
