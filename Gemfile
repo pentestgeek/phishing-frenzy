@@ -98,8 +98,5 @@ gem 'prawn'
 # email enumeration
 gem 'searchbing'
 
-# pdf reports
-gem 'prawn'
-
 # site cloning
 gem 'mechanize'
