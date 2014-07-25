@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20140724073404) do
 
   create_table "email_searches", :force => true do |t|
     t.string   "domain"
+    t.integer  "crawls"
     t.integer  "harvested_email_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false

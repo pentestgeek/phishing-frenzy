@@ -21,8 +21,9 @@ class ToolsController < ApplicationController
 
   def download_emails
     emails = String.new
-    EmailSearch.find(params[:id]).harvested_emails.each {|email| emails << "#{email.email}\n" }
-    send_data( emails, :filename => "emails-#{params[:id]}.txt" )
+    email_search = EmailSearch.find(params[:id])
+    email_search.harvested_emails.each {|email| emails << "#{email.email}\n" }
+    send_data(emails, :filename => "#{email_search.domain}-#{params[:id]}.txt".parameterize)
   end
 
   def import_emails
@@ -55,7 +56,7 @@ class ToolsController < ApplicationController
     urls = []
     number = (params[:crawls].to_i/50)
     # create new search record
-    email_search = EmailSearch.create(domain: params[:domain])
+    email_search = EmailSearch.create(domain: params[:domain], crawls: params[:crawls].to_i)
 
     # bing search to list first 100 urls and place in array
     bing_web = Bing.new(bing_api, 50, "Web")

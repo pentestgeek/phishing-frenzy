@@ -13,6 +13,7 @@
       <tr>
         <th>Domain</th>
         <th>Emails Found</th>
+        <th>Links Crawled</th>
         <th class="pull-right">Actions</th>
       </tr>
     </thead>
@@ -21,6 +22,7 @@
       <tr>
         <td><%= link_to search.domain, show_emails_path(search) %></td>
         <td><%= search.harvested_emails.size %></td>
+        <td><%= search.crawls %></td>
         <td>
           <div class="pull-right">
           <%= link_to "<span class='glyphicon glyphicon-new-window'></span>".html_safe, 

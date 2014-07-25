@@ -2,6 +2,7 @@ class CreateEmailSearches < ActiveRecord::Migration
   def change
     create_table :email_searches do |t|
       t.string :domain
+      t.integer :crawls
       t.references :harvested_email
 
       t.timestamps

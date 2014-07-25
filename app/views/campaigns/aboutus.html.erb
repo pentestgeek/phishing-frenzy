@@ -1,101 +1,25 @@
 <% @page_title = "About" %>
 
 <div class="page-header">
-  <h2>FAQ</h2>
-</div>
-
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#collapseOne">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          How to Create a new Campaign
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse">
-      <div class="panel-body">
-        Navigate to the Campaigns page and select 'Add New Campaign'</br>
-        <%=  image_tag 'create-campaign.jpg', class: 'img-responsive' %></br>
-        Once a Phishing Campaign has been created it can be customized using the 'Campaign Options'
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#collapseTwo">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-          How to Create a new Template
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
-        Navigate to the Templates page and select 'Create'.</br>
-        <%=  image_tag 'create-template.jpg', class: 'img-responsive' %></br>
-        Once a Template has been created it can be assisgned to any future campaign within the 'Campaign Options'
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#collapseThree">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-          What is an Active Campaign?
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-          An Active campaign means that the website is live and configured using Apache's virtual hosts.</br>
-          <%=  image_tag 'active-campaign.jpg', class: 'img-responsive' %></br>
-          A campaigns website can be taken offline by simply making the campaign Inactive.
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#collapseFour">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-          What is a Launched Campaign?
-        </a>
-      </h4>
-    </div>
-    <div id="collapseFour" class="panel-collapse collapse">
-      <div class="panel-body">
-          A Launched campaign means that emails were sent to targets and Phishing Frenzy will start to generate statistics based on the results of the email phishing.</br>
-          <%=  image_tag 'launch-campaign.jpg', class: 'img-responsive' %></br>
-          Once a campaign has been launched, this process cannnot be reversed.
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#collapseFive">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-          Reports are not showing any Campaigns
-        </a>
-      </h4>
-    </div>
-    <div id="collapseFive" class="panel-collapse collapse">
-      <div class="panel-body">
-        This occurs because a Phishing Campaign has not actually been launched. A Phishing Campaing must be launched in order to generate statistics regarding the Phishing Campaign.
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="page-header">
   <h2>Resources</h2>
 </div>
 
 <div id="listContainer">
   <ul>
     <li>
-      <a href="http://www.pentestgeek.com" target="_blank">www.pentestgeek.com</a>
+      <a href="http://www.phishingfrenzy.com" target="_blank">
+        www.phishingfrenzy.com
+      </a>
     </li>
     <li>
-      <a href="http://github.com/pentestgeek/phishing-frenzy.git" target="_blank">github.com/pentestgeek/phishing-frenzy.git</a>
+      <a href="http://www.pentestgeek.com" target="_blank">
+        www.pentestgeek.com
+      </a>
+    </li>
+    <li>
+      <a href="http://github.com/pentestgeek/phishing-frenzy.git" target="_blank">
+        github.com/pentestgeek/phishing-frenzy.git
+      </a>
     </li>
   </ul>
 </div>
