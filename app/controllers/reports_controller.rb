@@ -169,6 +169,36 @@ class ReportsController < ApplicationController
     end
   end
 
+  def download_excel
+    @campaign = Campaign.find(params[:id])
+    @victims = @campaign.victims
+
+    package = Axlsx::Package.new
+    wb = package.workbook
+    wb.styles do |s|
+      @heading = s.add_style alignment: {horizontal: :center}, b: true, bg_color: "ca0002", fg_color: "FF", border: {style: :thin, color: "00000000"}
+      @data = s.add_style alignment: {wrap_text: true, horizontal: :left, vertical: :top}, height: 14, border: {style: :thin, color: "00000000"}
+    end
+
+    wb.add_worksheet(name: "Targets") do |sheet|
+      sheet.add_row [
+        "Target",
+        "Clicked?",
+        "Opened?"], style: @heading
+      @victims.each do |victim|
+        sheet.add_row [
+          victim.email_address, 
+          victim.clicked?, 
+          victim.opened?], style: @data
+      end
+      sheet.column_widths 50, 20, 20
+    end
+
+    send_data package.to_stream.read, 
+      :filename => "#{@campaign.name}-#{@campaign.id}".parameterize + ".xlsx", 
+      :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
+  end
+
   def apache_logs
     # display all apache logs for campaign
     @campaign = Campaign.find(params[:id])

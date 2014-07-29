@@ -64,6 +64,9 @@ PhishingFramework::Application.routes.draw do
 			post 'results'
 			delete 'clear'
 		end
+		member do
+			get 'download_excel'
+		end
 	end
 
 	resources :admin do
