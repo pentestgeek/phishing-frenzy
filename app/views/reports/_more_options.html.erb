@@ -1,0 +1,61 @@
+<div class="modal fade" id="display-report-options" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Report Options</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-cloud-download"></span>
+            <%= link_to "Download XML Campaign Report", 
+                        download_stats_reports_path(id: params[:id], 
+                        format: "xml"),
+                        target: "_blank" %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-cloud-download"></span>
+            <%= link_to "Download PDF Campaign Report", 
+                        stats_reports_path(id: params[:id], format: "pdf"),
+                        target: "_blank" %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-cloud-download"></span>
+            <%= link_to "Download Excel Spreadsheet from Campaign",
+                        download_excel_report_path(id: params[:id]) %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-cloud-download"></span>
+            <%= link_to "Download raw Apache Logs from Campaign",
+                        download_logs_reports_path(id: params[:id]) %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-paperclip"></span>
+            <%= link_to "View all SMTP logs from Campaign", 
+                        smtp_reports_path(id: params[:id]) %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-paperclip"></span>
+            <%= link_to "View all Passwords Harvested", 
+                        passwords_reports_path(id: params[:id]) %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-paperclip"></span>
+            <%= link_to "View raw Apache Logs from Campaign", 
+                        apache_logs_reports_path(id: params[:id]) %>
+          </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-remove"></span>
+            <%= link_to "Clear Campaign Statistics", 
+                        clear_reports_path(id: params[:id]), method: :delete, 
+                        data: { confirm: "Are you sure?" } %>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
