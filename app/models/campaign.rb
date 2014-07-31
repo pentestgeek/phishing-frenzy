@@ -12,7 +12,6 @@ class Campaign < ActiveRecord::Base
   has_many :blasts
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
-  acts_as_xlsx
 
   # allow mass asignment
   attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email

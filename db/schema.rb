@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140724073404) do
+ActiveRecord::Schema.define(:version => 20140730212703) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(:version => 20140724073404) do
     t.integer  "email_search_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "original"
   end
 
   add_index "harvested_emails", ["email_search_id"], :name => "index_harvested_emails_on_email_search_id"

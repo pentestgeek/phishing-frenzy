@@ -139,6 +139,7 @@ GEM
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     ntlm-http (0.1.1)
+    open_uri_redirections (0.1.4)
     orm_adapter (0.5.0)
     paper_trail (3.0.1)
       activerecord (>= 3.0, < 5.0)
@@ -254,6 +255,7 @@ DEPENDENCIES
   mechanize
   mysql2
   nested_form
+  open_uri_redirections
   paper_trail (>= 3.0.0.rc2)
   prawn
   pry
