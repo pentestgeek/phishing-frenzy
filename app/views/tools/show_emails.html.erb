@@ -14,7 +14,7 @@
     <% @emails_found.each do |email| %>
     <tr>
       <td><span class='glyphicon glyphicon-globe'></span></td>
-      <td><%= email.email %></td>
+      <td><%= email.original %></td>
       <td><%= link_to truncate(email.url, length: 80), email.url, target: '_blank' %></td>
     </tr>
     <% end %>

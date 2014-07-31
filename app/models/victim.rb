@@ -1,7 +1,6 @@
 class Victim < ActiveRecord::Base
 	belongs_to :campaign
 	has_many :visits
-  acts_as_xlsx
 
 	validates_format_of :email_address, :with => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
 	before_create :default_values

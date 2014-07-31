@@ -1,5 +1,7 @@
 class ToolsController < ApplicationController
   require 'searchbing'
+  require 'timeout'
+  require 'open_uri_redirections'
 
   def emails
     # warn user if bing api key is not configured
@@ -55,13 +57,16 @@ class ToolsController < ApplicationController
     offset = 0
     urls = []
     number = (params[:crawls].to_i/50)
-    # create new search record
-    email_search = EmailSearch.create(domain: params[:domain], crawls: params[:crawls].to_i)
 
-    # bing search to list first 100 urls and place in array
+    # bing search to list first 50 urls and place in array
     bing_web = Bing.new(bing_api, 50, "Web")
     number.times.each do |search|
-      bing_results = bing_web.search("\@#{params[:domain]}", offset)
+      begin
+        bing_results = bing_web.search("\@#{params[:domain]}", offset)
+      rescue => e
+        redirect_to tools_emails_path, notice: 'Invalid Bing API Key'
+        return
+      end
       bing_results[0][:Web].each {|result| urls << result[:Url]}
       offset += 50
     end
@@ -71,14 +76,20 @@ class ToolsController < ApplicationController
 
     # iterate through links and store unique emails to database
     found_emails = []
+    contents = ""
+
+    # create new search record
+    email_search = EmailSearch.create(domain: params[:domain], crawls: params[:crawls].to_i)
 
     urls.each do |url|
       begin
-        contents = URI.parse(url).read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        Timeout::timeout(10) {
+          contents = open(url, :allow_redirections => :all).read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        }
       rescue
         next
       end
-      emails = contents.scan(/\w{1,20}\b@#{params[:domain]}/)
+      emails = contents.scan(/(\w{1,20}\b(@|\[at\]|<at>|\(at\))\b#{params[:domain].gsub('.', '\.')})/)
       next if emails.empty?
       emails.each {|email| email_search.harvested_emails << HarvestedEmail.new(email: email, url: url)}
     end

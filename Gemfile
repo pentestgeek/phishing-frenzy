@@ -97,6 +97,7 @@ gem 'prawn'
 
 # email enumeration
 gem 'searchbing'
+gem 'open_uri_redirections'
 
 # site cloning
 gem 'mechanize'
