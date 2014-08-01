@@ -22,7 +22,7 @@
     <%= f.label :url, "URL:" %><br />
     <%= f.text_field :url, placeholder: 'http://www.domain.net', 
           required: true, class: 'form-control',
-          pattern: "^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$" %>
+          pattern: "^(https?|ftp)://[^\s/$.?#].[^\s]*$" %>
   </div><br>
   <div class="actions">
     <%= f.submit 'Clone Website', class: 'btn btn-primary' %>
