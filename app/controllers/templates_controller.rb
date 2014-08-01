@@ -178,8 +178,7 @@ class TemplatesController < ApplicationController
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
 		@attachment_content = File.read(Dir.glob(attachment_location)[0])
 		if File.binary?(Dir.glob(attachment_location)[0])
-			flash[:notice] = "Cannot Edit Binary Files"
-			redirect_to(:controlloer => 'templates', :action => 'edit', :id => params[:id])
+			redirect_to :back, notice: "Cannot Edit Binary Files"
 		end
 	end
 
