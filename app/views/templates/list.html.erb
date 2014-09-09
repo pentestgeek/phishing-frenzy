@@ -4,8 +4,6 @@
   <h2>Templates</h2>
 </div>
 
-<div class="template list">
-
 <div id="template-buttons">
   <button class="btn btn-default" data-toggle="modal" data-target="#createTemplate">
     Create
@@ -48,7 +46,7 @@
         <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe, 
               template_path(template), method: :delete,
               confirm: 'Are you sure you want to permanently delete this campaign?',
-              class: 'btn btn-danger btn-xs', id: 'delete-emails',
+              class: 'btn btn-danger btn-xs', rel: 'tooltip',
               data: {placement: 'bottom'}, title: 'Delete Template' %>
       </td>
     </tr>

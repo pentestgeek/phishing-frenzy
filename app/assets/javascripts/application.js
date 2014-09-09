@@ -17,4 +17,7 @@
 //= require bootstrap.min
 //= require d3
 //= require jquery_nested_form
-//= require tools
+
+$(document).ready(function() {
+  $("[rel~='tooltip']").tooltip();
+});

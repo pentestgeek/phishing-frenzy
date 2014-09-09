@@ -1,11 +1,11 @@
-<%= @page_title = "Campaign Victims" %>
+<% @page_title = "Campaign Victims" %>
 
 <%= link_to("<< Back to Campaign Options", campaign_path(id: params[:id]), :class => 'back-link') %>
 
 <h3>Targets</h3>
 
 <% unless @victims.empty? %>
-  <div class="form-button-victims">
+  <div id="campaign-buttons">
     <%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => params[:id]}, class: "btn btn-danger") %>
   </div>
 
@@ -26,21 +26,11 @@
         <%= counter %>
         <% counter += 1 %>
       </td>
-      <td>
-        <%= victim.firstname %>
-      </td>
-      <td>
-        <%= victim.lastname %>
-      </td>
-      <td>
-        <%= victim.email_address %>
-      </td>
-      <td>
-        <%= victim.uid %>
-      </td>
-      <td>
-        <%= victim.sent %>
-      </td>
+      <td><%= victim.firstname %></td>
+      <td><%= victim.lastname %></td>
+      <td><%= victim.email_address %></td>
+      <td><%= victim.uid %></td>
+      <td><%= victim.sent %></td>
       <td>
         <%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
       </td>
