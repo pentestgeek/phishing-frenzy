@@ -14,6 +14,7 @@
   <![endif]-->
 
   <%= stylesheet_link_tag "application", :media => "all" %>
+<%= javascript_include_tag "application", controller_name %>
 
   <!-- For third-generation iPad with high-resolution Retina display: -->
   <!-- Size should be 144 x 144 pixels -->
@@ -34,8 +35,6 @@
   <!-- For all other devices -->
   <!-- Size should be 32 x 32 pixels -->
   <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
-
-  <%= javascript_include_tag "application" %>
 </head>
 <body>
 
