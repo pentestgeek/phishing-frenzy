@@ -120,3 +120,10 @@ A:hover
 #bs-example-navbar-collapse-1 > ul.nav.navbar-nav.navbar-right {
   padding-right: 1em;
 }
+
+/* flash notifications */
+#content > div.alert.alert-notice,
+#content > div.alert.alert-alert,
+#content > div.alert.alert-warning {
+  line-height: 2px;
+}

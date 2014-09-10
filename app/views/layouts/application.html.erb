@@ -38,36 +38,35 @@
 </head>
 <body>
 
-<% if admin_signed_in? %>
+  <% if admin_signed_in? %>
     <%= render partial: 'layouts/navigation' %>
-<% end %>
+  <% end %>
 
-<div class="container-fluid">
-  <div class="row">
-
+  <!-- sidebar -->
   <div class="sidebar">
     <div class="col-xs-2 visible-lg visible-md visible-sm">
       <%= image_tag('logo.png', :size => '150x150') %>
     </div>
   </div>
+  <!-- end sidebar -->
 
-    <div id="flash-notice" class="col-xs-10">
-      <% flash.each do |key, value| %>
-          <%= content_tag(:div, value, class: "alert alert-#{key}") %>
-      <% end %>
-    </div>
+  <!-- main content -->
+  <div id="content" class="col-xs-12 col-sm-10">
+    <% flash.each do |key, value| %>
+        <%= content_tag(:div, value, class: "alert alert-#{key}") %>
+    <% end %>
 
-    <div id="content" class="col-xs-6 col-sm-9">
-      <%= yield %>
-    </div>
-  </div><!--/row-->
-</div><!-- /container -->
-
-<div id="footer" class="navbar-fixed-bottom">
-  <div class="container">
-    <p class="text-muted">&copy; www.pentestgeek.com 2013</p>
+    <%= yield %>
   </div>
-</div>
+  <!-- end content -->
+
+  <!-- footer -->
+  <div id="footer" class="navbar-fixed-bottom">
+    <div class="container">
+      <p class="text-muted">&copy; www.pentestgeek.com 2013</p>
+    </div>
+  </div>
+  <!-- end footer -->
 
 </body>
 </html>
