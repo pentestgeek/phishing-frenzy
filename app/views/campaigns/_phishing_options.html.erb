@@ -1,0 +1,39 @@
+<div class="panel panel-default">
+  <div class="panel-heading" data-toggle="collapse" data-target="#collapseFive">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+        Phishing Options
+      </a>
+    </h4>
+  </div>
+  <div id="collapseFive" class="panel-collapse collapse">
+    <div class="panel-body">
+      <table class='table borderless' summary="Campaign Settings">
+        <%= fields_for @campaign.campaign_settings do |cs| %>
+        <tr>
+          <th>Track User Clicks?</th>
+          <td>
+            <span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span>
+          </td>
+          <td><%= cs.check_box(:track_uniq_visitors) %></td>
+        </tr>
+        <tr>
+          <th>Use BeeF?</th>
+          <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
+          <td><%= cs.check_box(:use_beef) %></td>
+        </tr>
+        <tr>
+          <th>BeeF Hook URL:</th>
+          <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
+          <td><%= cs.text_field(:beef_url, class: 'form-control') %></td>
+        </tr>
+        <tr>
+          <th>SMTP Sending Delay:</th>
+          <td><span class="ui-icon ui-icon-help" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email. Note this will not work if you are configured to send emails in the background with sidekiq.'></span></td>
+          <td><%= cs.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %></td>
+        </tr>   
+      <% end %>
+      </table>
+    </div>
+  </div>
+</div>

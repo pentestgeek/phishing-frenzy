@@ -35,9 +35,22 @@
       <td><%= f.text_field(:smtp_timeout, class: 'form-control') %></td>
     </tr>
     <tr>
+      <th>BeEF URL</th>
+      <td><span class="ui-icon ui-icon-help" title='URL used for BeEF to hook browsers with javascript'></span></td>
+      <td><%= f.text_field(:beef_url,
+                placeholder: "http://beef.phishingfrenzy.local/hook.js",
+                class: 'form-control') %></td>
+    </tr>
+    <tr>
       <th>Bing API Key</th>
-      <td><span class="ui-icon ui-icon-help" title='Bing API Key required for email enumeration'></span></td>
-      <td><%= f.text_field(:bing_api, class: 'form-control') %></td>
+      <td>
+        <span class="ui-icon ui-icon-help" title='Bing API Key required for email enumeration'></span>
+      </td>
+      <td>
+        <%= f.text_field(:bing_api, 
+                placeholder: "BKqC2hIKr8foem2E1qiRvB5ttBQJK8objH8kZE/WJVs=", 
+                class: 'form-control') %>
+      </td>
     </tr>
     <tr>
       <th>Background Email</th>

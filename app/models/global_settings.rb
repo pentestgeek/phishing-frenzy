@@ -1,6 +1,6 @@
 class GlobalSettings < ActiveRecord::Base
 
-  attr_accessible :command_apache_restart, :command_apache_vhosts, :command_apache_status, :path_apache_httpd, :smtp_timeout, :asynchronous, :bing_api
+  attr_accessible :command_apache_restart, :command_apache_vhosts, :command_apache_status, :path_apache_httpd, :smtp_timeout, :asynchronous, :bing_api, :beef_url
 
   validates :command_apache_restart, :presence => true, :length => {:maximum => 255}
   validates :command_apache_vhosts, :presence => true, :length => {:maximum => 255}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140730212703) do
+ActiveRecord::Schema.define(:version => 20140910021338) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20140730212703) do
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.integer  "smtp_delay",             :default => 0
+    t.string   "beef_url"
   end
 
   add_index "campaign_settings", ["campaign_id"], :name => "index_campaign_settings_on_campaign_id"
@@ -157,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20140730212703) do
     t.string   "command_apache_vhosts",  :default => "apache2ctl -S"
     t.boolean  "asynchronous",           :default => false
     t.string   "bing_api"
+    t.string   "beef_url"
   end
 
   create_table "harvested_emails", :force => true do |t|
