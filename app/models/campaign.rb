@@ -6,10 +6,10 @@ class Campaign < ActiveRecord::Base
   belongs_to :template
   has_one :campaign_settings, dependent: :destroy
   has_one :email_settings, dependent: :destroy
+  has_many :victims, dependent: :destroy
+  has_many :blasts, dependent: :destroy
   has_many :statistics
-  has_many :victims
   has_many :smtp_communications
-  has_many :blasts
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
 
