@@ -10,12 +10,8 @@
  *
  *= require bootstrap.min
  *= require_self
- *= require_tree .
- *= require jquery.ui.core
- *= require jquery.ui.theme
  *= require dataTables/jquery.dataTables.bootstrap
- *= require jquery.ui.accordion
- *= require jquery.ui.tooltip 
+ *= require jquery.ui.tooltip
  */
 
  @font-face {
@@ -25,4 +21,102 @@
        url('../assets/glyphicons-halflings-regular.woff') format('woff'), 
        url('../assets/glyphicons-halflings-regular.ttf') format('truetype'), 
        url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+/* Application Public Stylesheet */
+BODY
+{
+  padding-top: 50px;
+}
+A
+{
+  color: #808080;
+}
+A:hover
+{
+  color: #A41400;
+}
+/*Structure*/
+#content
+{
+  padding-bottom: 30px;
+}
+#logout
+{
+  float: right;
+  padding: 2px;
+}
+/*CRUD*/
+.odd
+{
+  background: #E5E5E4;
+}
+.even
+{
+  background: none;
+}
+.notice, .alert
+{
+  text-align: center;
+  background: #A41400;
+  color: #FFFFFF;
+  max-height: 5px;
+  margin-top: 5px;
+}
+
+#flash-notice {
+  line-height: 5px;
+}
+
+.back-link
+{
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+
+.action:hover
+{
+  background: #A41400;
+  color: #FFFFFF;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+  height: 30px;
+  padding-top: 5px;
+}
+#footer {
+  background-color: #ca0002;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+#footer {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  }
+}
+
+/* navbar customizations */
+.navbar .nav > li > a {
+  float: none;
+  padding: 15px 10px 15px;
+  text-decoration: none;
+}
+
+/* navbar right padding */
+#bs-example-navbar-collapse-1 > ul.nav.navbar-nav.navbar-right {
+  padding-right: 1em;
 }

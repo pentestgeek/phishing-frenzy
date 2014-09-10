@@ -5,11 +5,13 @@
 <div class="campaign settings"> 
   <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
     <%= render(:partial => "options", :locals => {:f => f}) %>
-    <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
-    <%= link_to("Preview", preview_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
-    <%= link_to("Test", test_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
-    <%= link_to("Launch", launch_path(@campaign.id), class: 'btn btn-default', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
-    <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn btn-default') unless @template.nil? %>
+    <div id="show-campaign-buttons">
+      <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
+      <%= link_to("Preview", preview_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
+      <%= link_to("Test", test_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
+      <%= link_to("Launch", launch_path(@campaign.id), class: 'btn btn-default', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
+      <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn btn-default') unless @template.nil? %>
+    </div>
   <% end %>
 </div>
 

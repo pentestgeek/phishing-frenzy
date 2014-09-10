@@ -1,11 +1,10 @@
-<%= error_messages_for(@global_settings) %>
 
 <% @page_title = "Global Settings" %>
 
+<%= error_messages_for(@global_settings) %>
+
 <div class="global_settings">
-  
   <h2>Global Settings</h2>
-  <hr>
 
   <%= form_for(:global_settings, :url => {:action => 'update_global_settings'}) do |f| %>
 
