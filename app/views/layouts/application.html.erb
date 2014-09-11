@@ -13,7 +13,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js" type="text/javascript"></script>
   <![endif]-->
 
-  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= stylesheet_link_tag "application", controller_name %>
+  <%= javascript_include_tag "application", controller_name %>
 
   <!-- For third-generation iPad with high-resolution Retina display: -->
   <!-- Size should be 144 x 144 pixels -->
@@ -34,41 +35,38 @@
   <!-- For all other devices -->
   <!-- Size should be 32 x 32 pixels -->
   <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
-
-  <%= javascript_include_tag "application" %>
 </head>
 <body>
 
-<% if admin_signed_in? %>
+  <% if admin_signed_in? %>
     <%= render partial: 'layouts/navigation' %>
-<% end %>
+  <% end %>
 
-<div class="container-fluid">
-  <div class="row">
-
+  <!-- sidebar -->
   <div class="sidebar">
     <div class="col-xs-2 visible-lg visible-md visible-sm">
       <%= image_tag('logo.png', :size => '150x150') %>
     </div>
   </div>
+  <!-- end sidebar -->
 
-    <div id="flash-notice" class="col-xs-10">
-      <% flash.each do |key, value| %>
-          <%= content_tag(:div, value, class: "alert alert-#{key}") %>
-      <% end %>
-    </div>
+  <!-- main content -->
+  <div id="content" class="col-xs-12 col-sm-10">
+    <% flash.each do |key, value| %>
+        <%= content_tag(:div, value, class: "alert alert-#{key}") %>
+    <% end %>
 
-    <div id="content" class="col-xs-6 col-sm-9">
-      <%= yield %>
-    </div>
-  </div><!--/row-->
-</div><!-- /container -->
-
-<div id="footer" class="navbar-fixed-bottom">
-  <div class="container">
-    <p class="text-muted">&copy; www.pentestgeek.com 2013</p>
+    <%= yield %>
   </div>
-</div>
+  <!-- end content -->
+
+  <!-- footer -->
+  <div id="footer" class="navbar-fixed-bottom">
+    <div class="container">
+      <p class="text-muted">&copy; www.pentestgeek.com 2013</p>
+    </div>
+  </div>
+  <!-- end footer -->
 
 </body>
 </html>

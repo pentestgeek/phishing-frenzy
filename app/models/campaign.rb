@@ -6,10 +6,10 @@ class Campaign < ActiveRecord::Base
   belongs_to :template
   has_one :campaign_settings, dependent: :destroy
   has_one :email_settings, dependent: :destroy
+  has_many :victims, dependent: :destroy
+  has_many :blasts, dependent: :destroy
   has_many :statistics
-  has_many :victims
   has_many :smtp_communications
-  has_many :blasts
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
 
@@ -57,10 +57,16 @@ class Campaign < ActiveRecord::Base
 
   def get_binding
     @campaign_id = id
+    @campaign_settings = campaign_settings
     @fqdn = campaign_settings.fqdn
     @template_location = deployment_directory
     @approot = Rails.root
     @directory_index = template.index_file
+    binding
+  end
+
+  def beef_binding(beef_url)
+    @beef_url = beef_url
     binding
   end
 
@@ -179,7 +185,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def deploy
-    # deploy phishing
+    # deploy phishing website
     FileUtils.mkdir_p(deployment_directory)
     template.website_files.each do |page|
       loc = File.join(deployment_directory, page[:file])
@@ -205,7 +211,13 @@ class Campaign < ActiveRecord::Base
 
   def tag_beef(tags)
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    return beef.result + tags.result
+    return beef.result(self.beef_binding(select_beef_url)) + tags.result
+  end
+
+  def select_beef_url
+    return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
+    return GlobalSettings.first.beef_url unless GlobalSettings.first.beef_url.empty?
+    return "#{PhishingFramework::SITE_URL}:3000/hook.js"
   end
 
   def deployment_directory

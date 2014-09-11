@@ -31,21 +31,21 @@
                 "#", class: 'btn btn-xs btn-primary', 
                 data: {toggle: 'modal', target: "#importEmails-#{search.id}", 
                 placement: 'bottom'}, title: 'Import Emails', 
-                id: 'import-emails', rel: 'tooltip' %>
+                rel: 'tooltip' %>
           <%= link_to "<span class='glyphicon glyphicon-envelope'></span>".html_safe,
                 show_emails_path(search), class: 'btn btn-xs btn-default', 
                 data: {toggle: 'tooltip', placement: 'bottom'}, 
-                title: 'Show Emails', id: 'show-emails' %>
+                title: 'Show Emails', rel: 'tooltip' %>
           <%= link_to "<span class='glyphicon glyphicon-download-alt'></span>".html_safe,
                 download_emails_path(search), class: 'btn btn-xs btn-default', 
                 data: {toggle: 'tooltip', placement: 'bottom'}, 
-                title: 'Download Emails', id: 'download-emails' %>
+                title: 'Download Emails', rel: 'tooltip' %>
           <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe,
                 destroy_email_path(search), method: :delete, 
                 confirm: 'Are you sure you want to permanently delete this Email Search?',
                 class: 'btn btn-danger btn-xs',
                 data: {toggle: 'tooltip', placement: 'bottom'}, 
-                title: 'Delete Emails', id: 'delete-emails' %>
+                title: 'Delete Emails', rel: 'tooltip' %>
           </div>
           <%= render partial: 'import_emails', locals: {search: search} %>
         </td>

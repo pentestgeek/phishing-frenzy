@@ -30,7 +30,7 @@
       <td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
       <td class="actions">
         <%= link_to("Stats", stats_reports_path(id: campaign.id), 
-              :class => 'btn btn-default btn-xs') %>
+              :class => 'btn btn-primary btn-xs') %>
       </td>
     </tr>
     <% end %>
