@@ -1,14 +1,10 @@
-body {
-    margin: 0
-}
-
 .col {
 }
 
 .left {
     overflow-y: auto;
     width:      35%;
-    max-height: 450px;
+    height:     700px;
     float: left;
 }
 
@@ -16,8 +12,8 @@ body {
     float: left;
 }
 
-iframe {
-    width:      100%;
+#mail {
+    width:      64%%;
     height:     100%;
     position:   absolute;
     border:     solid 1px #ccc;
