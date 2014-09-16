@@ -8,14 +8,13 @@ class CampaignsController < ApplicationController
 	end
 
 	def list
-		# grab the campaigns and sort by id
+		# grab the campaigns and sort by created_at date
 		@campaigns = Campaign.order("created_at DESC")
 	end
 
 	def home
 		# grab only the launched campaigns
-		@campaigns = Campaign.launched.page(params[:page]).per(16)
-
+		@campaigns = Campaign.launched.page(params[:page]).per(16).reverse
 	end
 
 	def show
@@ -74,8 +73,7 @@ class CampaignsController < ApplicationController
 		# ensure we have required dependencies to go active
 		if params[:campaign][:active] == "1"
 			if params[:campaign_settings][:fqdn] == ""
-				flash[:notice] = "FQDN cannot be blank when active"
-				redirect_to(:controller => 'campaigns', :action => 'form', :id => params[:id])
+				redirect_to campaign_path(params[:id]), notice: "FQDN cannot be blank when active"
 				return false
 			end
 		end

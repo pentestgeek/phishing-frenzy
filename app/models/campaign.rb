@@ -21,7 +21,6 @@ class Campaign < ActiveRecord::Base
   scope :launched, where(:email_sent => true)
 
   before_save :parse_email_addresses
-  after_save :check_changes
   after_update :devops, :if => :active_changed?
 
   # validate form before saving
@@ -56,6 +55,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def get_binding
+    binding.pry
     @campaign_id = id
     @campaign_settings = campaign_settings
     @fqdn = campaign_settings.fqdn
@@ -137,43 +137,19 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def check_changes
-    Rails.logger.info "!!!!CHECKING CHANGES!!!!"
-    if campaign_settings == nil
-      return false
-    end
-
-    if self.changed?
-      Rails.logger.info "!!!!CHANGED!!!!"
-      httpd = GlobalSettings.first.path_apache_httpd
-
-      # gather active campaigns
-      active_campaigns = Campaign.active
-
-      # flush httpd config
-      File.open(httpd, 'w') { |file| file.truncate(0) }
-
-      # write each active campaign to httpd
-      active_campaigns.each do |campaign|
-        File.open(httpd, "a+") do |f|
-          template = Template.find_by_id(campaign.template_id)
-          if template.nil?
-            raise 'Template #{campaign.template_id} not found'
-          else
-            f.write(vhost_text(campaign))
-          end
-        end
-      end
-
-      # reload apache
-      restart_apache = GlobalSettings.first.command_apache_restart
-      Rails.logger.info system(restart_apache)
-    end
-  end
-
   def vhost_text(campaign)
     template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb",))
     template.result(campaign.get_binding)
+  end
+
+  def check_changes
+    # if campaign is active ensure we still have a FQDN on update
+    if self.active
+      if self.campaign_settings.phishing_url.to_s.empty?
+        redirect_to campaign_path(self.id), notice: 'FQDN cannot be blank before going active'
+        return
+      end
+    end
   end
 
   def devops
@@ -181,10 +157,31 @@ class Campaign < ActiveRecord::Base
   end
 
   def undeploy
+    vhost_file = "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
+
+    # remove phishing directory
     FileUtils.rm_rf deployment_directory
+    # remove apache vhost file if exists
+    FileUtils.rm_rf vhost_file if File.exists?(vhost_file)
+
+    # reload apache
+    restart_apache = GlobalSettings.first.command_apache_restart
+    Rails.logger.info system(restart_apache)
   end
 
   def deploy
+    vhost_file = "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
+
+    # add vhost file to sites-enabled
+    File.open(vhost_file, "w") do |f|
+      template = Template.find_by_id(self.template_id)
+      if template.nil?
+        raise 'Template #{self.template_id} not found'
+      else
+        f.write(vhost_text(self))
+      end
+    end
+
     # deploy phishing website
     FileUtils.mkdir_p(deployment_directory)
     template.website_files.each do |page|

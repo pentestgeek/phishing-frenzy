@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140910021338) do
+ActiveRecord::Schema.define(:version => 20140916202808) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -150,7 +150,6 @@ ActiveRecord::Schema.define(:version => 20140910021338) do
 
   create_table "global_settings", :force => true do |t|
     t.string   "command_apache_restart"
-    t.string   "path_apache_httpd"
     t.integer  "smtp_timeout",           :default => 5
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
@@ -159,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20140910021338) do
     t.boolean  "asynchronous",           :default => false
     t.string   "bing_api"
     t.string   "beef_url"
+    t.string   "sites_enabled_path"
   end
 
   create_table "harvested_emails", :force => true do |t|

@@ -25,9 +25,10 @@
       <td><%= f.text_field(:command_apache_vhosts, class: 'form-control') %></td>
     </tr>
     <tr>
-      <th>Apache httpd.conf Path</th>
-      <td><span class="ui-icon ui-icon-help" title='Path or location of where the Apache httpd.conf configuration file is located. Default location on most debian systems is /etc/apache/httpd.conf'></span></td>
-      <td><%= f.text_field(:path_apache_httpd, class: 'form-control') %></td>
+      <th>Apache sites-enabled Path</th>
+      <td>
+        <span class="ui-icon ui-icon-help" title='Path or location of where the Apache stores the sites-enabled virtual hosts'></span></td>
+      <td><%= f.text_field(:sites_enabled_path, class: 'form-control') %></td>
     </tr>
     <tr>
       <th>SMTP Timeout</th>

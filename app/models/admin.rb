@@ -12,6 +12,8 @@ class Admin < ActiveRecord::Base
 
 	validates :name, :presence => true, :length => { :maximum => 255 }
 	validates :username, :presence => true, :length => { :maximum => 255 }
+	validates_format_of :name, :with => /[A-Za-z\d]([-\w]{,498}[A-Za-z\d])?/i, :message => "Invalid Name: Alphanumerics only"
+	validates_format_of :username, :with => /[A-Za-z\d]([-\w]{,498}[A-Za-z\d])?/i, :message => "Invalid Username: Alphanumerics only"
 
 	scope :sorted, order("admins.name ASC")
 
