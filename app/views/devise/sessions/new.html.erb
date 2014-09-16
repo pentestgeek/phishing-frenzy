@@ -6,21 +6,30 @@
 
 <div class="col-xs-6 col-sm-4">
 	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-		<div><%= f.label :username %><br />
-		<%= f.text_field :username, autofocus: true, 
-											required: true, class: "form-control" %></div>
+		<div>
+			<%= f.label :username %><br />
+			<%= f.text_field :username, autofocus: true,
+							autocomplete: false,
+							required: true, class: "form-control" %></div>
 
-		<div><%= f.label :password %><br />
-		<%= f.password_field :password, required: true, 
-											class: "form-control" %></div>
+		<div>
+			<%= f.label :password %><br />
+			<%= f.password_field :password,
+							required: true,
+							autocomplete: false,
+							class: "form-control" %>
+		</div>
 
 		<% if devise_mapping.rememberable? -%>
-		<p class='form-inline '><%= f.check_box :remember_me %> <%= f.label :remember_me %></p>
+		<p class='form-inline '>
+			<%= f.check_box :remember_me %> <%= f.label :remember_me %>
+		</p>
 		<% end -%>
 
 		<p>
 			<%= render "devise/shared/links" %>
 		</p>
+
 		<div><%= f.submit "Sign in", class: 'btn btn-primary' %></div>
 	<% end %>
 </div>
