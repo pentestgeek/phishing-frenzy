@@ -22,6 +22,7 @@ class Campaign < ActiveRecord::Base
 
   before_save :parse_email_addresses
   after_update :devops, :if => :active_changed?
+  after_destroy :cleanup_apache
 
   # validate form before saving
   validates :name, :presence => true,
@@ -55,7 +56,6 @@ class Campaign < ActiveRecord::Base
   end
 
   def get_binding
-    binding.pry
     @campaign_id = id
     @campaign_settings = campaign_settings
     @fqdn = campaign_settings.fqdn
@@ -157,21 +157,15 @@ class Campaign < ActiveRecord::Base
   end
 
   def undeploy
-    vhost_file = "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
-
     # remove phishing directory
     FileUtils.rm_rf deployment_directory
     # remove apache vhost file if exists
     FileUtils.rm_rf vhost_file if File.exists?(vhost_file)
 
-    # reload apache
-    restart_apache = GlobalSettings.first.command_apache_restart
-    Rails.logger.info system(restart_apache)
+    reload_apache
   end
 
   def deploy
-    vhost_file = "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
-
     # add vhost file to sites-enabled
     File.open(vhost_file, "w") do |f|
       template = Template.find_by_id(self.template_id)
@@ -182,7 +176,9 @@ class Campaign < ActiveRecord::Base
       end
     end
 
-    # deploy phishing website
+    reload_apache
+
+    # deploy phishing website files
     FileUtils.mkdir_p(deployment_directory)
     template.website_files.each do |page|
       loc = File.join(deployment_directory, page[:file])
@@ -221,6 +217,10 @@ class Campaign < ActiveRecord::Base
     File.join(Rails.root, "public/deployed/campaigns", id.to_s)
   end
 
+  def vhost_file
+    "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
+  end
+
   def inflatable?(file)
     File.extname(file) == '.zip'
   end
@@ -234,4 +234,18 @@ class Campaign < ActiveRecord::Base
       }
     }
   end
+
+  def cleanup_apache
+    # delete phishing files for campaign
+    FileUtils.rm_rf deployment_directory
+    # delete apache vhost configuration
+    FileUtils.rm_rf vhost_file if File.exists?(vhost_file)
+  end
+
+  def reload_apache
+    # reload apache
+    restart_apache = GlobalSettings.first.command_apache_restart
+    Rails.logger.info system(restart_apache)
+  end
+
 end
