@@ -45,6 +45,10 @@ class ClonesController < ApplicationController
 
     # run the cloning magic
     page, code = clone_website(params[:clone])
+
+    # ensure we got returned a page and status code
+    return if page.nil? or code.nil?
+
     @clone.page = page
     @clone.status = code
 
@@ -102,7 +106,15 @@ class ClonesController < ApplicationController
   def clone_website(clone)
     agent = Mechanize.new
     agent.user_agent_alias = 'Mac Firefox'
-    page = agent.get clone[:url]
+    begin
+      page = agent.get clone[:url]
+    rescue ArgumentError => e
+      redirect_to clones_path, notice: "ArgumentError: #{e}"
+      return
+    rescue Net::HTTP::Persistent::Error => e
+      redirect_to clones_path, notice: "HTTP Issue: #{e}"
+      return
+    end
 
     doc = Nokogiri::HTML(page.content)
     doc.css("a").each do |link|
