@@ -25,10 +25,10 @@
     <%= f.password_field :password, :autocomplete => "off", class: "form-control" %></div>
 
     <div><%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, class: "form-control" %></div>
+    <%= f.password_field :password_confirmation, :autocomplete => "off", class: "form-control" %></div>
 
     <div><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, class: "form-control" %></div>
+    <%= f.password_field :current_password, :autocomplete => "off", class: "form-control" %></div>
 
     <div><%= f.submit "Update", class: 'btn btn-primary' %></div>
   <% end %>

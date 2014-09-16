@@ -9,14 +9,14 @@
 		<div>
 			<%= f.label :username %><br />
 			<%= f.text_field :username, autofocus: true,
-							autocomplete: false,
+							autocomplete: "off",
 							required: true, class: "form-control" %></div>
 
 		<div>
 			<%= f.label :password %><br />
 			<%= f.password_field :password,
 							required: true,
-							autocomplete: false,
+							autocomplete: "off",
 							class: "form-control" %>
 		</div>
 

@@ -151,14 +151,14 @@ ActiveRecord::Schema.define(:version => 20140916202808) do
   create_table "global_settings", :force => true do |t|
     t.string   "command_apache_restart"
     t.integer  "smtp_timeout",           :default => 5
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
     t.string   "command_apache_status"
     t.string   "command_apache_vhosts",  :default => "apache2ctl -S"
     t.boolean  "asynchronous",           :default => false
     t.string   "bing_api"
     t.string   "beef_url"
-    t.string   "sites_enabled_path"
+    t.string   "sites_enabled_path",     :default => "/etc/apache2/sites-enabled"
   end
 
   create_table "harvested_emails", :force => true do |t|

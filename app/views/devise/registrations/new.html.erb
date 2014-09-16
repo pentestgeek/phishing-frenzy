@@ -14,10 +14,10 @@
     <%= f.email_field :email, :autofocus => true, class: "form-control" %></div>
 
     <div><%= f.label :password %><br />
-    <%= f.password_field :password, class: "form-control" %></div>
+    <%= f.password_field :password, autocomplete: "off", class: "form-control" %></div>
 
     <div><%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, class: "form-control" %></div>
+    <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control" %></div>
 
     <div><%= f.submit "Sign up", class: 'btn btn-default' %></div>
   <% end %>
