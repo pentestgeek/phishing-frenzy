@@ -17,10 +17,16 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign test email queued for preview"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      rescue::NoMethodError => e
+        flash[:error] = "Template Issue: #{e}"
       end
     else
-      PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, PREVIEW)
-      flash[:notice] = "Campaign test email available for preview"
+      begin
+        PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, PREVIEW)
+        flash[:notice] = "Campaign test email available for preview"
+      rescue::NoMethodError => e
+        flash[:error] = "Template Issue: #{e}"
+      end
     end
     redirect_to "/letter_opener"
   end
@@ -34,10 +40,16 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign test email queued for test"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      rescue::NoMethodError => e
+        flash[:error] = "Template Issue: #{e}"
       end
     else
-      PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, ACTIVE)
-      flash[:notice] = "Campaign test email sent"
+      begin
+        PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, ACTIVE)
+        flash[:notice] = "Campaign test email sent"
+      rescue => e
+        flash[:error] = "Template Issue: #{e}"
+      end
     end
     redirect_to :back
   end
@@ -58,15 +70,21 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      rescue::NoMethodError => e
+        flash[:error] = "Template Issue: #{e}"
       end
     else
-      victims.each do |target|
-        PhishingFrenzyMailer.phish(@campaign.id, target, @blast, ACTIVE)
-        target.update_attribute(:sent, true)
+      begin
+        victims.each do |target|
+          PhishingFrenzyMailer.phish(@campaign.id, target, @blast, ACTIVE)
+          target.update_attribute(:sent, true)
+        end
+        flash[:notice] = "Campaign blast launched"
+        @campaign.email_sent = true
+        @campaign.save
+      rescue::NoMethodError => e
+        flash[:error] = "Template Issue: #{e}"
       end
-      flash[:notice] = "Campaign blast launched"
-      @campaign.email_sent = true
-      @campaign.save
     end
     redirect_to :back
 

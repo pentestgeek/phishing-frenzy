@@ -122,6 +122,7 @@ A:hover
 }
 
 /* flash notifications */
+#content > div.alert.alert-error,
 #content > div.alert.alert-notice,
 #content > div.alert.alert-alert,
 #content > div.alert.alert-warning {
