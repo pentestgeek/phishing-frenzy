@@ -33,8 +33,8 @@
       <h2 id='clicked' class='textItems' style="color:black;">-</h2>
     </div>
     <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:607.5px;background-color: #9edae5">
-      <h3 class='textItems' style="color:grey;">Sucess Rate: </h2>
-      <h2 id='sucess_rate' class='textItems' style="color:black;">-</h2>
+      <h3 class='textItems' style="color:grey;">Success Rate: </h2>
+      <h2 id='success_rate' class='textItems' style="color:black;">-</h2>
     </div>
     <svg id="barChart" class='colorBox' style="width:395px;height:210px;top:440px;left:0px;background-color: #FFF;">
     </svg>
@@ -271,7 +271,7 @@ $(document).ready(function() {
       $("#sent").text(sum.sent)
       $("#clicked").text(sum.clicked)
       $("#opened").text(sum.opened)   
-      $("#sucess_rate").text(Math.floor((sum.clicked/sum.sent)*100) + "%")
+      $("#success_rate").text(Math.floor((sum.clicked/sum.sent)*100) + "%")
     
       data = [
         {"label":"Clicked", "value":sum.clicked},
