@@ -74,6 +74,12 @@ class CampaignsController < ApplicationController
 	end
 
 	def update_settings
+		# ensure we have write access to sites-enabled
+		unless File.writable?(GlobalSettings.first.sites_enabled_path)
+			redirect_to campaign_path, notice: "File Permission Issue: chmod #{GlobalSettings.first.sites_enabled_path}"
+			return
+		end
+	
 		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 
 		# ensure we have required dependencies to go active
