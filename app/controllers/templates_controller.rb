@@ -153,7 +153,15 @@ class TemplatesController < ApplicationController
 				# do something with file
 				next if file.name.eql? "template.yml" or file.name.eql? "attachments.yml"
 				FileUtils.mkdir_p(template_location) unless Dir.exists?(template_location)
-				zipfile.extract(file, File.join(template_location, file.name))
+				begin
+					zipfile.extract(file, File.join(template_location, file.name))
+				rescue Zip::ZipDestinationFileExistsError
+					# if file already exists create random name to handle it
+					zipfile.extract(file, File.join(template_location, "#{file.name}_#{(0...8).map { (65 + rand(26)).chr }.join}"))
+				rescue => e
+					redirect_to templates_path, notice: "Template Upload Issue: #{e}"
+					return false
+				end
 			}
 		}
 
@@ -162,7 +170,12 @@ class TemplatesController < ApplicationController
 			# add each attachment to template
 			filename = File.basename(attachment.file.to_s)
 			t = new_template.attachments.create(function: attachment.function)
-			t.file = File.new(File.join(template_location, filename))
+			begin
+				t.file = File.new(File.join(template_location, filename))
+			rescue Errno::EACCES => e
+				redirect_to templates_path, notice: "File Permission Issues (chmod): #{e}"
+				return
+			end
 			t.save!		
 		end
 

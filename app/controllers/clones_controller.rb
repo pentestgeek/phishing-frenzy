@@ -114,6 +114,12 @@ class ClonesController < ApplicationController
     rescue Net::HTTP::Persistent::Error => e
       redirect_to clones_path, notice: "HTTP Issue: #{e}"
       return
+    rescue Errno::ECONNRESET => e
+      redirect_to clones_path, notice: "Connection Reset: #{e}"
+      return
+    rescue => e
+      redirect_to clones_path, notice: "Issue: #{e}"
+      return
     end
 
     doc = Nokogiri::HTML(page.content)
