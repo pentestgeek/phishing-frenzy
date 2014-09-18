@@ -167,21 +167,13 @@ class Campaign < ActiveRecord::Base
 
   def deploy
     # add vhost file to sites-enabled
-    begin
-      File.open(vhost_file, "w") do |f|
-        template = Template.find_by_id(self.template_id)
-        if template.nil?
-          raise 'Template #{self.template_id} not found'
-        else
-          f.write(vhost_text(self))
-        end
+    File.open(vhost_file, "w") do |f|
+      template = Template.find_by_id(self.template_id)
+      if template.nil?
+        raise 'Template #{self.template_id} not found'
+      else
+        f.write(vhost_text(self))
       end
-    rescue Errno::EACCES => e
-      redirect_to campaign_path(self.id), notice: "File Permission Issue (chmod): #{e}"
-      return
-    rescue => e
-      redirect_to campaign_path(self.id), notice: "Phishing Website Deploy Issue: #{e}"
-      return
     end
 
     reload_apache
