@@ -52,7 +52,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def self.logfile(campaign)
-    Rails.root.to_s + "/log/www-#{campaign.campaign_settings.fqdn}-#{campaign.id}-access.log"
+    Rails.root.to_s + "/log/www-campaign-#{campaign.id}-access.log"
   end
 
   def get_binding
