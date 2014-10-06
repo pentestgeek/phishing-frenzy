@@ -6,6 +6,8 @@ $( document ).ready(function() {
   "iDisplayLength": 25
   });
 
+  console.log("TEST DEV");
+
   // prefill SMTP settings on pre-populate dropdown change
   $('#smtpPreFill').change(function () {
     var myValue = $(this).val();
