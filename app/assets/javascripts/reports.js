@@ -26,32 +26,10 @@ $( document ).ready(function() {
       [25, 50, 100, 500, "All"]]
   } );
 
-   // new BeEF table
-    $('#victims-browsers-summary-table').dataTable( {
+    // new BeEF table
+    $('#hooked-browsers-summary-table').dataTable( {
         "sPaginationType": "bootstrap",
-        //TODO this must be dynamic
-        "sAjaxSource": 'http://172.16.37.1:3000/api/hooks?token=2f69a06fde2184e5547eb5b567607c149a19d556',
-//        "aoColumnDefs": [
-//            {
-//                "aTargets": [ 0 ], // Column to target
-//                "mRender": function ( data, type, full ) {
-//                    // 'full' is the row's data object, and 'data' is this column's data
-//                    // e.g. 'full[0]' is the comic id, and 'data' is the comic title
-//                    return '<a href="/reports/uid/' + data + '">' + data + '</a>';
-//                }
-//            }
-//        ],
-        "columns":[
-            { "hooked-browsers.online" : "id"},
-            { "hooked-browsers.online" : "name"},
-            { "hooked-browsers.online" : "version"},
-            { "hooked-browsers.online" : "os"},
-            { "hooked-browsers.online" : "platform"},
-            { "hooked-browsers.online" : "ip"}
-        ],
-        "aaSorting": [[4,'desc']],
-        "aLengthMenu": [
-            [25, 50, 100, 500, -1],
-            [25, 50, 100, 500, "All"]]
-    } );
+        //TODO this must be dynamic, also push new BeEF restful api endpoints
+        "sAjaxSource": 'http://172.16.37.1:3000/api/hooks/pf?token=293dd2a040830c1155c9461da85c7eb085d9efbd'
+    });
 });

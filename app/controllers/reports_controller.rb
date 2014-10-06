@@ -209,6 +209,11 @@ class ReportsController < ApplicationController
     end
   end
 
+  def hooked_browsers
+    # display hooked browsers for the campaign
+    # -- nothing to do now
+  end
+
   def passwords
     # display all password harvested within campaign
     @campaign = Campaign.find(params[:id])

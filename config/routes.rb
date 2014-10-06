@@ -59,6 +59,7 @@ PhishingFramework::Application.routes.draw do
 			get 'download_logs'
 			get 'download_stats'
 			get 'apache_logs'
+      get 'hooked_browsers'
 			get 'smtp'
 			get 'passwords'
 			post 'results'
