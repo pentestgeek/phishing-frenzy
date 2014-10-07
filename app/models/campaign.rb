@@ -220,7 +220,6 @@ class Campaign < ActiveRecord::Base
   def vhost_file
     "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
   end
-
   def inflatable?(file)
     File.extname(file) == '.zip'
   end

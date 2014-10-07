@@ -18,15 +18,20 @@
           <td><%= cs.check_box(:track_uniq_visitors) %></td>
         </tr>
         <tr>
-          <th>Use BeeF?</th>
+          <th>Use BeEF?</th>
           <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
           <td><%= cs.check_box(:use_beef) %></td>
         </tr>
         <tr>
-          <th>BeeF Hook URL:</th>
+          <th>BeEF Hook URL:</th>
           <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
           <td><%= cs.text_field(:beef_url, class: 'form-control') %></td>
         </tr>
+            <tr>
+            <th>BeEF RESTful API key:</th>
+            <td><span class="ui-icon ui-icon-help" title='This is needed to instrument BeEF from PhishingFrenzy'></span></td>
+            <td><%= cs.text_field(:beef_apikey, class: 'form-control') %></td>
+            </tr>
         <tr>
           <th>SMTP Sending Delay:</th>
           <td><span class="ui-icon ui-icon-help" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email. Note this will not work if you are configured to send emails in the background with sidekiq.'></span></td>

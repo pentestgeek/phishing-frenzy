@@ -42,16 +42,18 @@ $( document ).ready(function() {
   // if use_beef checked function
   function is_beef_checked() {
     if ($("#campaign_settings_use_beef").is(':checked')) {
-      // enable beef_url form
+      // enable beef_url and beef_apikey forms
       $("#campaign_settings_beef_url").prop('disabled', false);
+      $("#campaign_settings_beef_apikey").prop('disabled', false);
     }
     else {
-      // disable beef_url form
+      // disable beef_url and beef_apikey forms
       $("#campaign_settings_beef_url").prop('disabled', true);
+      $("#campaign_settings_beef_apikey").prop('disabled', true);
     }
   }
 
-  // enable beef_url if use_beef is checked on page load
+  // enable beef_url and beef_apikey if use_beef is checked on page load
   is_beef_checked();
 
   // click event handler to enable beef_url if use_beef is checked
