@@ -13,7 +13,7 @@ class Campaign < ActiveRecord::Base
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
 
-  # allow mass asignment
+  # allow mass assignment
   attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email
 
   # named scopes

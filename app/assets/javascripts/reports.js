@@ -26,7 +26,10 @@ $( document ).ready(function() {
       [25, 50, 100, 500, "All"]]
   } );
 
+
     // new BeEF table
+    var beef_apikey = $('#beef_apikey').text();
+
     $('#hooked-browsers-summary-table').dataTable( {
         "sPaginationType": "bootstrap",
         //TODO this must be dynamic, also push new BeEF restful api endpoints

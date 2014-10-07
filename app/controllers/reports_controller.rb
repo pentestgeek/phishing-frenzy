@@ -210,8 +210,11 @@ class ReportsController < ApplicationController
   end
 
   def hooked_browsers
-    # display hooked browsers for the campaign
-    # -- nothing to do now
+    # retrieve from the db BeEF realted settings to be used when calling the RESTful API
+    campaign_settings = CampaignSettings.where(:campaign_id => params[:id]).first
+    beef_uri = URI.parse(campaign_settings.beef_url)
+    @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}"
+    @beef_apikey = campaign_settings.beef_apikey
   end
 
   def passwords
