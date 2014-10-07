@@ -213,7 +213,7 @@ class ReportsController < ApplicationController
     # retrieve from the db BeEF realted settings to be used when calling the RESTful API
     campaign_settings = CampaignSettings.where(:campaign_id => params[:id]).first
     beef_uri = URI.parse(campaign_settings.beef_url)
-    @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}"
+    @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
     @beef_apikey = campaign_settings.beef_apikey
   end
 

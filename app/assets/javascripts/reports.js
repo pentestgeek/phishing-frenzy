@@ -28,11 +28,12 @@ $( document ).ready(function() {
 
 
     // new BeEF table
+    // TODO do output escaping for these values, context: JS
     var beef_apikey = $('#beef_apikey').text();
+    var beef_server = $('#beef_server_url').text();
 
     $('#hooked-browsers-summary-table').dataTable( {
         "sPaginationType": "bootstrap",
-        //TODO this must be dynamic, also push new BeEF restful api endpoints
-        "sAjaxSource": 'http://172.16.37.1:3000/api/hooks/pf?token=293dd2a040830c1155c9461da85c7eb085d9efbd'
+        "sAjaxSource": beef_server + '/api/hooks/pf?token=' + beef_apikey
     });
 });

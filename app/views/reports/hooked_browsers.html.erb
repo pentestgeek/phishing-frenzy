@@ -7,7 +7,8 @@
 <!--<hr>-->
 
 <!-- This will be read by jQuery before making calls to the BeEF RESTful API. Ideally we should be using Erubis and
-     have this information directly in JavaScript files. -->
+     have this information directly in JavaScript files. This is a current workaround as we read these value from reports.js-->
+<!--// TODO do output escaping for these values, context: html-->
 <div id="beef_apikey" style="visibility: hidden"><%= @beef_apikey %></div>
 <div id="beef_server_url" style="visibility: hidden"><%= @beef_server %></div>
 
