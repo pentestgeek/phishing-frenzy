@@ -87,7 +87,7 @@ gem 'carrierwave'
 gem 'nested_form'
 
 # datatables
-gem 'jquery-datatables-rails'
+gem 'jquery-datatables-rails','~> 1.12.2'
 
 # d3 reports
 gem 'd3-rails'

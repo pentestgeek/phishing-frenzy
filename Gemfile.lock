@@ -246,7 +246,7 @@ DEPENDENCIES
   execjs
   geokit
   googlecharts
-  jquery-datatables-rails
+  jquery-datatables-rails (~> 1.12.2)
   jquery-rails
   jquery-ui-rails
   kaminari

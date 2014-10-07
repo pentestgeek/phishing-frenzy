@@ -34,6 +34,17 @@ $( document ).ready(function() {
 
     $('#hooked-browsers-summary-table').dataTable( {
         "sPaginationType": "bootstrap",
-        "sAjaxSource": beef_server + '/api/hooks/pf?token=' + beef_apikey
+        "sAjaxSource": beef_server + '/api/hooks/pf?token=' + beef_apikey,
+        "aoColumns" : [
+            { "sWidth": "15px" },
+            { "sWidth": "50px" },
+            { "sWidth": "25px" },
+            { "sWidth": "20px" },
+            { "sWidth": "30px" },
+            { "sWidth": "20px" },
+            { "sWidth": "20px" },
+            { "sWidth": "300px" }
+            ],
+        "bProcessing": true
     });
 });
