@@ -215,6 +215,7 @@ class ReportsController < ApplicationController
     beef_uri = URI.parse(campaign_settings.beef_url)
     @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
     @beef_apikey = campaign_settings.beef_apikey
+    @campaign = Campaign.find(params[:id])
   end
 
   def passwords

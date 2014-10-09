@@ -3,14 +3,62 @@
 <%= link_to '<< Back to Stats', :back, class: "back-link" %>
 
 <!--TODO fix this, capparently campaign name gives error-->
-<!--<h3>Hooked Browsers - < \%= @campaign.name %></h3>-->
-<!--<hr>-->
+<h3>Hooked Browsers - <%= @campaign.name %></h3>
+<hr>
 
 <!-- This will be read by jQuery before making calls to the BeEF RESTful API. Ideally we should be using Erubis and
      have this information directly in JavaScript files. This is a current workaround as we read these value from reports.js-->
 <!--// TODO do output escaping for these values, context: html-->
 <div id="beef_apikey" style="visibility: hidden"><%= @beef_apikey %></div>
 <div id="beef_server_url" style="visibility: hidden"><%= @beef_server %></div>
+
+
+<link rel="stylesheet" href="/assets/leaflet.css" />
+<script src="/assets/leaflet.js"></script>
+
+<div id="map" style="width: 1200px; height: 800px"></div>
+
+<script>
+
+    var map = L.map('map').setView([30, -20], 3);
+
+    // maps are offline ;-) see /assets/worldmap_zoom_level_4 directory
+    L.tileLayer('/assets/{id}/{z}/{x}/{y}.png', {
+        maxZoom: 4,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'worldmap_zoom_level_4'
+    }).addTo(map);
+
+    // TODO do output escaping for these values, context: JS
+    var beef_apikey = $('#beef_apikey').text();
+    var beef_server = $('#beef_server_url').text();
+
+    var beef_icon = L.icon({
+        iconUrl: '/assets/marker-icon.png',
+        iconSize:     [25, 41], // size of the icon
+        iconAnchor:   [12, 40], // point of the icon which will correspond to marker's location
+        popupAnchor:  [0, -35] // point from which the popup should open relative to the iconAnchor
+    });
+
+    $( document ).ready(function() {
+        $.getJSON(beef_server + '/api/hooks/pf?token=' + beef_apikey, function(data){
+            $.each( data['aaData'], function(key, val) {
+                var hd_id = val[0];
+                var ip = val[1];
+                var city = val[8];
+                var country = val[9];
+                var lat = val[10];
+                var lon = val[11];
+                L.marker([lat, lon], {icon: beef_icon})
+                        .addTo(map).bindPopup("<b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip)
+                        .openPopup();
+            });
+        });
+
+    });
+</script>
 
 <table id="hooked-browsers-summary-table" class="table-hover table-condense"
        style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="0" cellspacing="0" width="100%">
