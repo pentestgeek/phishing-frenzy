@@ -35,15 +35,25 @@
     var beef_apikey = $('#beef_apikey').text();
     var beef_server = $('#beef_server_url').text();
 
-    var beef_icon = L.icon({
-        iconUrl: '/assets/marker-icon.png',
-        iconSize:     [25, 41], // size of the icon
-        iconAnchor:   [12, 40], // point of the icon which will correspond to marker's location
-        popupAnchor:  [0, -35] // point from which the popup should open relative to the iconAnchor
+    var beef_online_icon = L.icon({
+        iconUrl: '/assets/beef-online-icon.png',
+        iconSize:     [25, 41],
+        iconAnchor:   [12, 40],
+        popupAnchor:  [0, -35]
+    });
+
+    var beef_offline_icon = L.icon({
+        iconUrl: '/assets/beef-offline-icon.png',
+        iconSize:     [25, 41],
+        iconAnchor:   [12, 40],
+        popupAnchor:  [0, -35]
     });
 
     $( document ).ready(function() {
-        $.getJSON(beef_server + '/api/hooks/pf?token=' + beef_apikey, function(data){
+        // TODO when jquery.dataTables will be updated to 1.10, we can use only 1 call (as in the normal BeEF api, with a
+        // TODO.. nested hash objects, containing both offline and online browsers)
+        // online browsers
+        $.getJSON(beef_server + '/api/hooks/pf/online?token=' + beef_apikey, function(data){
             $.each( data['aaData'], function(key, val) {
                 var hd_id = val[0];
                 var ip = val[1];
@@ -51,7 +61,22 @@
                 var country = val[9];
                 var lat = val[10];
                 var lon = val[11];
-                L.marker([lat, lon], {icon: beef_icon})
+                L.marker([lat, lon], {icon: beef_online_icon})
+                        .addTo(map).bindPopup("<b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip)
+                        .openPopup();
+            });
+        });
+
+        // offline browsers
+        $.getJSON(beef_server + '/api/hooks/pf/offline?token=' + beef_apikey, function(data){
+            $.each( data['aaData'], function(key, val) {
+                var hd_id = val[0];
+                var ip = val[1];
+                var city = val[8];
+                var country = val[9];
+                var lat = val[10];
+                var lon = val[11];
+                L.marker([lat, lon], {icon: beef_offline_icon})
                         .addTo(map).bindPopup("<b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip)
                         .openPopup();
             });
@@ -60,7 +85,10 @@
     });
 </script>
 
-<table id="hooked-browsers-summary-table" class="table-hover table-condense"
+<br/>
+<h3>Online Hooked Browsers</h3>
+<hr>
+<table id="online-hooked-browsers-table" class="table-hover table-condense"
        style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="0" cellspacing="0" width="100%">
   <thead>
   <tr>
@@ -77,4 +105,25 @@
   <tbody>
 
   </tbody>
+</table>
+<br/>
+<h3>Offline Hooked Browsers</h3>
+<hr>
+<table id="offline-hooked-browsers-table" class="table-hover table-condense"
+       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>IP</th>
+        <th>Type</th>
+        <th>Version</th>
+        <th>Operating System</th>
+        <th>Platform</th>
+        <th>Language</th>
+        <th>Plugins</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
 </table>
