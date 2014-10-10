@@ -45,6 +45,34 @@ $( document ).ready(function() {
             { "sWidth": "20px" },
             { "sWidth": "300px" }
         ],
+        "aoColumnDefs": [
+            {
+                "aTargets": [ 2 ], // browser type
+                "mRender": function ( data, type, full ) {
+                    var name = "";
+                    switch(data){
+                        case "C":
+                            name = "Chrome";
+                            break;
+                        case "FF":
+                            name = "Firefox";
+                            break;
+                        case "IE":
+                            name = "InternetExplorer";
+                            break;
+                        case "O":
+                            name = "Opera";
+                            break;
+                        case "S":
+                            name = "Safari";
+                            break;
+                        default:
+                            name = data;
+                    }
+                    return name;
+                }
+            }
+        ],
         "bProcessing": true
     });
 
@@ -60,6 +88,34 @@ $( document ).ready(function() {
             { "sWidth": "20px" },
             { "sWidth": "20px" },
             { "sWidth": "300px" }
+        ],
+        "aoColumnDefs": [
+            {
+                "aTargets": [ 2 ], // browser type
+                "mRender": function ( data, type, full ) {
+                    var name = "";
+                    switch(data){
+                        case "C":
+                            name = "Chrome";
+                            break;
+                        case "FF":
+                            name = "Firefox";
+                            break;
+                        case "IE":
+                            name = "InternetExplorer";
+                            break;
+                        case "O":
+                            name = "Opera";
+                            break;
+                        case "S":
+                            name = "Safari";
+                            break;
+                        default:
+                            name = data;
+                    }
+                    return name;
+                }
+            }
         ],
         "bProcessing": true
     });

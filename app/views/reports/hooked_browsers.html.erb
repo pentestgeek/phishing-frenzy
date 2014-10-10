@@ -36,18 +36,67 @@
     var beef_server = $('#beef_server_url').text();
 
     var beef_online_icon = L.icon({
-        iconUrl: '/assets/beef-online-icon.png',
+        iconUrl: '/assets/hooked_browsers/beef-online-icon.png',
         iconSize:     [25, 41],
         iconAnchor:   [12, 40],
         popupAnchor:  [0, -35]
     });
 
     var beef_offline_icon = L.icon({
-        iconUrl: '/assets/beef-offline-icon.png',
+        iconUrl: '/assets/hooked_browsers/beef-offline-icon.png',
         iconSize:     [25, 41],
         iconAnchor:   [12, 40],
         popupAnchor:  [0, -35]
     });
+
+    function add_icons(browser, os){
+        var output = "";
+        switch(browser){
+            case "C":
+                output += "<img src='/assets/hooked_browsers/chrome.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "FF":
+                output += "<img src='/assets/hooked_browsers/firefox.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "IE":
+                output += "<img src='/assets/hooked_browsers/msie.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "O":
+                output += "<img src='/assets/hooked_browsers/opera.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "S":
+                output += "<img src='/assets/hooked_browsers/safari.png' style='width: 16px; height: 16px;'/>";
+                break;
+            default:
+                output += "<img src='/assets/hooked_browsers/unknown.png' style='width: 16px; height: 16px;'/>";
+        }
+
+        var operating_system = os.toLowerCase();
+        switch(true){
+            case /win/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/win.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /os x|osx|mac/i.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/mac.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /lin/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/linux.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /ios|iphone|ipad|ipod/i.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/ios.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /blackberry/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/blackberry.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /android/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/android.png' style='width: 16px; height: 16px;'/>";
+                break;
+            default:
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/unknown.png' style='width: 16px; height: 16px;'/>";
+
+        }
+        return output;
+    }
 
     $( document ).ready(function() {
         // TODO when jquery.dataTables will be updated to 1.10, we can use only 1 call (as in the normal BeEF api, with a
@@ -62,8 +111,7 @@
                 var lat = val[10];
                 var lon = val[11];
                 L.marker([lat, lon], {icon: beef_online_icon})
-                        .addTo(map).bindPopup("<b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip)
-                        .openPopup();
+                        .addTo(map).bindPopup(add_icons(val[2],val[4]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
             });
         });
 
@@ -77,8 +125,7 @@
                 var lat = val[10];
                 var lon = val[11];
                 L.marker([lat, lon], {icon: beef_offline_icon})
-                        .addTo(map).bindPopup("<b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip)
-                        .openPopup();
+                        .addTo(map).bindPopup(add_icons(val[2],val[4]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
             });
         });
 
