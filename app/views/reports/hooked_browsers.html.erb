@@ -1,4 +1,4 @@
-<% @page_title = "Campaign Apache Logs" %>
+<% @page_title = "Campaign Hooked Browsers" %>
 
 <%= link_to '<< Back to Stats', :back, class: "back-link" %>
 
@@ -12,7 +12,6 @@
 <div id="beef_apikey" style="visibility: hidden"><%= @beef_apikey %></div>
 <div id="beef_server_url" style="visibility: hidden"><%= @beef_server %></div>
 
-
 <link rel="stylesheet" href="/assets/leaflet.css" />
 <script src="/assets/leaflet.js"></script>
 
@@ -20,6 +19,7 @@
 
 <script>
 
+    $( document ).ready(function() {
     var map = L.map('map').setView([30, -20], 3);
 
     // maps are offline ;-) see /assets/worldmap_zoom_level_4 directory
@@ -98,7 +98,9 @@
         return output;
     }
 
-    $( document ).ready(function() {
+
+        var victims_uids = $.parseJSON('<%== @victims_clickonly %>');
+
         // TODO when jquery.dataTables will be updated to 1.10, we can use only 1 call (as in the normal BeEF api, with a
         // TODO.. nested hash objects, containing both offline and online browsers)
         // online browsers
@@ -106,12 +108,12 @@
             $.each( data['aaData'], function(key, val) {
                 var hd_id = val[0];
                 var ip = val[1];
-                var city = val[8];
-                var country = val[9];
-                var lat = val[10];
-                var lon = val[11];
+                var city = val[9];
+                var country = val[10];
+                var lat = val[11];
+                var lon = val[12];
                 L.marker([lat, lon], {icon: beef_online_icon})
-                        .addTo(map).bindPopup(add_icons(val[2],val[4]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
+                        .addTo(map).bindPopup(add_icons(val[3],val[5]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
             });
         });
 
@@ -120,13 +122,122 @@
             $.each( data['aaData'], function(key, val) {
                 var hd_id = val[0];
                 var ip = val[1];
-                var city = val[8];
-                var country = val[9];
-                var lat = val[10];
-                var lon = val[11];
+                var city = val[9];
+                var country = val[10];
+                var lat = val[11];
+                var lon = val[12];
                 L.marker([lat, lon], {icon: beef_offline_icon})
-                        .addTo(map).bindPopup(add_icons(val[2],val[4]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
+                        .addTo(map).bindPopup(add_icons(val[3],val[5]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
             });
+        });
+
+        // new BeEF tables
+        $('#online-hooked-browsers-table').dataTable( {
+            "sPaginationType": "bootstrap",
+            "sAjaxSource": beef_server + '/api/hooks/pf/online?token=' + beef_apikey,
+            "aoColumns" : [
+                { "sWidth": "15px" },
+                { "sWidth": "50px" },
+                { "sWidth": "50px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "300px" }
+            ],
+            "aoColumnDefs": [
+                {
+                    "aTargets": [ 3 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var name = "";
+                        switch(data){
+                            case "C":
+                                name = "Chrome";
+                                break;
+                            case "FF":
+                                name = "Firefox";
+                                break;
+                            case "IE":
+                                name = "InternetExplorer";
+                                break;
+                            case "O":
+                                name = "Opera";
+                                break;
+                            case "S":
+                                name = "Safari";
+                                break;
+                            default:
+                                name = data;
+                        }
+                        return name;
+                    }
+                },
+                {
+                    "aTargets": [ 2 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var email = victims_uids[data];
+                        if(email != null){
+                            return email;
+                        }
+                    }
+                }
+            ],
+            "bProcessing": true
+        });
+
+        $('#offline-hooked-browsers-table').dataTable( {
+            "sPaginationType": "bootstrap",
+            "sAjaxSource": beef_server + '/api/hooks/pf/offline?token=' + beef_apikey,
+            "aoColumns" : [
+                { "sWidth": "15px" },
+                { "sWidth": "50px" },
+                { "sWidth": "50px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "300px" }
+            ],
+            "aoColumnDefs": [
+                {
+                    "aTargets": [ 3 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var name = "";
+                        switch(data){
+                            case "C":
+                                name = "Chrome";
+                                break;
+                            case "FF":
+                                name = "Firefox";
+                                break;
+                            case "IE":
+                                name = "InternetExplorer";
+                                break;
+                            case "O":
+                                name = "Opera";
+                                break;
+                            case "S":
+                                name = "Safari";
+                                break;
+                            default:
+                                name = data;
+                        }
+                        return name;
+                    }
+                },
+                {
+                    "aTargets": [ 2 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var email = victims_uids[data];
+                        if(email != null){
+                            return email;
+                        }
+                    }
+                }
+            ],
+            "bProcessing": true
         });
 
     });
@@ -136,14 +247,15 @@
 <h3>Online Hooked Browsers</h3>
 <hr>
 <table id="online-hooked-browsers-table" class="table-hover table-condense"
-       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="0" cellspacing="0" width="100%">
+       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="2" cellspacing="2" width="100%">
   <thead>
   <tr>
     <th>ID</th>
     <th>IP</th>
+    <th>Email</th>
     <th>Type</th>
     <th>Version</th>
-    <th>Operating System</th>
+    <th>OS</th>
     <th>Platform</th>
     <th>Language</th>
     <th>Plugins</th>
@@ -157,14 +269,15 @@
 <h3>Offline Hooked Browsers</h3>
 <hr>
 <table id="offline-hooked-browsers-table" class="table-hover table-condense"
-       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="0" cellspacing="0" width="100%">
+       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="1" cellspacing="1" width="100%">
     <thead>
     <tr>
         <th>ID</th>
         <th>IP</th>
+        <th>Email</th>
         <th>Type</th>
         <th>Version</th>
-        <th>Operating System</th>
+        <th>OS</th>
         <th>Platform</th>
         <th>Language</th>
         <th>Plugins</th>

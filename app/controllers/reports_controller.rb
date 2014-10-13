@@ -216,6 +216,14 @@ class ReportsController < ApplicationController
     @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
     @beef_apikey = campaign_settings.beef_apikey
     @campaign = Campaign.find(params[:id])
+
+    victims = Hash.new
+    Victim.where(campaign_id: params[:id]).each do |victim|
+        if victim.clicked?
+          victims[victim.uid] = victim.email_address
+        end
+    end
+    @victims_clickonly = victims.to_json
   end
 
   def passwords
