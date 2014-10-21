@@ -58,7 +58,7 @@ class EmailController < ApplicationController
     @campaign = Campaign.find(params[:id])
     @campaign.update_attributes(active: true)
     @blast = @campaign.blasts.create(test: false)
-    victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
+    victims = Victim.where("campaign_id = ? and archive = ? and sent = ?", params[:id], false, false)
     if GlobalSettings.asynchronous?
       begin
         victims.each do |target|
