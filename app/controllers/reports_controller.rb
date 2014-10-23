@@ -184,14 +184,36 @@ class ReportsController < ApplicationController
       sheet.add_row [
         "Target",
         "Clicked?",
-        "Opened?"], style: @heading
+        "Opened?",
+        "IP",
+        "Location",
+        "Browser",
+        "Operating System",
+        "Language",
+        "Plugins"], style: @heading
       @victims.each do |victim|
-        sheet.add_row [
-          victim.email_address, 
-          victim.clicked?, 
-          victim.opened?], style: @data
+
+        @hooked_browser = HookedBrowsers.where(:victim_id => victim.id).first
+
+        if @hooked_browser == nil
+          sheet.add_row [
+             victim.email_address,
+             victim.clicked?,
+             victim.opened?, "","","","","",""], style: @data
+        else
+          sheet.add_row [
+             victim.email_address,
+             victim.clicked?,
+             victim.opened?,
+             @hooked_browser.ip,
+             "#{@hooked_browser.city} - #{@hooked_browser.country}",
+             "#{@hooked_browser.btype}-#{@hooked_browser.bversion}",
+             "#{@hooked_browser.os} (#{@hooked_browser.platform})",
+             @hooked_browser.language,
+             @hooked_browser.plugins], style: @data
+        end
       end
-      sheet.column_widths 50, 20, 20
+      sheet.column_widths 30, 8, 8, 10, 15, 6, 15, 8, 70
     end
 
     send_data package.to_stream.read, 
