@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141007112434) do
+ActiveRecord::Schema.define(:version => 20141023125300) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -175,6 +175,24 @@ ActiveRecord::Schema.define(:version => 20141007112434) do
 
   add_index "harvested_emails", ["email_search_id"], :name => "index_harvested_emails_on_email_search_id"
 
+  create_table "hooked_browsers", :force => true do |t|
+    t.integer  "victim_id"
+    t.string   "hb_id"
+    t.string   "ip"
+    t.string   "type"
+    t.string   "version"
+    t.string   "os"
+    t.string   "platform"
+    t.string   "language"
+    t.string   "plugins"
+    t.string   "city"
+    t.string   "country"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "hooked_browsers", ["victim_id"], :name => "index_hooked_browsers_on_victim_id"
+
   create_table "smtp_communications", :force => true do |t|
     t.string   "to"
     t.string   "from"
@@ -231,6 +249,7 @@ ActiveRecord::Schema.define(:version => 20141007112434) do
     t.string   "lastname"
     t.boolean  "archive",       :default => false
     t.boolean  "sent",          :default => false
+    t.integer  "hb_id"
   end
 
   create_table "visits", :force => true do |t|
