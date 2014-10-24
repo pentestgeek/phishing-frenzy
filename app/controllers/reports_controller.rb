@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
 
   def list
     # gather the launched campaigns
-    @campaigns = Campaign.launched.page(params[:page]).per(8)
+    @campaigns = Campaign.launched.reversenano.page(params[:page]).per(8)
   end
 
   def visit_pool
@@ -224,7 +224,7 @@ class ReportsController < ApplicationController
     # clear campaign statistics
     campaign = Campaign.find(params[:id])
     campaign.victims.destroy_all
-    redirect_to :back, notice: "Cleared Campaign Stats"
+    redirect_to :back, notice: "Cleared Campaign Stats and removed Victims"
   end
 
 end
