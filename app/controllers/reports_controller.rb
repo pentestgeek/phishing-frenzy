@@ -1,3 +1,5 @@
+require 'net/http'
+
 class ReportsController < ApplicationController
   skip_before_filter :authenticate_admin!, :only => [ :results, :image  ]
 
@@ -133,6 +135,50 @@ class ReportsController < ApplicationController
     render json: jsonToSend
   end
 
+  # call BeEF's RESTful API to retrieve online/offline hooked browsers, storing in the PF DB details and updating the Victims tables too.
+  def synch_with_beef(campaign_id)
+    campaign_id = campaign_id.to_i
+    campaign_settings = CampaignSettings.where(:campaign_id => campaign_id).first
+    beef_uri = URI.parse(campaign_settings.beef_url)
+    beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
+
+    online = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/online?token=#{campaign_settings.beef_apikey}"))
+    offline = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/offline?token=#{campaign_settings.beef_apikey}"))
+
+    JSON.parse(online)['aaData'].each do |hb|
+      store_hooked_browsers hb
+    end
+
+    JSON.parse(offline)['aaData'].each do |hb|
+      store_hooked_browsers hb
+    end
+  end
+
+  def store_hooked_browsers(hb)
+    victim_uid = hb[2]
+
+    if HookedBrowsers.where(hb_id: hb[0]).empty?
+      victim = Victim.find_by_uid(victim_uid)
+      hooked_browser = HookedBrowsers.create(
+          hb_id: hb[0],
+              ip: hb[1],
+              victim_id: victim.id,
+              btype: hb[3],
+              bversion: hb[4],
+              os: hb[5],
+              platform: hb[6],
+              language: hb[7],
+              plugins: hb[8],
+              city: hb[9],
+              country: hb[10]
+      )
+
+      # update Victim table with HookedBrowser relation
+      victim.hb_id = hooked_browser.id
+      victim.save
+    end
+  end
+
   def uid
     @victim = Victim.find_by_uid(params[:id])
   end
@@ -172,6 +218,9 @@ class ReportsController < ApplicationController
   def download_excel
     @campaign = Campaign.find(params[:id])
     @victims = @campaign.victims
+
+    # synch the PF db with BeEF data
+    synch_with_beef params[:id]
 
     package = Axlsx::Package.new
     wb = package.workbook
@@ -232,12 +281,15 @@ class ReportsController < ApplicationController
   end
 
   def hooked_browsers
-    # retrieve from the db BeEF realted settings to be used when calling the RESTful API
+    # retrieve from the db BeEF related settings to be used when calling the RESTful API
     campaign_settings = CampaignSettings.where(:campaign_id => params[:id]).first
     beef_uri = URI.parse(campaign_settings.beef_url)
     @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
     @beef_apikey = campaign_settings.beef_apikey
     @campaign = Campaign.find(params[:id])
+
+    # synch the PF db with BeEF data
+    synch_with_beef params[:id]
 
     victims = Hash.new
     Victim.where(campaign_id: params[:id]).each do |victim|
