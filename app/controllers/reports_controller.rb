@@ -142,16 +142,21 @@ class ReportsController < ApplicationController
     beef_uri = URI.parse(campaign_settings.beef_url)
     beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
 
-    online = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/online?token=#{campaign_settings.beef_apikey}"))
-    offline = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/offline?token=#{campaign_settings.beef_apikey}"))
+    begin
+      online = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/online?token=#{campaign_settings.beef_apikey}"))
+      offline = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/offline?token=#{campaign_settings.beef_apikey}"))
 
-    JSON.parse(online)['aaData'].each do |hb|
-      store_hooked_browsers hb
+      JSON.parse(online)['aaData'].each do |hb|
+        store_hooked_browsers hb
+      end
+
+      JSON.parse(offline)['aaData'].each do |hb|
+        store_hooked_browsers hb
+      end
+    rescue => e
+      flash[:notice] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
     end
 
-    JSON.parse(offline)['aaData'].each do |hb|
-      store_hooked_browsers hb
-    end
   end
 
   def store_hooked_browsers(hb)
@@ -220,7 +225,9 @@ class ReportsController < ApplicationController
     @victims = @campaign.victims
 
     # synch the PF db with BeEF data
-    synch_with_beef params[:id]
+    if @campaign.campaign_settings.use_beef?
+      synch_with_beef params[:id]
+    end
 
     package = Axlsx::Package.new
     wb = package.workbook
