@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
 
   def list
     # gather the launched campaigns
-    @campaigns = Campaign.launched.reversenano.page(params[:page]).per(8)
+    @campaigns = Campaign.launched.reverse.page(params[:page]).per(8)
   end
 
   def visit_pool
