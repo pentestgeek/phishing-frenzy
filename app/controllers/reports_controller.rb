@@ -7,8 +7,7 @@ class ReportsController < ApplicationController
   end
 
   def list
-    # gather the launched campaigns
-    @campaigns = Campaign.launched.reverse.page(params[:page]).per(8)
+    @campaigns = Campaign.launched.order(:created_at).page(params[:page]).per(8)
   end
 
   def visit_pool
@@ -21,13 +20,18 @@ class ReportsController < ApplicationController
 
   def image
     victims = Victim.where(:uid => params[:uid])
+    unless victims.present?
+      render text: "No UID Found"
+      return
+    end
+
     visit = Visit.new
     victim = victims.first
     visit.victim_id = victim.id
     visit.browser = request.env["HTTP_USER_AGENT"]
     visit.ip_address = request.env["REMOTE_ADDR"]
     visit.extra = "SOURCE: EMAIL"
-    visit.save()
+    visit.save
     send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
   end
 
