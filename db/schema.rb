@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140916202808) do
+ActiveRecord::Schema.define(:version => 20141111063547) do
 
   create_table "admins", :force => true do |t|
     t.string   "name"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20140916202808) do
     t.datetime "updated_at",                                :null => false
     t.integer  "smtp_delay",             :default => 0
     t.string   "beef_url"
+    t.boolean  "ssl"
   end
 
   add_index "campaign_settings", ["campaign_id"], :name => "index_campaign_settings_on_campaign_id"
@@ -184,6 +185,14 @@ ActiveRecord::Schema.define(:version => 20140916202808) do
   end
 
   add_index "smtp_communications", ["campaign_id"], :name => "index_smtp_communications_on_campaign_id"
+
+  create_table "ssls", :force => true do |t|
+    t.string   "filename"
+    t.string   "function"
+    t.integer  "campaign_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "statistics", :force => true do |t|
     t.integer  "campaign_id"

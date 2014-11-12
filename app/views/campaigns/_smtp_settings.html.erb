@@ -9,7 +9,7 @@
   <div id="collapseThree" class="panel-collapse collapse">
     <div class="panel-body">
       <table class='table borderless' summary="Campaign Settings">
-      <%= fields_for @campaign.email_settings do |es| %>
+      <%= f.fields_for :email_settings, @campaign.email_settings do |ff| %>
         <tr>
           <th>Pre-populate:</th>
           <td>
@@ -29,7 +29,7 @@
           <th>SMTP Server:</th>
           <td><span class="ui-icon ui-icon-help" title='SMTP server used to received emails'></span></td>
           <td>
-            <%= es.text_field(:smtp_server,
+            <%= ff.text_field(:smtp_server,
                   placeholder: 'mail.phishingfrenzy.local',
                   class: 'form-control') %>
           </td>
@@ -38,16 +38,16 @@
           <th>SMTP Outbound Server:</th>
           <td><span class="ui-icon ui-icon-help" title='SMTP server used to relay emails through'></span></td>
           <td>
-            <%= es.text_field(:smtp_server_out,
+            <%= ff.text_field(:smtp_server_out,
                     placeholder: 'smtp.phishingfrenzy.local',
                     class: 'form-control') %>
           </td>
         </tr>
         <tr>
           <th>SMTP Domain:</th>
-          <td><span class="ui-icon ui-icon-help" title='Domain of email address'></span></td>
+          <td><span class="ui-icon ui-icon-help" title='Domain of email addrffs'></span></td>
           <td>
-            <%= es.text_field(:domain,
+            <%= ff.text_field(:domain,
                     placeholder: 'phishingfrenzy.local',
                     class: 'form-control') %>
           </td>
@@ -56,7 +56,7 @@
           <th>SMTP Authentication:</th>
           <td><span class="ui-icon ui-icon-help" title='SMTP Authentication Method'></span></td>
           <td>
-            <%= es.select(:authentication, 
+            <%= ff.select(:authentication, 
                     @campaign.email_settings.authentications.collect { |a| [a, a] },{},
                     {class: 'form-control'}) %>
           </td>
@@ -65,7 +65,7 @@
           <th>SMTP Username:</th>
           <td><span class="ui-icon ui-icon-help" title='SMTP username to authenticate sending emails'></span></td>
           <td>
-            <%= es.text_field(:smtp_username,
+            <%= ff.text_field(:smtp_username,
                     placeholder: 'username',
                     class: 'form-control') %>
           </td>
@@ -77,7 +77,7 @@
             </span>
           </td>
           <td>
-            <%= es.password_field(:smtp_password,
+            <%= ff.password_field(:smtp_password,
                   placeholder: 'password',
                   value: @campaign.email_settings.smtp_password,
                   class: 'form-control') %>
@@ -87,7 +87,7 @@
           <th>Openssl Verify Mode:</th>
           <td><span class="ui-icon ui-icon-help" title='Session verification mode'></span></td>
           <td>
-            <%= es.select(:openssl_verify_mode,
+            <%= ff.select(:openssl_verify_mode,
                     @campaign.email_settings.openssl_verify_modes.collect { |m| [m, m] },{},
                     {class: 'form-control'}) %>
           </td>
@@ -95,13 +95,13 @@
         <tr>
           <th>Enable Start TLS Automatically?:</th>
           <td><span class="ui-icon ui-icon-help" title='Enable Start TLS Automatically?'></span></td>
-          <td><%= es.check_box(:enable_starttls_auto, class: 'span9') %></td>
+          <td><%= ff.check_box(:enable_starttls_auto, class: 'span9') %></td>
         </tr>
         <tr>
           <th>SMTP Port:</th>
           <td><span class="ui-icon ui-icon-help" title='SMTP port used to relay emails through'></span></td>
           <td>
-            <%= es.text_field(:smtp_port,
+            <%= ff.text_field(:smtp_port,
                     placeholder: '25',
                     class: 'form-control') %>
           </td>

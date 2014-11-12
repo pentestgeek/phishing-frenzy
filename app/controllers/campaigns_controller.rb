@@ -19,8 +19,7 @@ class CampaignsController < ApplicationController
 
 	def show
 		@templates = Template.all
-		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
-		@blasts = @campaign.blasts.order('created_at DESC').limit(10)
+		@campaign = Campaign.find(params[:id], :include => [:campaign_settings, :email_settings])
 		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
 		@template = @campaign.template
 		unless @template
@@ -38,8 +37,7 @@ class CampaignsController < ApplicationController
 			@campaign_settings = CampaignSettings.new(:campaign_id => @campaign.id, :fqdn => '')
 			@email_settings = EmailSettings.new(:campaign_id => @campaign.id)
 			if @campaign_settings.save and @email_settings.save
-				flash[:notice] = "Campaign Created"
-				redirect_to @campaign
+				redirect_to @campaign, notice: "Campaign Created"
 			else
 				render('new')
 			end
@@ -49,12 +47,7 @@ class CampaignsController < ApplicationController
 	end
 
 	def edit
-		# find existing id
-		@campaign = Campaign.find_by_id(params[:id])
-		if @campaign.nil?
-			list
-			render('list')
-		end
+		@campaign = Campaign.find(params[:id])
 	end
 
 	def update
@@ -65,37 +58,17 @@ class CampaignsController < ApplicationController
 		end
 
 		@campaign = Campaign.find(params[:id])
-		if @campaign.update_attributes(params[:campaign])
-			flash[:notice] = "Campaign Updated"
-			redirect_to @campaign
-		else
-			render('edit')
-		end
-	end
-
-	def update_settings
-		# ensure we have write access to sites-enabled
-		unless File.writable?(GlobalSettings.first.sites_enabled_path)
-			redirect_to campaign_path, notice: "File Permission Issue: chmod #{GlobalSettings.first.sites_enabled_path}"
+		errors = @campaign.update_deps(params).messages.values.join(', ')
+		if errors.present?
+			redirect_to @campaign, notice: "Error: #{errors}"
 			return
 		end
-	
-		@campaign = Campaign.find_by_id(params[:id], :include => [:campaign_settings, :email_settings])
 
-		# ensure we have required dependencies to go active
-		if params[:campaign][:active] == "1"
-			if params[:campaign_settings][:fqdn] == ""
-				redirect_to campaign_path(params[:id]), notice: "FQDN cannot be blank when active"
-				return false
-			end
-		end
-
-		if @campaign.update_attributes(params[:campaign]) and @campaign.email_settings.update_attributes(params[:email_settings]) and @campaign.campaign_settings.update_attributes(params[:campaign_settings])
-			flash[:notice] = "Campaign Updated"
-			redirect_to @campaign
+		if @campaign.update_attributes(params[:campaign])
+			redirect_to @campaign, notice: "Campaign Updated"
 		else
 			@templates = Template.all
-			render('form')
+			render('show')
 		end
 	end
 

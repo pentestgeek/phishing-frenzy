@@ -12,10 +12,11 @@
       <tr>
         <th>Phishing Scenario</th>
         <td>
-        <span class="ui-icon ui-icon-help" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
+          <span class="ui-icon ui-icon-help" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
         </td>
         <td>
-        <%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] }, @campaign.template_id),{} , {class: 'form-control'}) %>
+          <%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] },
+                @campaign.template_id),{} , {class: 'form-control'}) %>
         </td>
       </tr>
       </table>

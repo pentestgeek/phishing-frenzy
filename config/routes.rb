@@ -34,7 +34,6 @@ PhishingFramework::Application.routes.draw do
 			delete 'destroy'
 		end
 		member do
-			post 'update_settings'
 			post 'clear_victims'
 		end
 	end

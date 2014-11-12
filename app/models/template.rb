@@ -8,7 +8,7 @@ class Template < ActiveRecord::Base
 
 	has_many :attachments, as: :attachable, dependent: :destroy
 
-	accepts_nested_attributes_for :attachments
+	accepts_nested_attributes_for :attachments, :allow_destroy => true , :reject_if => proc {|attributes| attributes['file'].blank?}
 
 	def email_directory
 		File.dirname(email_files.first.file.current_path)

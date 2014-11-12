@@ -11,11 +11,6 @@ class TemplatesController < ApplicationController
 
 	def show
 		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			list
-			render('list')
-		end
-
 		@images = @template.images
 	end
 
@@ -35,29 +30,12 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit
-		@template = Template.find_by_id(params[:id])
-		if @template.nil?
-			list
-			render('list')
-		end
+		@template = Template.find(params[:id])
 	end
 
 	def update
+		binding.pry
 		@template = Template.find(params[:id])
-		attachments = params[:template][:attachments_attributes]
-		unless attachments.nil?
-			attachments.each do |a| 
-				if a[1]["_destroy"].eql? "1"
-					begin
-						@template.attachments.destroy(a[1]["id"])
-						params[:template][:attachments_attributes].delete(a[0])
-					rescue
-						next
-					end
-				end
-			end
-		end
-
 		if @template.update_attributes(params[:template])
 			redirect_to edit_template_path, notice: "Template Updated"
 		else

@@ -6,15 +6,20 @@ class Campaign < ActiveRecord::Base
   belongs_to :template
   has_one :campaign_settings, dependent: :destroy
   has_one :email_settings, dependent: :destroy
+  has_many :ssl, dependent: :destroy
   has_many :victims, dependent: :destroy
   has_many :blasts, dependent: :destroy
   has_many :statistics
   has_many :smtp_communications
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
+  
+  accepts_nested_attributes_for :email_settings, allow_destroy: true
+  accepts_nested_attributes_for :campaign_settings, allow_destroy: true
+  accepts_nested_attributes_for :ssl, allow_destroy: true#, :reject_if => proc {|attributes| attributes['filename'].blank?}
 
   # allow mass asignment
-  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email
+  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email, :ssl_attributes, :email_settings_attributes, :campaign_settings_attributes
 
   # named scopes
   scope :active, where(:active => true)
@@ -23,6 +28,7 @@ class Campaign < ActiveRecord::Base
   before_save :parse_email_addresses
   after_update :devops, :if => :active_changed?
   after_destroy :cleanup_apache
+  after_create :create_deps
 
   # validate form before saving
   validates :name, :presence => true,
@@ -33,6 +39,21 @@ class Campaign < ActiveRecord::Base
             :length => {:maximum => 60000}
   validates :scope, :numericality => {:greater_than_or_equal_to => 0},
             :length => {:maximum => 4}, :allow_nil => true
+
+  def create_deps
+    Ssl.functions.each do |function|
+      newSSL = ssl.new
+      newSSL.function = function[0]
+      newSSL.save(validate: false)
+    end
+  end
+
+  def update_deps(params)
+    if params[:campaign][:active] == "1"
+      errors.add(:fqdn, "FQDN cannot be nil when activating") unless campaign_settings.fqdn.present?
+    end
+    return errors
+  end
 
   def self.clicks(campaign)
     campaign.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
@@ -56,6 +77,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def get_binding
+    @ssl = ssl
     @campaign_id = id
     @campaign_settings = campaign_settings
     @fqdn = campaign_settings.fqdn
@@ -137,8 +159,8 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def vhost_text(campaign)
-    template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb",))
+  def vhost_text(campaign, virtual_host_type)
+    template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/#{virtual_host_type}.txt.erb",))
     template.result(campaign.get_binding)
   end
 
@@ -166,16 +188,11 @@ class Campaign < ActiveRecord::Base
   end
 
   def deploy
-    # add vhost file to sites-enabled
-    File.open(vhost_file, "w") do |f|
-      template = Template.find_by_id(self.template_id)
-      if template.nil?
-        raise 'Template #{self.template_id} not found'
-      else
-        f.write(vhost_text(self))
-      end
-    end
+    # determine if SSL is enabled on campaign
+    virtual_host_type = self.campaign_settings.ssl ? "virtual_host_ssl" : "virtual_host"
 
+    # write vhost config and restart apache
+    write_vhost(virtual_host_type)
     reload_apache
 
     # deploy phishing website files
@@ -198,6 +215,18 @@ class Campaign < ActiveRecord::Base
       end
       if inflatable?(loc)
         inflate(loc, deployment_directory)
+      end
+    end
+  end
+
+  def write_vhost(vhost_type)
+    # add vhost file to sites-enabled
+    File.open(vhost_file, "w") do |f|
+      template = Template.find_by_id(self.template_id)
+      if template.nil?
+        raise 'Template #{self.template_id} not found'
+      else
+        f.write(vhost_text(self, vhost_type))
       end
     end
   end

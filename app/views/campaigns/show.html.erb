@@ -3,8 +3,8 @@
 <h2>Campaign Options - <%= @campaign.name %></h2>
 
 <div class="campaign settings"> 
-  <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
-    <%= render(:partial => "options", :locals => {:f => f}) %>
+  <%= nested_form_for(@campaign, :html => {:multipart => true}) do |f| %>
+    <%= render partial: "options", locals: {f: f} %>
     <div id="show-campaign-buttons">
       <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
       <%= link_to("Preview", preview_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
@@ -37,7 +37,7 @@
             </tr>
           </thead>
           <tbody>
-          <% @blasts.each do |blast| %>
+          <% @campaign.blasts.each do |blast| %>
             <tr>
               <td><%= link_to "#{time_ago_in_words(blast.created_at)} ago", blast %></td>
               <td><%= blast.test? %></td>

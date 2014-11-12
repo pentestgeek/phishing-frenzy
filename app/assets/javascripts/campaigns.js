@@ -11,47 +11,57 @@ $( document ).ready(function() {
     var myValue = $(this).val();
     switch (myValue) {
       case 'google':
-        $('#email_settings_smtp_server').val('smtp.gmail.com');
-        $('#email_settings_smtp_server_out').val('smtp.gmail.com');
-        $('#email_settings_authentication').val('plain');
-        $('#email_settings_domain').val('gmail.com');
-        $('#email_settings_enable_starttls_auto').prop('checked', true);
-        $('#email_settings_openssl_verify_mode').val('VERIFY_NONE');
-        $('#email_settings_smtp_port').val('587');
+        $('#campaign_email_settings_attributes_smtp_server').val('smtp.gmail.com');
+        $('#campaign_email_settings_attributes_smtp_server_out').val('smtp.gmail.com');
+        $('#campaign_email_settings_attributes_authentication').val('plain');
+        $('#campaign_email_settings_attributes_domain').val('gmail.com');
+        $('#campaign_email_settings_attributes_enable_starttls_auto').prop('checked', true);
+        $('#campaign_email_settings_attributes_openssl_verify_mode').val('VERIFY_NONE');
+        $('#campaign_email_settings_attributes_smtp_port').val('587');
         break;
       case 'outlook':
-        $('#email_settings_smtp_server').val('smtp.outlook.com');
-        $('#email_settings_smtp_server_out').val('smtp.outlook.com');
-        $('#email_settings_smtp_port').val('25');
+        $('#campaign_email_settings_attributes_smtp_server').val('smtp.outlook.com');
+        $('#campaign_email_settings_attributes_smtp_server_out').val('smtp.outlook.com');
+        $('#campaign_email_settings_attributes_smtp_port').val('25');
         break;
       case 'godaddy':
-        $('#email_settings_smtp_server').val('smtp.secureserver.net');
-        $('#email_settings_smtp_server_out').val('smtpout.secureserver.net');
-        $('#email_settings_smtp_port').val('3535');
+        $('#campaign_email_settings_attributes_smtp_server').val('smtp.secureserver.net');
+        $('#campaign_email_settings_attributes_smtp_server_out').val('smtpout.secureserver.net');
+        $('#campaign_email_settings_attributes_smtp_port').val('3535');
         break;
       case 'sendgrid':
-        $('#email_settings_email_settings_smtp_server').val('smtp.sendgrid.net');
-        $('#email_settings_smtp_server_out').val('smtp.sendgrid.net');
-        $('#email_settings_smtp_port').val('25');
+        $('#campaign_email_settings_attributes_smtp_server').val('smtp.sendgrid.net');
+        $('#campaign_email_settings_attributes_smtp_server_out').val('smtp.sendgrid.net');
+        $('#campaign_email_settings_attributes_smtp_port').val('25');
         break;
     }
   });
 
   // if use_beef checked function
-  function is_beef_checked() {
-    if ($("#campaign_settings_use_beef").is(':checked')) {
+  function is_stuff_checked() {
+    if ($("#campaign_campaign_settings_attributes_use_beef").is(':checked')) {
       // enable beef_url form
-      $("#campaign_settings_beef_url").prop('disabled', false);
+      $("#campaign_campaign_settings_attributes_beef_url").prop('disabled', false);
     }
     else {
       // disable beef_url form
-      $("#campaign_settings_beef_url").prop('disabled', true);
+      $("#campaign_campaign_settings_attributes_beef_url").prop('disabled', true);
+    }
+
+    if ($("#campaign_campaign_settings_attributes_ssl").is(':checked')) {
+      // display ssl form
+      $("[id=ssl-tr]").css("display", "table-row");
+    }
+    else {
+      // hide ssl form
+      $("[id=ssl-tr]").css("display", "none");
     }
   }
 
   // enable beef_url if use_beef is checked on page load
-  is_beef_checked();
+  is_stuff_checked();
 
   // click event handler to enable beef_url if use_beef is checked
-  $( "#campaign_settings_use_beef" ).on( "click", is_beef_checked);
+  $( "#campaign_campaign_settings_attributes_use_beef" ).on( "click", is_stuff_checked);
+  $( "#campaign_campaign_settings_attributes_ssl" ).on( "click", is_stuff_checked);
 });
