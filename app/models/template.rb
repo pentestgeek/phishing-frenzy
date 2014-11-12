@@ -1,12 +1,11 @@
 class Template < ActiveRecord::Base
 	has_many :campaigns
+	has_many :attachments, as: :attachable, dependent: :destroy
 
 	attr_accessible :name, :description, :notes, :attachments_attributes, :directory_index
 
 	validates :name, presence: true, length: { :maximum => 255 }
 	validates_with TemplateValidator
-
-	has_many :attachments, as: :attachable, dependent: :destroy
 
 	accepts_nested_attributes_for :attachments, :allow_destroy => true , :reject_if => proc {|attributes| attributes['file'].blank?}
 

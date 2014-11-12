@@ -56,7 +56,7 @@ class EmailController < ApplicationController
 
   def launch
     @campaign = Campaign.find(params[:id])
-    @campaign.update_attributes(active: true)
+    @campaign.update_attributes(active: true, email_sent: true)
     @blast = @campaign.blasts.create(test: false)
     victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
     if GlobalSettings.asynchronous?
@@ -65,8 +65,6 @@ class EmailController < ApplicationController
           PhishingFrenzyMailer.delay.phish(@campaign.id, target, @blast.id, ACTIVE)
           target.update_attribute(:sent, true)
         end
-        @campaign.email_sent = true
-        @campaign.save
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
@@ -80,8 +78,6 @@ class EmailController < ApplicationController
           target.update_attribute(:sent, true)
         end
         flash[:notice] = "Campaign blast launched"
-        @campaign.email_sent = true
-        @campaign.save
       rescue::NoMethodError => e
         flash[:error] = "Template Issue: #{e}"
       end

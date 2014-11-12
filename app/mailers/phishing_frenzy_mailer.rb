@@ -1,4 +1,5 @@
 class PhishingFrenzyMailer < ActionMailer::Base
+  
   PREVIEW = 0
   ACTIVE = 1
 
@@ -57,7 +58,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
   def cast(blast, bait)
     # log smtp communication
-    response= nil
+    response = nil
     error = nil
     begin
       sleep(@campaign.campaign_settings.smtp_delay)
