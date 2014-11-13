@@ -1,14 +1,12 @@
 $( document ).ready(function() {
   $('#victims-table').dataTable( {
   "sAjaxSource": '/reports/uid_json/' + window.location.href.split("/").pop(),
-  "sPaginationType": "bootstrap",
   "aLengthMenu": [
       [25, 50, 100, 500, -1],
       [25, 50, 100, 500, "All"]]
   });
 
   $('#victims-summary-table').dataTable( {
-    "sPaginationType": "bootstrap",
     "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
     "aoColumnDefs": [            
     {
