@@ -57,10 +57,10 @@ $( document ).ready(function() {
     }
   }
 
-  // enable beef_url if use_beef is checked on page load
+  // enable checkbox stuff on page load
   is_stuff_checked();
 
-  // click event handler to enable beef_url if use_beef is checked
+  // click event handler to for checked stuff
   $( "#campaign_campaign_settings_attributes_use_beef" ).on( "click", is_stuff_checked);
   $( "#campaign_campaign_settings_attributes_ssl" ).on( "click", is_stuff_checked);
 });

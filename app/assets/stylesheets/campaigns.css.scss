@@ -22,3 +22,8 @@
 #show-campaign-buttons .btn {
   margin-top: 1.5em;
 }
+
+#dashboard-campaign > div > div > h3 {
+  white-space: nowrap;
+  overflow: hidden;
+}
