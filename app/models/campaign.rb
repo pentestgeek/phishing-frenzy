@@ -19,11 +19,11 @@ class Campaign < ActiveRecord::Base
   accepts_nested_attributes_for :ssl, allow_destroy: true#, :reject_if => proc {|attributes| attributes['filename'].blank?}
 
   # allow mass asignment
-  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email, :ssl_attributes, :email_settings_attributes, :campaign_settings_attributes
+  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email, :ssl_attributes,:email_sent, :email_settings_attributes, :campaign_settings_attributes
 
   # named scopes
-  scope :active, where(:active => true)
-  scope :launched, where(:email_sent => true)
+  scope :active, -> { where(active: true) }
+  scope :launched, -> { where(email_sent: true) }
 
   before_save :parse_email_addresses
   after_update :devops, :if => :active_changed?

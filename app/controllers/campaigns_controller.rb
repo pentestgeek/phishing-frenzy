@@ -19,7 +19,7 @@ class CampaignsController < ApplicationController
 
 	def show
 		@templates = Template.all
-		@campaign = Campaign.find(params[:id], :include => [:campaign_settings, :email_settings])
+		@campaign = Campaign.includes(:campaign_settings, :email_settings).find(params[:id])
 		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
 		@template = @campaign.template
 		unless @template

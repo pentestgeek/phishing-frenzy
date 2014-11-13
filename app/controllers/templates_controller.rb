@@ -34,7 +34,6 @@ class TemplatesController < ApplicationController
 	end
 
 	def update
-		binding.pry
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
 			redirect_to edit_template_path, notice: "Template Updated"

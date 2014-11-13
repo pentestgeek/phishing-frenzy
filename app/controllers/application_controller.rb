@@ -10,11 +10,11 @@ class ApplicationController < ActionController::Base
 
   def system_status
     @show_status = true
-    @apache = SYSTEM_MONITOR.apache
-    @vhosts = SYSTEM_MONITOR.vhosts
-    @msf = SYSTEM_MONITOR.metasploit
-    @beef = SYSTEM_MONITOR.beef
-    @sidekiq = SYSTEM_MONITOR.sidekiq
+    @apache = SystemMonitor.apache
+    @vhosts = SystemMonitor.vhosts
+    @msf = SystemMonitor.metasploit
+    @beef = SystemMonitor.beef
+    @sidekiq = SystemMonitor.sidekiq
     begin
       q = Sidekiq::Stats.new.enqueued
       @redis = true

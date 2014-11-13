@@ -10,8 +10,7 @@
  *
  *= require bootstrap.min
  *= require_self
-*= require dataTables/jquery.dataTables
- *= require jquery.ui.tooltip
+ *= require dataTables/jquery.dataTables
  */
 
  @font-face {

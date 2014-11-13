@@ -17,7 +17,6 @@ PhishingFramework::Application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
 
-
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
@@ -29,7 +28,7 @@ PhishingFramework::Application.configure do
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
-  config.active_record.auto_explain_threshold_in_seconds = 0.5
+  #config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Do not compress assets
   config.assets.compress = false
@@ -37,4 +36,5 @@ PhishingFramework::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  config.eager_load = false
 end

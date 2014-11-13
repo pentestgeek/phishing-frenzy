@@ -8,7 +8,7 @@ $( document ).ready(function() {
 
   $('#victims-summary-table').dataTable( {
     "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
-    "aoColumnDefs": [            
+    "aoColumnDefs": [
     {
      "aTargets": [ 0 ], // Column to target
      "mRender": function ( data, type, full ) {

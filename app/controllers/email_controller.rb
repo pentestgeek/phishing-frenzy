@@ -17,14 +17,14 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign test email queued for preview"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
-      rescue::NoMethodError => e
+      rescue => e
         flash[:error] = "Template Issue: #{e}"
       end
     else
       begin
         PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, PREVIEW)
         flash[:notice] = "Campaign test email available for preview"
-      rescue::NoMethodError => e
+      rescue => e
         flash[:error] = "Template Issue: #{e}"
       end
     end
@@ -40,7 +40,7 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign test email queued for test"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
-      rescue::NoMethodError => e
+      rescue => e
         flash[:error] = "Template Issue: #{e}"
       end
     else
@@ -68,7 +68,7 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
-      rescue::NoMethodError => e
+      rescue => e
         flash[:error] = "Template Issue: #{e}"
       end
     else

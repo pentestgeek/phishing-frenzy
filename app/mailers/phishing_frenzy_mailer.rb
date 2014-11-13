@@ -17,12 +17,8 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     if method==ACTIVE
-      if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
-        uid = "000000"
-      else
-        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first().uid
-      end
-      @url =  "#{phishing_url}?uid=#{uid}"
+      uid = victim_uid(@target, campaign_id)
+      @url = "#{phishing_url}?uid=#{uid}"
       @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
       bait = mail(
           to: @target.email_address,
@@ -41,11 +37,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
       end
       cast(blast, bait)
     else
-      if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
-        uid = "000000"
-      else
-        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first().uid
-      end
+      uid = victim_uid(@target, campaign_id)
       bait = mail(
           to: @target.email_address,
           subject: @campaign.email_settings.subject,
@@ -101,5 +93,15 @@ class PhishingFrenzyMailer < ActionMailer::Base
       enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
       return_response: true
     }
+  end
+
+  def victim_uid(target, campaign_id)
+    victim = Victim.where(:email_address => target.email_address, :campaign_id => campaign_id)
+    if victim.present?
+      uid = victim.first.uid
+    else
+      uid = "000000"
+    end
+    return uid
   end
 end
