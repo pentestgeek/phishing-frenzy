@@ -127,3 +127,7 @@ A:hover
 #content > div.alert.alert-warning {
   line-height: 2px;
 }
+
+.alert-notice {
+  background: rgb(72, 214, 89);
+}

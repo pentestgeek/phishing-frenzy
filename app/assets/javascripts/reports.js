@@ -23,4 +23,9 @@ $( document ).ready(function() {
       [25, 50, 100, 500, -1],
       [25, 50, 100, 500, "All"]]
   } );
+
+  // datatable for reports#list launched campaigns
+  $('#launched-campains').dataTable({
+    "iDisplayLength": 25
+  });
 });
