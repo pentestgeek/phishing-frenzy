@@ -1,19 +1,21 @@
 <% @page_title = "Edit Template File" %>
 
 <%= link_to("<< Back", 
-            edit_template_path(@attachment.attachable_id), 
-            :class => 'back-link') %>
-
-<h2>Edit Attachment - <%= File.basename(@attachment.file.to_s) %></h2>
+        edit_template_path(@attachment.attachable_id), 
+        :class => 'back-link') %>
 
 <div class='row'>
-	<div class='col-md-12'>
-		<%= form_for(:attachment, :url => {:action => 'update_attachment', :format => params[:format]}) do |f| %>
-			<div class="form-buttons">
-				<%= submit_tag("Save", class: 'btn btn-primary') %>
-			</div>
+  <div class='col-md-12'>
+    <%= form_for(:attachment, :url => {:action => 'update_attachment', :format => params[:format]}) do |f| %>
+      <div class="form-buttons">
+        <h3>
+          Edit Attachment - <%= File.basename(@attachment.file.to_s) %>
+          <%= submit_tag("Save", class: 'btn btn-primary') %>
+        </h3>
+      </div>
 
-			<%= text_area_tag("attachment_content", @attachment_content, size: "130x32") %>
-		<% end %>
-	</div>
+      <%= text_area_tag("attachment_content", @attachment_content,
+       rows: 35 ,class: 'form-control') %>
+    <% end %>
+  </div>
 </div>

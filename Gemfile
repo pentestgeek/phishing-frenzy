@@ -104,3 +104,6 @@ gem 'mechanize'
 # Gem for xlsx creation
 gem 'acts_as_xlsx'
 gem 'axlsx'
+
+# code syntax highlighter
+gem 'codemirror-rails'

@@ -11,6 +11,7 @@
  *= require bootstrap.min
  *= require_self
  *= require dataTables/jquery.dataTables
+ *= require codemirror
  */
 
  @font-face {

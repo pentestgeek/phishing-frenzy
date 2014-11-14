@@ -51,12 +51,10 @@ class TemplatesController < ApplicationController
 	end
 
 	def destroy
-		# delete folder if_exists?
-		@template = Template.find_by_id(params[:id])
-
-		Template.find(params[:id]).destroy
-		flash[:notice] = "Template Destroyed"
-		redirect_to templates_path
+		@template = Template.find(params[:id])
+		@template.destroy
+		flash[:warning] = "Template Destroyed"
+		redirect_to list_templates_path
 	end
 
 	def copy
@@ -168,7 +166,7 @@ class TemplatesController < ApplicationController
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
 		@attachment_content = File.read(Dir.glob(attachment_location)[0])
 		if File.binary?(Dir.glob(attachment_location)[0])
-			redirect_to :back, notice: "Cannot Edit Binary Files"
+			redirect_to :back, warning: "Cannot Edit Binary Files"
 		end
 	end
 
