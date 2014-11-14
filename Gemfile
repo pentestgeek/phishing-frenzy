@@ -92,7 +92,8 @@ gem 'jquery-datatables-rails'
 gem 'd3-rails'
 
 # pdf creation
-gem 'prawn'
+gem 'prawn', '~> 1.2.1'
+gem 'prawn-table', '~> 0.1.0'
 
 # email enumeration
 gem 'searchbing'

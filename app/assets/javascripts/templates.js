@@ -16,8 +16,7 @@ $('#attachment_content').each(function() {
          var editor = CodeMirror.fromTextArea(this, {
              viewportMargin: Infinity,
              lineNumbers : true,
-             matchBrackets : true,
-             mode: "htmlmixed"
+             matchBrackets : true
          });
      })
 });

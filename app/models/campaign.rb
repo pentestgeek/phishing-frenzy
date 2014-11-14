@@ -55,21 +55,21 @@ class Campaign < ActiveRecord::Base
     return errors
   end
 
-  def self.clicks(campaign)
-    campaign.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
+  def clicks
+    visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
   end
 
-  def self.opened(campaign)
-    campaign.visits.pluck(:victim_id).uniq.size
+  def opened
+    visits.pluck(:victim_id).uniq.size
   end
 
-  def self.sent(campaign)
-    campaign.victims.where(sent: true).size
+  def sent
+    victims.where(sent: true).size
   end
 
-  def self.success(campaign)
-    Campaign.sent(campaign) == 0 ? 
-        0 : (Campaign.clicks(campaign).to_f / Campaign.sent(campaign).to_f * 100.0).round(2)
+  def success
+    self.sent == 0 ? 
+        0 : (self.clicks.to_f / self.sent.to_f * 100.0).round(2)
   end
 
   def self.logfile(campaign)

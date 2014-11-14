@@ -164,9 +164,17 @@ class TemplatesController < ApplicationController
 	def edit_email
 		@attachment = Attachment.find(params[:format])
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
-		@attachment_content = File.read(Dir.glob(attachment_location)[0])
+
+		begin
+			@attachment_content = File.read(Dir.glob(attachment_location)[0])
+		rescue
+			flash[:warning] = "Issue Reading Attachment File"
+			redirect_to :back
+			return
+		end
 		if File.binary?(Dir.glob(attachment_location)[0])
-			redirect_to :back, warning: "Cannot Edit Binary Files"
+			flash[:warning] = "Cannot Edit Binary Files"
+			redirect_to :back
 		end
 	end
 

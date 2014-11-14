@@ -5,15 +5,15 @@
         <div class="pull-right">
           <div class="pie-<%= campaign.id %>"></div>
         </div>
-        <%= render partial: "pie", locals: {campaign: campaign} if Campaign.sent(campaign) > 0 %>
+        <%= render partial: "pie", locals: {campaign: campaign} if campaign.sent > 0 %>
         <p><span class="glyphicon glyphicon-envelope"></span> 
-          Sent: <%= Campaign.sent(campaign) %></p> 
+          Sent: <%= campaign.sent %></p> 
         <p><span class="glyphicon glyphicon-plus-sign"></span> 
-          Clicks: <%= Campaign.clicks(campaign) %></p>
+          Clicks: <%= campaign.clicks %></p>
         <p><span class="glyphicon glyphicon-exclamation-sign"></span> 
-          Opened: <%= Campaign.opened(campaign) %></p>
+          Opened: <%= campaign.opened %></p>
         <p><span class="glyphicon glyphicon-signal"></span> 
-          Success: <%= Campaign.success(campaign) %>%</p>
+          Success: <%= campaign.success %>%</p>
         <p>
         <a href="<%= stats_reports_url(id: campaign.id) %>" class="btn btn-primary btn-xs" role="button">Reports</a> 
         <a href="<%= campaign_url(campaign.id) %>" class="btn btn-default btn-xs" role="button">Manage</a>
