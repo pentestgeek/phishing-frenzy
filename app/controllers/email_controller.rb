@@ -17,6 +17,8 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign test email queued for preview"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
       rescue => e
         flash[:error] = "Template Issue: #{e}"
       end
@@ -24,6 +26,8 @@ class EmailController < ApplicationController
       begin
         PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, PREVIEW)
         flash[:notice] = "Campaign test email available for preview"
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
       rescue => e
         flash[:error] = "Template Issue: #{e}"
       end
@@ -40,15 +44,19 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign test email queued for test"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
       rescue => e
-        flash[:error] = "Template Issue: #{e}"
+        flash[:error] = "Generic Template Issue: #{e}"
       end
     else
       begin
         PhishingFrenzyMailer.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, ACTIVE)
         flash[:notice] = "Campaign test email sent"
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
       rescue => e
-        flash[:error] = "Template Issue: #{e}"
+        flash[:error] = "Generic Template Issue: #{e}"
       end
     end
     redirect_to :back
@@ -68,8 +76,10 @@ class EmailController < ApplicationController
         flash[:notice] = "Campaign blast launched"
       rescue Redis::CannotConnectError => e
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
       rescue => e
-        flash[:error] = "Template Issue: #{e}"
+        flash[:error] = "Generic Template Issue: #{e}"
       end
     else
       begin
@@ -78,11 +88,14 @@ class EmailController < ApplicationController
           target.update_attribute(:sent, true)
         end
         flash[:notice] = "Campaign blast launched"
-      rescue::NoMethodError => e
-        flash[:error] = "Template Issue: #{e}"
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
+      rescue => e
+        flash[:error] = "Generic Template Issue: #{e}"
       end
     end
     redirect_to :back
 
   end
+
 end

@@ -14,7 +14,6 @@
       <%= link_to "Admins awaiting approval", :action => "list", :approved => "false" %>
   <% end %>
 
-
   <div><%= pluralize(@admins.size, 'admin') %> found</div>
   <table class="table table-condensed table-hover">
     <thead>
@@ -28,7 +27,7 @@
     <tbody>
     <% @admins.each do |admin| %>
       <tr>
-        <td><%= image_tag('administrator.png', :size => '35x35') %></td>
+        <td><%= image_tag('administrator.png', size: '35x35') %></td>
         <td><%= admin.name %></td>
         <td><%= admin.username %></td>
         <td class="actions">
@@ -38,7 +37,7 @@
               <%= link_to "Approve", approve_admin_path(admin), method: :post, class: 'btn btn-default btn-xs' %>
           <% end %>
           <%=  link_to "Logins", logins_admin_path(admin), class: 'btn btn-default btn-xs' %>
-          <%= link_to "Delete", admin_path(admin), method: :delete, confirm: 'Are you sure you want to permanently delete this admin?', class: 'btn btn-default btn-xs' %>
+          <%= link_to "Delete", admin_path(admin), method: :delete, data: {confirm: 'Are you sure you want to permanently delete this admin?'}, class: 'btn btn-default btn-xs' %>
         </td>
       </tr>
     <% end %>

@@ -53,7 +53,8 @@ class CampaignsController < ApplicationController
 	def update
 		# ensure we have write access to sites-enabled
 		unless File.writable?(GlobalSettings.first.sites_enabled_path)
-			redirect_to campaign_path, notice: "File Permission Issue: chmod #{GlobalSettings.first.sites_enabled_path}"
+			flash[:warning] = "File Permission Issue: chmod -R 755 #{GlobalSettings.first.sites_enabled_path}"
+			redirect_to campaign_path
 			return
 		end
 

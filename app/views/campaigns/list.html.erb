@@ -45,9 +45,9 @@
                 title: 'Campaign Options') %>
           <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe,
                 campaign_path(campaign), method: :delete,
-                confirm: 'Are you sure you want to permanently delete this campaign?', rel: 'tooltip',
+                data: { confirm: 'Are you sure you want to permanently delete this campaign?', placement: 'bottom'}, rel: 'tooltip',
                 class: 'btn btn-danger btn-xs',
-                data: {placement: 'bottom'}, title: 'Delete Campaign' %>
+                title: 'Delete Campaign' %>
         </div>
       </td>
     </tr>

@@ -16,8 +16,7 @@
           <span class="glyphicon glyphicon-question-sign" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
         </div>
         <div class="col-xs-8">
-          <%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] },
-                @campaign.template_id),{} , {class: 'form-control'}) %>
+          <%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] }, @campaign.template_id),{}, class: 'form-control') %>
         </div>
       </div>
     </div>
