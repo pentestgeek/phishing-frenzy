@@ -40,20 +40,20 @@ $( document ).ready(function() {
   function is_stuff_checked() {
     if ($("#campaign_campaign_settings_attributes_use_beef").is(':checked')) {
       // enable beef_url form
-      $("#campaign_campaign_settings_attributes_beef_url").prop('disabled', false);
+      $("#beef-url").show( 1500 );
     }
     else {
       // disable beef_url form
-      $("#campaign_campaign_settings_attributes_beef_url").prop('disabled', true);
+      $("#beef-url").hide( 1000 );
     }
 
     if ($("#campaign_campaign_settings_attributes_ssl").is(':checked')) {
       // display ssl form
-      $("[id=ssl-tr]").css("display", "table-row");
+      $("[id=ssl-row]").show( 1500 );
     }
     else {
       // hide ssl form
-      $("[id=ssl-tr]").css("display", "none");
+      $("[id=ssl-row]").hide( 1000 );
     }
   }
 

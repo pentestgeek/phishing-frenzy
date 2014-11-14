@@ -8,49 +8,93 @@
   </div>
   <div id="collapseFive" class="panel-collapse collapse">
     <div class="panel-body">
-      <table class='table borderless' summary="Campaign Settings">
-        <%= f.fields_for :campaign_settings, @campaign.campaign_settings do |ff| %>
-        <tr>
-          <th>Track User Clicks?</th>
-          <td>
-            <span class="ui-icon ui-icon-help" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span>
-          </td>
-          <td><%= ff.check_box(:track_uniq_visitors) %></td>
-        </tr>
-        <tr>
-          <th>Use BeeF?</th>
-          <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
-          <td><%= ff.check_box(:use_beef) %></td>
-        </tr>
-        <tr>
-          <th>BeeF Hook URL:</th>
-          <td><span class="ui-icon ui-icon-help" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span></td>
-          <td><%= ff.text_field(:beef_url, class: 'form-control') %></td>
-        </tr>
-        <tr>
-          <th>SMTP Sending Delay:</th>
-          <td><span class="ui-icon ui-icon-help" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email. Note this will not work if you are configured to send emails in the background with sidekiq.'></span></td>
-          <td><%= ff.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %></td>
-        </tr>
-        <tr>
-          <th>Use SSL?</th>
-          <td><span class="ui-icon ui-icon-help" title='Run your phishing website on SSL will require you already have valid signed certificates available for upload'></span></td>
-          <td><%= ff.check_box(:ssl) %></td>
-        </tr>
-        <tr id="ssl-tr" style="display:none;">
-          <th>SSL Files</th>
-          <td><span class="ui-icon ui-icon-help" title='Upload SSL files and assign proper functionto run HTTPS'></span></td>
-          <td></td>
-        </tr>
-        <%= f.fields_for :ssl, @campaign.ssl do |ff| %>
-        <tr id="ssl-tr" style="display:none;">
-          <td><%= ff.object[:filename] if ff.object[:filename].present? %></td>
-          <td><%= ff.file_field(:filename, class: 'form-control') %></td>
-          <td><%= ff.select(:function, %w(SSLCertificateFile SSLCertificateKeyFile SSLCertificateChainFile), {}, {class: "form-control"}) %></td>
-        </tr>
-        <% end %>
-        <% end %>
-      </table>
+      <%= f.fields_for :campaign_settings, @campaign.campaign_settings do |ff| %>
+      <div class="row">
+        <div class="col-xs-3">
+          <p>SMTP Sending Delay:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email. Note this will not work if you are configured to send emails in the background with sidekiq.'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %></td>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Track User Clicks?</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='Track User Clicks will append a unique identifier to the end of the phishing URL so each target that visits the website can be properly identified'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.check_box(:track_uniq_visitors) %>
+        </div>
+      </div>
+
+    <div class="row top-buffer">
+      <div class="col-xs-3">
+        <p>Use BeeF?</p>
+      </div>
+      <div class="col-xs-1">
+        <span class="glyphicon glyphicon-question-sign" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span>
+      </div>
+      <div class="col-xs-8">
+        <%= ff.check_box(:use_beef) %>
+      </div>
     </div>
+
+    <div id="beef-url" class="row top-buffer">
+      <div class="col-xs-3">
+        <p>BeeF Hook URL:</p>
+      </div>
+      <div class="col-xs-1">
+        <span class="glyphicon glyphicon-question-sign" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span>
+      </div>
+      <div class="col-xs-8">
+        <%= ff.text_field(:beef_url, class: 'form-control') %></td>
+      </div>
+    </div>
+
+    <div class="row top-buffer">
+      <div class="col-xs-3">
+          <p>Use SSL?</p>
+      </div>
+      <div class="col-xs-1">
+        <span class="glyphicon glyphicon-question-sign" title='Run your phishing website on SSL will require you already have valid signed certificates available for upload'></span>
+      </div>
+      <div class="col-xs-8">
+        <%= ff.check_box(:ssl) %>
+      </div>
+    </div>
+
+    <div id="ssl-row" class="row top-buffer">
+      <div class="col-xs-3">
+        <p>SSL Files</p>
+      </div>
+      <div class="col-xs-1">
+        <span class="glyphicon glyphicon-question-sign" title='Upload SSL files and assign proper functionto run HTTPS'></span>
+      </div>
+      <div class="col-xs-8">
+
+      </div>
+    </div>
+
+    <%= f.fields_for :ssl, @campaign.ssl do |ff| %>
+    <div id="ssl-row" class="row top-buffer">
+      <div class="col-xs-4">
+       <i><%= ff.object[:filename] if ff.object[:filename].present? %></i>
+      </div>
+      <div class="col-xs-4">
+        <%= ff.file_field(:filename, class: 'form-control') %>
+      </div>
+      <div class="col-xs-4">
+        <%= ff.select(:function, %w(SSLCertificateFile SSLCertificateKeyFile SSLCertificateChainFile), {}, {class: "form-control"}) %>
+      </div>
+    </div>
+    <% end %>
+
+    <% end %>
   </div>
 </div>
