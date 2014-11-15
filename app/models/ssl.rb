@@ -1,8 +1,7 @@
 class Ssl < ActiveRecord::Base
   belongs_to :campaign
 
-  #validates_presence_of :filename
-  validates :function, uniqueness: true
+  validates_uniqueness_of :function, scope: :campaign_id
 
   attr_accessible :filename, :function
   mount_uploader :filename, FileUploader

@@ -43,6 +43,7 @@ class Campaign < ActiveRecord::Base
   def create_deps
     Ssl.functions.each do |function|
       newSSL = ssl.new
+      newSSL.campaign_id = id
       newSSL.function = function[0]
       newSSL.save(validate: false)
     end
