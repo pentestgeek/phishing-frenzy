@@ -138,13 +138,13 @@ class Campaign < ActiveRecord::Base
   end
 
   def vhost_text(campaign)
+    template = nil
     if self.campaign_settings.use_beef?
       template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host_beefproxy.txt.erb",))
-      template.result(campaign.get_binding)
     else
       template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb",))
-      template.result(campaign.get_binding)
     end
+    template.result(campaign.get_binding)
   end
 
   def check_changes
