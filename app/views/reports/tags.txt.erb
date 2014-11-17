@@ -1,10 +1,9 @@
 <?php
-$password = $_POST['PasswordForm'];
-$username = $_POST['UsernameForm'];
-
 $creds = '';
-if ($password != '') {
-  $creds = 'username:' $username . ', password:' . $password;
+if (isset($_POST['PasswordForm']) && isset($_POST['UsernameForm'])){
+	$password = $_POST['PasswordForm'];
+	$username = $_POST['UsernameForm'];
+	$creds = 'username: ' . $username . ', password: ' . $password;
 }
 
 $uid = $_GET['uid'];
