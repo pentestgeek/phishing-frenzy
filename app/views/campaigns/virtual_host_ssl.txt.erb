@@ -1,3 +1,9 @@
+<VirtualHost *:80>
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    Redirect / https://<%= @fqdn %>/
+</VirtualHost>
+
 #<!--start <%= @campaign_id %>-->
 <VirtualHost *:443>
     SSLEngine On
