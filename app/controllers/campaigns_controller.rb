@@ -51,20 +51,7 @@ class CampaignsController < ApplicationController
 	end
 
 	def update
-		# ensure we have write access to sites-enabled
-		unless File.writable?(GlobalSettings.first.sites_enabled_path)
-			flash[:warning] = "File Permission Issue: chmod -R 755 #{GlobalSettings.first.sites_enabled_path}"
-			redirect_to campaign_path
-			return
-		end
-
 		@campaign = Campaign.find(params[:id])
-		#errors = @campaign.update_deps(params).messages.values.join(', ')
-		#if errors.present?
-		#	redirect_to @campaign, notice: "Error: #{errors}"
-		#	return
-		#end
-
 		if @campaign.update_attributes(params[:campaign])
 			redirect_to @campaign, notice: "Campaign Updated"
 		else
