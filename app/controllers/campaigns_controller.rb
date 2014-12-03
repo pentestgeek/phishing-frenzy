@@ -59,11 +59,11 @@ class CampaignsController < ApplicationController
 		end
 
 		@campaign = Campaign.find(params[:id])
-		errors = @campaign.update_deps(params).messages.values.join(', ')
-		if errors.present?
-			redirect_to @campaign, notice: "Error: #{errors}"
-			return
-		end
+		#errors = @campaign.update_deps(params).messages.values.join(', ')
+		#if errors.present?
+		#	redirect_to @campaign, notice: "Error: #{errors}"
+		#	return
+		#end
 
 		if @campaign.update_attributes(params[:campaign])
 			redirect_to @campaign, notice: "Campaign Updated"

@@ -1,8 +1,8 @@
 $( document ).ready(function() {
   // enable dataTable on campaign#list
-  $('#campaigns').dataTable( {
-  "aoColumnDefs": [ { 'bSortable': false, "aTargets": [ 0, 5 ] } ],
-  "iDisplayLength": 25
+  $('#campaigns').dataTable({
+    "aoColumnDefs": [ { 'bSortable': false, "aTargets": [ 0, 5 ] } ],
+    "iDisplayLength": 25
   });
 
   // prefill SMTP settings on pre-populate dropdown change

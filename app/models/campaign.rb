@@ -26,6 +26,7 @@ class Campaign < ActiveRecord::Base
   scope :launched, -> { where(email_sent: true) }
 
   before_save :parse_email_addresses
+  before_validation :active_deps, :if => :active_changed?
   after_update :devops, :if => :active_changed?
   after_destroy :cleanup_apache
   after_create :create_deps
@@ -47,13 +48,6 @@ class Campaign < ActiveRecord::Base
       newSSL.function = function[0]
       newSSL.save(validate: false)
     end
-  end
-
-  def update_deps(params)
-    if params[:campaign][:active] == "1"
-      errors.add(:fqdn, "FQDN cannot be nil when activating") unless campaign_settings.fqdn.present?
-    end
-    return errors
   end
 
   def clicks
@@ -172,6 +166,25 @@ class Campaign < ActiveRecord::Base
         redirect_to campaign_path(self.id), notice: 'FQDN cannot be blank before going active'
         return
       end
+    end
+  end
+
+  def active_deps
+    # ensure we have a FQDN before going active
+    if active.eql? true
+      errors.add(:fqdn, "cannot be nil when making campaign active") unless campaign_settings.fqdn.present?
+
+      # ensure we have write access to sites-enabled   
+      unless File.writable?(GlobalSettings.first.sites_enabled_path)
+        errors.add(:apache, "File Permission Issue: chmod -R 755 and chown www-data:www-data #{GlobalSettings.first.sites_enabled_path}")
+      end
+    end
+
+    # check ssl deps if enabled and going active
+    if campaign_settings.ssl and active.eql? true
+      # validate we have certificate files
+      ssl_status = self.ssl.map {|m| m.filename.present?}
+      errors.add(:active, "process needs SSL certificate files uploaded for HTTPS") if ssl_status.include?(false)
     end
   end
 
