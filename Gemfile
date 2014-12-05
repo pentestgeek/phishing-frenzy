@@ -108,3 +108,6 @@ gem 'axlsx'
 
 # code syntax highlighter
 gem 'codemirror-rails'
+
+# ruby code style checker
+gem 'rubocop'
