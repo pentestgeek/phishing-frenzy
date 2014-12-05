@@ -20,6 +20,7 @@ class SystemMonitor
   # determine if BeeF is running
   def self.beef
     beef_output = `ps aux | grep beef | grep -v color`
+    #TODO anti: fix this, also add RESTful API auth via credentials, then store the api token in the DB and add it to JS
     beef_output =~ /beef/
   end
 

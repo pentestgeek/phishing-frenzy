@@ -28,4 +28,5 @@ $( document ).ready(function() {
   $('#launched-campains').dataTable({
     "iDisplayLength": 25
   });
+
 });

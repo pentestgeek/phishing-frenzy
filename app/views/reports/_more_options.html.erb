@@ -46,6 +46,11 @@
                         apache_logs_reports_path(id: params[:id]) %>
           </li>
           <li class="list-group-item">
+            <span class="glyphicon glyphicon-paperclip"></span>
+            <%= link_to "View BeEF's Hooked Browsers",
+                        hooked_browsers_reports_path(id: params[:id]) %>
+          </li>
+          <li class="list-group-item">
             <span class="glyphicon glyphicon-remove"></span>
             <%= link_to "Clear Campaign Statistics", 
                         clear_reports_path(id: params[:id]), method: :delete, 

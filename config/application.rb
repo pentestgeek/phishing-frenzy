@@ -6,7 +6,7 @@ Bundler.require(:default, Rails.env)
 
 module PhishingFramework
   # Default website for reports stuff, must change to callback.
-  SITE_URL = "http://phishingfrenzy.local"
+  SITE_URL = "http://phishingfrenzy.anti.local"
 
 
   class Application < Rails::Application

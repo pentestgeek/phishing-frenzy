@@ -5,7 +5,7 @@ class Victim < ActiveRecord::Base
 	validates_format_of :email_address, :with => /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i
 	before_create :default_values
 
-	attr_accessible :email_address, :uid, :campaign_id, :firstname, :lastname
+	attr_accessible :email_address, :uid, :campaign_id, :firstname, :lastname, :hb_id
 
 	def default_values
 		self.uid = (0...8).map { (65 + rand(26)).chr }.join 	
