@@ -1,6 +1,6 @@
-class AddHookedBrowsersAndRelations < ActiveRecord::Migration
+class AddHookedBrowserAndRelations < ActiveRecord::Migration
   def change
-    create_table :hooked_browsers do |t|
+    create_table :hooked_browser do |t|
 
       #:ip, :type, :version, :os, :platform, :language, :plugins, :city, :country
       t.integer "victim_id"
@@ -17,6 +17,6 @@ class AddHookedBrowsersAndRelations < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index("hooked_browsers", "victim_id")
+    add_index("hooked_browser", "victim_id")
   end
 end
