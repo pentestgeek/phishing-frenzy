@@ -135,7 +135,7 @@ class ReportsController < ApplicationController
         store_hooked_browsers hb
       end
     rescue => e
-      flash[:warning] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
+      flash.now[:warning] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
     end
 
   end

@@ -41,10 +41,12 @@ $( document ).ready(function() {
     if ($("#campaign_campaign_settings_attributes_use_beef").is(':checked')) {
       // enable beef_url form
       $("#beef-url").show( 1500 );
+      $("#beef-apikey").show( 1500 );
     }
     else {
       // disable beef_url form
       $("#beef-url").hide( 1000 );
+      $("#beef-apikey").hide( 1500 );
     }
 
     if ($("#campaign_campaign_settings_attributes_ssl").is(':checked')) {
