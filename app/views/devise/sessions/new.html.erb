@@ -1,35 +1,36 @@
 <% @page_title = "Sign In" %>
 
 <div class='page-header'>
-	<h2>Sign in</h2>
+  <h2>Sign in</h2>
 </div>
 
 <div class="col-xs-6 col-sm-4">
-	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-		<div>
-			<%= f.label :username %><br />
-			<%= f.text_field :username, autofocus: true,
-							autocomplete: "off",
-							required: true, class: "form-control" %></div>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+    <div>
+      <%= f.label :username %><br />
+      <%= f.text_field :username, autofocus: true,
+              autocomplete: "off",
+              required: true,
+              required: true, class: "form-control" %></div>
 
-		<div>
-			<%= f.label :password %><br />
-			<%= f.password_field :password,
-							required: true,
-							autocomplete: "off",
-							class: "form-control" %>
-		</div>
+    <div>
+      <%= f.label :password %><br />
+      <%= f.password_field :password,
+              required: true,
+              autocomplete: "off",
+              class: "form-control" %>
+    </div>
 
-		<% if devise_mapping.rememberable? -%>
-		<p class='form-inline '>
-			<%= f.check_box :remember_me %> <%= f.label :remember_me %>
-		</p>
-		<% end -%>
+    <% if devise_mapping.rememberable? -%>
+    <p class='form-inline '>
+      <%= f.check_box :remember_me %> <%= f.label :remember_me %>
+    </p>
+    <% end -%>
 
-		<p>
-			<%= render "devise/shared/links" %>
-		</p>
+    <p>
+      <%= render "devise/shared/links" %>
+    </p>
 
-		<div><%= f.submit "Sign in", class: 'btn btn-primary' %></div>
-	<% end %>
+    <div><%= f.submit "Sign in", class: 'btn btn-primary' %></div>
+  <% end %>
 </div>

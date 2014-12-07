@@ -1,11 +1,14 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  
+  before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_admin!
   before_filter :system_status
 
   protected
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username) }
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :name, :email, :password, :password_confirmation) }
   end
 
   def system_status
