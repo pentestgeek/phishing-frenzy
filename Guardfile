@@ -43,18 +43,13 @@ guard :rspec, cmd: "bundle exec rspec" do
 
   watch(rails.app) { |m| rspec.spec.(m[1]) }
   watch(rails.views_n_layouts) { |m| rspec.spec.("#{m[1]}#{m[2]}") }
-  watch(rails.controllers) do |m|
-    [
-      rspec.spec.("routing/#{m[1]}_routing"),
-      rspec.spec.("controllers/#{m[1]}_controller"),
-      rspec.spec.("acceptance/#{m[1]}")
-    ]
-  end
 
   watch(rails.spec_support)    { rspec.spec_dir }
   watch(rails.factories)       { rspec.spec_dir }
   watch(rails.spec_helper)     { rspec.spec_dir }
-  watch(rails.routes)          { "spec/routing" }
+  watch(rails.routes)          { rspec.spec_dir }
+  watch(rails.controllers)     { rspec.spec_dir }
+  watch(rails.views)           { rspec.spec_dir }
   watch(rails.app_controller)  { "spec/controllers" }
 
   # Capybara features specs

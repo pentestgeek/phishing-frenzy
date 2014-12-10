@@ -2,6 +2,7 @@ PhishingFramework::Application.routes.draw do
 
 	devise_for :admins
 
+
 	# image tracking routes.
 	get '/reports/image/:uid.png' => 'reports#image'
 
@@ -82,14 +83,14 @@ PhishingFramework::Application.routes.draw do
 		end
 	end
 
-  resources :clones do
-  	member do
-  		get 'download'
-  		get 'preview'
-  	end
-  end
+	resources :clones do
+		member do
+			get 'download'
+			get 'preview'
+		end
+	end
 
-  resources :tools
+	resources :tools
 
 	root :to => 'campaigns#home'
 

@@ -1,7 +1,7 @@
 module ControllerMacros
   def login_admin
     before(:each) do
-      login_as build(:admin) # Using factory girl as an example
+      login_as create(:admin)
     end
   end
 end

@@ -7,7 +7,7 @@ class AdminController < ApplicationController
 
 	def list
 		if params[:approved] == "false"
-			@admins = Admin.find_all_by_approved(false)
+			@admins = Admin.where(approved: false)
 		else
 			@admins = Admin.all
 		end

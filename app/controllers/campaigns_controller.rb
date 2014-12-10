@@ -34,13 +34,7 @@ class CampaignsController < ApplicationController
 	def create 
 		@campaign = Campaign.new(params[:campaign])
 		if @campaign.save 
-			@campaign_settings = CampaignSettings.new(:campaign_id => @campaign.id, :fqdn => '')
-			@email_settings = EmailSettings.new(:campaign_id => @campaign.id)
-			if @campaign_settings.save and @email_settings.save
-				redirect_to @campaign, notice: "Campaign Created"
-			else
-				render('new')
-			end
+			redirect_to @campaign, notice: "Campaign Created"
 		else
 			render('new')
 		end

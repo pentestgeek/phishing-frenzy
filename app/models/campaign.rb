@@ -48,6 +48,10 @@ class Campaign < ActiveRecord::Base
       newSSL.function = function[0]
       newSSL.save(validate: false)
     end
+
+    # create campaign settings and email settings for campaign
+    CampaignSettings.create(campaign_id: id, fqdn: '')
+    EmailSettings.create(campaign_id: id)
   end
 
   def clicks

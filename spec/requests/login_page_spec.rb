@@ -3,16 +3,15 @@ require 'rails_helper'
 RSpec.describe "LoginPage", :type => :request do
 
   describe "GET /admin/sign_in" do
-    it "login success with valid credentials" do
+    it "login success with default credentials" do
+      admin = create(:admin)
       visit new_admin_session_path
-      fill_in('Username', with: "admin")
-      fill_in('Password', with: "Funt1me!")
+      fill_in('Username', with: admin.username)
+      fill_in('Password', with: admin.password)
       click_on("Sign in")
       expect(page).to have_content("Signed in successfully")
     end
-  end
 
-  describe "GET /admin/sign_in" do
     it "login failure with invalid credentials" do
       visit new_admin_session_path
       fill_in('Username', with: "admin")
@@ -20,9 +19,7 @@ RSpec.describe "LoginPage", :type => :request do
       click_on("Sign in")
       expect(page).to have_content("Invalid email or password")
     end
-  end
 
-  describe "GET /admin/sign_in" do
     it "sign up with valid account information for new account" do
       visit new_admin_session_path
       click_on("Sign up")
@@ -34,9 +31,7 @@ RSpec.describe "LoginPage", :type => :request do
       click_on("Sign up")
       expect(page).to have_content("You need to sign in or sign up before continuing.")
     end
-  end
 
-  describe "GET /admin/sign_in" do
     it "sign up with invalid account information for new account" do
       visit new_admin_session_path
       click_on("Sign up")
@@ -45,38 +40,32 @@ RSpec.describe "LoginPage", :type => :request do
       click_on("Sign up")
       expect(page).to have_content("errors")
     end
-  end
 
-  describe "GET /admin/sign_in" do
     it "sign in with an account registered but not approved" do
-      # create Johnny record
-      Admin.create(username: "johnny", password: "SecretPasswd321!", 
-                      password_confirmation: "SecretPasswd321!",
-                      email: "jsmith@phishingfrenzy.local",
-                      name: "John Smith")
-
+      admin = create(:admin, :unapproved)
       visit new_admin_session_path
-      fill_in("Username", with: "johnny")
-      fill_in("Password", with: "SecretPasswd321!")
+      fill_in("Username", with: admin.username)
+      fill_in("Password", with: admin.password)
       click_on("Sign in")
       expect(page).to have_content("Your account has not been approved by your administrator yet.")
     end
-  end
 
-  describe "GET /admin/sign_in" do
     it "sign in with an account registered and approved to login" do
-      # create Johnny record
-      Admin.create(username: "johnny", password: "SecretPasswd321!", 
-                      password_confirmation: "SecretPasswd321!",
-                      email: "jsmith@phishingfrenzy.local",
-                      name: "John Smith",
-                      approved: true)
-
+      admin = create(:admin)
       visit new_admin_session_path
-      fill_in("Username", with: "johnny")
-      fill_in("Password", with: "SecretPasswd321!")
+      fill_in("Username", with: admin.username)
+      fill_in("Password", with: admin.password)
       click_on("Sign in")
       expect(page).to have_content("Signed in successfully.")
+    end
+
+    it "sign in with an account registered and approved but wrong password" do
+      admin = create(:admin)
+      visit new_admin_session_path
+      fill_in("Username", with: admin.username)
+      fill_in("Password", with: "wrongpasswd!")
+      click_on("Sign in")
+      expect(page).to have_content("Invalid email or password.")
     end
   end
 
