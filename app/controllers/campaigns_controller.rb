@@ -14,7 +14,7 @@ class CampaignsController < ApplicationController
 
 	def home
 		# grab only the launched campaigns
-		@campaigns = Campaign.launched.order("created_at").limit(50)
+		@campaigns = Campaign.launched.order("created_at DESC").limit(50)
 	end
 
 	def show
