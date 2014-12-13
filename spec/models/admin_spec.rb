@@ -10,7 +10,7 @@ RSpec.describe Admin, :type => :model do
   end
 
   it "is invalid without name" do
-  expect(build(:admin, name: nil)).to_not be_valid
+    expect(build(:admin, name: nil)).to_not be_valid
   end
 
   it "is invalid without email" do
@@ -32,4 +32,5 @@ RSpec.describe Admin, :type => :model do
   it "is invalid with non alpha numeric username format" do
     expect(build(:admin, username: '!@#{$%^&*}')).to_not be_valid
   end
+  
 end

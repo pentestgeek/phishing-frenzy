@@ -4,9 +4,9 @@ FactoryGirl.define do
   end
 
   factory :admin do
-    sequence(:username) {|n| "Username#{n}" }
-    sequence(:email) {|n| "username#{n}@phishingfrenzy.local" }
-    name "Username Name"
+    username { Faker::Internet.user_name }
+    email { Faker::Internet.email }
+    name { Faker::Name.name }
     password "SecretPasswd123!"
     password_confirmation "SecretPasswd123!"
     approved true
