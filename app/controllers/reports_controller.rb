@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
   end
 
   def list
-    @campaigns = Campaign.launched.order(:created_at)
+    @campaigns = Campaign.launched.order(created_at: :desc)
   end
 
   def image

@@ -290,9 +290,8 @@ class Campaign < ActiveRecord::Base
   end
 
   def reload_apache
-    # reload apache
     restart_apache = GlobalSettings.first.command_apache_restart
-    Rails.logger.info system(restart_apache)
+    system("#{restart_apache} > /dev/null")
   end
 
 end

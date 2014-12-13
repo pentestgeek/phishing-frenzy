@@ -65,6 +65,10 @@ class EmailController < ApplicationController
   def launch
     @campaign = Campaign.find(params[:id])
     @campaign.update_attributes(active: true, email_sent: true)
+    if @campaign.errors.present?
+      render template: "/campaigns/show"
+      return false
+    end
     @blast = @campaign.blasts.create(test: false)
     victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
     if GlobalSettings.asynchronous?

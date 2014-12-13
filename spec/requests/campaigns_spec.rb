@@ -171,6 +171,7 @@ RSpec.describe "Campaigns", :type => :request do
       campaign = create(:campaign)
       visit campaign_path(campaign)
       select("Intel Password Checker", from: "campaign_template_id")
+      fill_in("campaign_campaign_settings_attributes_fqdn", with: Faker::Internet.domain_name)
       click_on("Save Settings")
       click_on("Launch")
       expect(page).to have_content("Campaign blast launched")

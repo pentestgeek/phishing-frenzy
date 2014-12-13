@@ -4,10 +4,10 @@
 
 <div class="campaign settings"> 
   <%= nested_form_for(@campaign, :html => {:multipart => true}) do |f| %>
-    <%= render partial: "options", locals: {f: f} %>
+    <%= render partial: "campaigns/options", locals: {f: f} %>
 
-    <%= render partial: "buttons", locals: {campaign: @campaign} %>
+    <%= render partial: "campaigns/buttons", locals: {campaign: @campaign} %>
   <% end %>
 
-  <%= render partial: 'blasts', locals: { campaign: @campaign } %>
+  <%= render partial: 'campaigns/blasts', locals: { campaign: @campaign } %>
 </div>
