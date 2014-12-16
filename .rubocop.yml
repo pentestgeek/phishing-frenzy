@@ -1,0 +1,14 @@
+inherit_from: .rubocop_todo.yml
+AllCops:
+  Exclude:
+    - db/**/*
+    - vendor/**/*
+    - node_modules/**/*
+ClassLength:
+  Enabled: false
+LineLength:
+  Enabled: false
+MethodLength:
+  Enabled: false
+Documentation:
+  Enabled: false
