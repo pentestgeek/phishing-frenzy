@@ -3,51 +3,11 @@
 <h2>Campaign Options - <%= @campaign.name %></h2>
 
 <div class="campaign settings"> 
-  <%= form_for(:campaign, :url => {:action => 'update_settings', :id => @campaign.id}) do |f| %>
-    <%= render(:partial => "options", :locals => {:f => f}) %>
-    <div id="show-campaign-buttons">
-      <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
-      <%= link_to("Preview", preview_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
-      <%= link_to("Test", test_email_path(@campaign.id), class: 'btn btn-default', :method => :post) %>
-      <%= link_to("Launch", launch_path(@campaign.id), class: 'btn btn-default', :confirm => 'Are you sure you want to launch the phishing campaign?', :method => :post) %>
-      <%= link_to("Edit Email", edit_template_path(@campaign.template), class: 'btn btn-default') unless @template.nil? %>
-    </div>
-  <% end %>
-</div>
+  <%= nested_form_for(@campaign, :html => {:multipart => true}) do |f| %>
+    <%= render partial: "campaigns/options", locals: {f: f} %>
 
-<br>
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#recentBlasts">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#recentBlasts">
-          Recent Blasts
-        </a>
-      </h4>
-    </div>
-    <div id="recentBlasts" class="panel-collapse collapse">
-      <div class="panel-body">
-        <table class="table" summary="Recent email blasts">
-          <thead>
-            <tr>
-              <th>Started</th>
-              <th>Test</th>
-              <th>Targets</th>
-              <th>SMTP Failures</th>
-            </tr>
-          </thead>
-          <tbody>
-          <% @blasts.each do |blast| %>
-            <tr>
-              <td><%= link_to "#{time_ago_in_words(blast.created_at)} ago", blast %></td>
-              <td><%= blast.test? %></td>
-              <td><%= blast.baits.size %></td>
-              <td><%= blast.smtp_failures %></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div><!-- panel body close -->
-    </div><!-- recentBlasts panel close -->
-  </div><!-- panel close -->
-</div><!-- panel-group close -->
+    <%= render partial: "campaigns/buttons", locals: {campaign: @campaign} %>
+  <% end %>
+
+  <%= render partial: 'campaigns/blasts', locals: { campaign: @campaign } %>
+</div>

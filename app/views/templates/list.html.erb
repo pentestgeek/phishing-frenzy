@@ -39,15 +39,14 @@
               class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Show Template') %>
         <%= link_to("<span class='glyphicon glyphicon-retweet'></span>".html_safe,
               {:action => 'copy', :id => template.id}, data: {placement: 'bottom'},
-              class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Copy Template') %>
+              class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Copy Template', id: 'copy') %>
         <%= link_to("<span class='glyphicon glyphicon-download-alt'></span>".html_safe,
               {:action => 'backup', :id => template.id}, data: {placement: 'bottom'},
               class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Backup Template') %>
         <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe, 
               template_path(template), method: :delete,
-              confirm: 'Are you sure you want to permanently delete this campaign?',
-              class: 'btn btn-danger btn-xs', rel: 'tooltip',
-              data: {placement: 'bottom'}, title: 'Delete Template' %>
+              class: 'btn btn-danger btn-xs', rel: 'tooltip', id: 'delete',
+              data: {confirm: 'Are you sure you want to permanently delete this campaign?', placement: 'bottom'}, title: 'Delete Template' %>
       </td>
     </tr>
     <% end %>

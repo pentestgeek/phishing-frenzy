@@ -1,0 +1,28 @@
+<VirtualHost *:80>
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    Redirect / https://<%= @fqdn %>/
+</VirtualHost>
+
+#<!--start <%= @campaign_id %>-->
+<VirtualHost *:443>
+    SSLEngine On
+
+    <% if @ssl.find_by_function("SSLCertificateFile").filename.present? %>
+    SSLCertificateFile <%= @ssl.find_by_function("SSLCertificateFile").filename.file.file %>
+    <% end %>
+    <% if @ssl.find_by_function("SSLCertificateKeyFile").filename.present? %>
+    SSLCertificateKeyFile <%= @ssl.find_by_function("SSLCertificateKeyFile").filename.file.file %>
+    <% end %>
+    <% if @ssl.find_by_function("SSLCertificateChainFile").filename.present? %>
+    SSLCertificateChainFile <%= @ssl.find_by_function("SSLCertificateChainFile").filename.file.file %>
+    <% end %>
+
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    DocumentRoot <%= @template_location %>
+    DirectoryIndex <%= @directory_index %>
+    CustomLog     <%= @approot %>/log/www-campaign-<%= @campaign_id %>-access.log combined
+    ErrorLog      <%= @approot %>/log/www-campaign-<%= @campaign_id %>-error.log
+</VirtualHost>
+#<!--end <%= @campaign_id %>-->

@@ -8,17 +8,17 @@
   </div>
   <div id="collapseTwo" class="panel-collapse collapse">
     <div class="panel-body">
-      <table class='table borderless'>
-      <tr>
-        <th>Phishing Scenario</th>
-        <td>
-        <span class="ui-icon ui-icon-help" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
-        </td>
-        <td>
-        <%= f.select(:template_id, options_for_select(@templates.map { |p| [p.name, p.id] }, @campaign.template_id),{} , {class: 'form-control'}) %>
-        </td>
-      </tr>
-      </table>
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Phishing Scenario</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title="Choose the Template to assign to the campaign. If the template is not listed, you must create a new template first"></span>
+        </div>
+        <div class="col-xs-8">
+          <%= f.select(:template_id, ::Template.all.map{|m| [m.name, m.id]},{}, class: 'form-control') %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

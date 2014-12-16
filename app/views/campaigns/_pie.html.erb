@@ -1,9 +1,3 @@
-<style type="text/css">
-  .slice text {
-      font-size: 8pt;
-      font-family: Arial;
-  }   
-</style>
 <script type="text/javascript">
 
 var w = 130,                        //width
@@ -11,8 +5,8 @@ h = 130,                            //height
 r = 55,                            //radius
 color = d3.scale.category20c();     //builtin range of colors
 
-data = [{"label":"clicked", "value": <%= Campaign.clicks(campaign) %>}, 
-        {"label":"no action", "value":<%= Campaign.sent(campaign) - Campaign.clicks(campaign) %>}];
+data = [{"label":"clicked", "value": <%= campaign.clicks %>}, 
+        {"label":"no action", "value":<%= campaign.sent - campaign.clicks %>}];
 
 var vis = d3.select(".pie-<%= campaign.id %>")
     .append("svg:svg")              //create the SVG element inside the <body>

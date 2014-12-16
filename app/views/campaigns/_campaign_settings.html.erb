@@ -8,59 +8,74 @@
   </div>
   <div id="collapseOne" class="panel-collapse collapse">
     <div class="panel-body">
-      <table class='table borderless' summary="Campaign Settings">
-        <tr>
-          <th>Name</th>
-          <td><span class="ui-icon ui-icon-help" title="Insert campaign name"></span></td>
-          <td>
-            <%= f.text_field(:name, 
-                    placeholder: 'Phishing Campaign', 
-                    class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>Description</th>
-          <td><span class="ui-icon ui-icon-help" title="Insert campaign details"></span></td>
-          <td>
+      <div class="row">
+        <div class="col-xs-3">
+          <p>Name</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title="Enter campaign name"></span>
+        </div>
+        <div class="col-xs-8">
+          <%= f.text_field(:name, 
+                  placeholder: 'Phishing Campaign', 
+                  class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Description</p>
+        </div>
+        <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title="Enter campaign details with description"></span>
+        </div>
+        <div class="col-xs-8">
             <%= f.text_field(:description, placeholder: 'Description Info', class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>Active</th>
-          <td>
-            <span class="ui-icon ui-icon-help" title="Making campaign active will enable the phishing website using Apache's virtual host. Ensure a Fully Qualified Domain Name is populated below before going active.">
-            </span>
-          </td>
-          <td><%= f.check_box(:active) %></td>
-        </tr>
-        <tr>
-          <th>Test Target</th>
-          <td>
-            <span class="ui-icon ui-icon-help" title="This is the only email that will be used when you click 'Test Email'.">
-            </span>
-          </td>
-          <td>
-            <%= f.text_field(:test_email, 
-                    placeholder: 'email@phishingfrenzy.local',
-                    class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Targets ( <%= link_to(@campaign.victims.size, victims_campaigns_path(id: @campaign)) %> )
-          </th>
-          <td>
-            <span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form">
-            </span>
-          </td>
-          <td>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Active</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title="Making campaign active will enable the phishing website using Apache's virtual host. Ensure a Fully Qualified Domain Name is populated below before going active."></span>
+        </div>
+        <div class="col-xs-8">
+          <p><%= f.check_box(:active) %></p>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Test Target</p>
+        </div>
+        <div class="col-xs-1">
+           <span class="glyphicon glyphicon-question-sign" title="This is the only email that will be used when you click 'Test Email'."></span>
+        </div>
+        <div class="col-xs-8">
+          <%= f.text_field(:test_email, 
+                  placeholder: 'email@phishingfrenzy.local',
+                  class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Targets ( <%= link_to(@campaign.victims.size,
+                  victims_campaigns_path(id: @campaign)) %> )</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="ui-icon ui-icon-help" title="Insert email addresses in a list or csv form"></span>
+          <span class="glyphicon glyphicon-question-sign" title="Insert email addresses in a list or csv form"></span>
+        </div>
+        <div class="col-xs-8">
           <%= f.text_area(:emails, :size => "31x2",
                   placeholder: 'firstname, lastname, email@phishingfrenzy.local',
                   value: '',
                   class: 'form-control') %>
-          </td>
-        </tr>
-        </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

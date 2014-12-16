@@ -6,23 +6,30 @@ class Campaign < ActiveRecord::Base
   belongs_to :template
   has_one :campaign_settings, dependent: :destroy
   has_one :email_settings, dependent: :destroy
+  has_many :ssl, dependent: :destroy
   has_many :victims, dependent: :destroy
   has_many :blasts, dependent: :destroy
   has_many :statistics
   has_many :smtp_communications
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
+  
+  accepts_nested_attributes_for :email_settings, allow_destroy: true
+  accepts_nested_attributes_for :campaign_settings, allow_destroy: true
+  accepts_nested_attributes_for :ssl, allow_destroy: true#, :reject_if => proc {|attributes| attributes['filename'].blank?}
 
-  # allow mass assignment
-  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email
+  # allow mass asignment
+  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email, :ssl_attributes,:email_sent, :email_settings_attributes, :campaign_settings_attributes
 
   # named scopes
-  scope :active, where(:active => true)
-  scope :launched, where(:email_sent => true)
+  scope :active, -> { where(active: true) }
+  scope :launched, -> { where(email_sent: true) }
 
   before_save :parse_email_addresses
+  before_validation :active_deps, :if => :active_changed?
   after_update :devops, :if => :active_changed?
   after_destroy :cleanup_apache
+  after_create :create_deps
 
   # validate form before saving
   validates :name, :presence => true,
@@ -34,21 +41,34 @@ class Campaign < ActiveRecord::Base
   validates :scope, :numericality => {:greater_than_or_equal_to => 0},
             :length => {:maximum => 4}, :allow_nil => true
 
-  def self.clicks(campaign)
-    campaign.visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
+  def create_deps
+    Ssl.functions.each do |function|
+      newSSL = ssl.new
+      newSSL.campaign_id = id
+      newSSL.function = function[0]
+      newSSL.save(validate: false)
+    end
+
+    # create campaign settings and email settings for campaign
+    CampaignSettings.create(campaign_id: id, fqdn: '')
+    EmailSettings.create(campaign_id: id)
   end
 
-  def self.opened(campaign)
-    campaign.visits.pluck(:victim_id).uniq.size
+  def clicks
+    visits.where('extra is null OR extra not LIKE ?', "%EMAIL%").pluck(:victim_id).uniq.size
   end
 
-  def self.sent(campaign)
-    campaign.victims.where(sent: true).size
+  def opened
+    visits.pluck(:victim_id).uniq.size
   end
 
-  def self.success(campaign)
-    Campaign.sent(campaign) == 0 ? 
-        0 : (Campaign.clicks(campaign).to_f / Campaign.sent(campaign).to_f * 100.0).round(2)
+  def sent
+    victims.where(sent: true).size
+  end
+
+  def success
+    self.sent == 0 ? 
+        0 : (self.clicks.to_f / self.sent.to_f * 100.0).round(2)
   end
 
   def self.logfile(campaign)
@@ -56,6 +76,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def get_binding
+    @ssl = ssl
     @campaign_id = id
     @campaign_settings = campaign_settings
     @fqdn = campaign_settings.fqdn
@@ -137,13 +158,8 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def vhost_text(campaign)
-    template = nil
-    if self.campaign_settings.use_beef?
-      template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host_beefproxy.txt.erb",))
-    else
-      template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/virtual_host.txt.erb",))
-    end
+  def vhost_text(campaign, virtual_host_type)
+    template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/#{virtual_host_type}.txt.erb",))
     template.result(campaign.get_binding)
   end
 
@@ -154,6 +170,25 @@ class Campaign < ActiveRecord::Base
         redirect_to campaign_path(self.id), notice: 'FQDN cannot be blank before going active'
         return
       end
+    end
+  end
+
+  def active_deps
+    # ensure we have a FQDN before going active
+    if active.eql? true
+      errors.add(:fqdn, "cannot be nil when making campaign active") unless campaign_settings.fqdn.present?
+
+      # ensure we have write access to sites-enabled   
+      unless File.writable?(GlobalSettings.first.sites_enabled_path)
+        errors.add(:apache, "File Permission Issue: chmod -R 755 and chown www-data:www-data #{GlobalSettings.first.sites_enabled_path}")
+      end
+    end
+
+    # check ssl deps if enabled and going active
+    if campaign_settings.ssl and active.eql? true
+      # validate we have certificate files
+      ssl_status = self.ssl.map {|m| m.filename.present?}
+      errors.add(:active, "process needs SSL certificate files uploaded for HTTPS") if ssl_status.include?(false)
     end
   end
 
@@ -171,16 +206,11 @@ class Campaign < ActiveRecord::Base
   end
 
   def deploy
-    # add vhost file to sites-enabled
-    File.open(vhost_file, "w") do |f|
-      template = Template.find_by_id(self.template_id)
-      if template.nil?
-        raise 'Template #{self.template_id} not found'
-      else
-        f.write(vhost_text(self))
-      end
-    end
+    # determine if SSL is enabled on campaign
+    virtual_host_type = self.campaign_settings.ssl ? "virtual_host_ssl" : "virtual_host"
 
+    # write vhost config and restart apache
+    write_vhost(virtual_host_type)
     reload_apache
 
     # deploy phishing website files
@@ -207,16 +237,6 @@ class Campaign < ActiveRecord::Base
             logger.error("Error: </body> or </BODY> tags not found. BeEF hook was not added.")
           end
         end
-
-        if self.campaign_settings.track_hits?
-          tracking_code = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-          file = tracking_code.result + file
-          logger.debug("Added hits tracking code to file [#{loc}]")
-        end
-
-        File.open(loc, 'w') do |f|
-          f.write(file)
-        end
       end
       if inflatable?(loc)
         inflate(loc, deployment_directory)
@@ -224,9 +244,21 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def tag_beef
+  def write_vhost(vhost_type)
+    # add vhost file to sites-enabled
+    File.open(vhost_file, "w") do |f|
+      template = Template.find_by_id(self.template_id)
+      if template.nil?
+        raise 'Template #{self.template_id} not found'
+      else
+        f.write(vhost_text(self, vhost_type))
+      end
+    end
+  end
+
+  def tag_beef(tags)
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    beef.result(self.beef_binding(select_beef_url))
+    return beef.result(self.beef_binding(select_beef_url)) + tags.result
   end
 
   def select_beef_url
@@ -242,6 +274,7 @@ class Campaign < ActiveRecord::Base
   def vhost_file
     "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
   end
+
   def inflatable?(file)
     File.extname(file) == '.zip'
   end
@@ -266,7 +299,7 @@ class Campaign < ActiveRecord::Base
   def reload_apache
     # reload apache
     restart_apache = GlobalSettings.first.command_apache_restart
-    Rails.logger.info system(restart_apache)
+    system("#{restart_apache} > /dev/null")
   end
 
 end

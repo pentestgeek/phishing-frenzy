@@ -45,10 +45,10 @@ class StatsSummaryPdf < Prawn::Document
   # display summary stats
   def stats_summary
     text "Campaign Summary", style: :bold
-    text "Emails Sent: #{Campaign.sent(@campaign)}"
-    text "Emails Opened: #{Campaign.opened(@campaign)}"
-    text "Emails Clicked: #{Campaign.clicks(@campaign)}"
-    text "Success: #{Campaign.success(@campaign)} %"
+    text "Emails Sent: #{@campaign.sent}"
+    text "Emails Opened: #{@campaign.opened}"
+    text "Emails Clicked: #{@campaign.clicks}"
+    text "Success: #{@campaign.success} %"
     move_down 20
   end
 

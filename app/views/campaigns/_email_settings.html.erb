@@ -8,67 +8,79 @@
   </div>
   <div id="collapseFour" class="panel-collapse collapse">
     <div class="panel-body">
-      <table class='table borderless' summary="Campaign Settings">
-        <%= fields_for @campaign.email_settings do |es| %>
-          <tr>
-            <th>Subject:</th>
-            <td><span class="ui-icon ui-icon-help" title='Subject used for SMTP and email headers'></span></td>
-            <td>
-              <%= es.text_field(:subject,
-                    placeholder: 'Subject Line',
-                    class: 'form-control') %>
-            </td>
-          </tr>
-          <tr>
-            <th>From:</th>
-            <td><span class="ui-icon ui-icon-help" title='From: used for email headers'></span></td>
-            <td>
-              <%= es.text_field(:from,
-                      placeholder: 'email@phishingfrenzy.local',
-                      class: 'form-control') %>
-            </td>
-          </tr>
-          <tr>
-            <th>Display From:</th>
-            <td>
-              <span class="ui-icon ui-icon-help" title='What you want displayed for the from category within the email headers'>
-              </span>
-            </td>
-            <td>
-              <%= es.text_field(:display_from,
-                      placeholder: 'Phishing Frenzy',
-                      class: 'form-control') %>
-            </td>
-          </tr>
-          <tr>
-            <th>Phishing URL:</th>
-            <td>
-              <span class="ui-icon ui-icon-help" title='Phishing URL that you would like the target to click on. This URL is embeded within the email message before sending'>
-              </span>
-            </td>
-            <td>
-              <%= es.text_field(:phishing_url,
-                      placeholder: 'site.phishingfrenzy.local',
-                      class: 'form-control') %>
-            </td>
-          </tr>
-        <% end %>
+      <%= f.fields_for :email_settings, @campaign.email_settings do |ff| %>
+      <div class="row">
+        <div class="col-xs-3">
+          <p>Subject:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='Subject used for SMTP and email headers'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.text_field(:subject,
+                placeholder: 'Subject Line',
+                class: 'form-control') %>
+        </div>
+      </div>
 
-        <%= fields_for @campaign.campaign_settings do |cs| %>
-          <tr>
-            <th>FQDN:</th>
-            <td>
-              <span class="ui-icon ui-icon-help" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'>
-              </span>
-            </td>
-            <td>
-              <%= cs.text_field(:fqdn,
-                      placeholder: 'site.phishingfrenzy.local',
-                      class: 'form-control') %>
-            </td>
-          </tr>
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>From:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='From: used for email headers'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.text_field(:from,
+                  placeholder: 'email@phishingfrenzy.local',
+                  class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Display From:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='What you want displayed for the from category within the email headers'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.text_field(:display_from,
+                  placeholder: 'Phishing Frenzy',
+                  class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Phishing URL:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='Phishing URL that you would like the target to click on. This URL is embeded within the email message before sending'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.text_field(:phishing_url,
+                  placeholder: 'site.phishingfrenzy.local',
+                  class: 'form-control') %>
+        </div>
+      </div>
+      <% end %>
+
+      <%= f.fields_for :campaign_settings, @campaign.campaign_settings do |ff| %>   
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+            <p>FQDN:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='Fully Qualified Domain Name (FQDN) is required to properly configure virtual hosts with Apache. Ensure that you have properly created DNS records to redirect targets to your phishing website.'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.text_field(:fqdn,
+                  placeholder: 'site.phishingfrenzy.local',
+                  class: 'form-control') %>
+        </div>
         <% end %>
-      </table>
+      </div>
     </div>
   </div>
 </div>

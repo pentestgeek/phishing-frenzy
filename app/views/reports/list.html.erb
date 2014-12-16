@@ -6,10 +6,7 @@
 
 <div><%= pluralize(@campaigns.size, 'campaign') %> launched</div>
 
-<%= paginate @campaigns, :theme => 'twitter-bootstrap-3' %>
-
-<% if @campaigns.size > 0 %>
-<table class="table table-condensed table-hover">
+<table id="launched-campains" class="table table-condensed table-hover">
   <thead>
     <tr>
       <th></th>
@@ -25,15 +22,15 @@
     <tr>
       <td><span class="glyphicon glyphicon-stats"></span></td>      
       <td><%= campaign.name %></td>
-      <td><%= Campaign.sent(campaign) %></td>
-      <td><%= Campaign.clicks(campaign) %></td>
-      <td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
+      <td><%= campaign.sent %></td>
+      <td><%= campaign.clicks %></td>
+      <td><%= campaign.active ? image_tag('green-light.png', size: '11x11') : 
+                image_tag('red-light.png', size: '11x11') %></td>
       <td class="actions">
         <%= link_to("Stats", stats_reports_path(id: campaign.id), 
-              :class => 'btn btn-primary btn-xs') %>
+              class: 'btn btn-primary btn-xs') %>
       </td>
     </tr>
     <% end %>
   </tbody>
 </table>
-<% end %>

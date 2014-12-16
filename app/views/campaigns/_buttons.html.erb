@@ -1,0 +1,19 @@
+<div id="show-campaign-buttons" class="btn-group btn-group-justified">
+  <div class="btn-group" role="group">
+    <%= submit_tag("Save Settings", class: 'btn btn-primary') %>
+  </div>
+  <div class="btn-group" role="group">
+    <%= link_to("Preview", preview_email_path(campaign.id), class: 'btn btn-default', method: :post) %>
+  </div>
+  <div class="btn-group" role="group">
+    <%= link_to("Test", test_email_path(campaign.id), class: 'btn btn-default', method: :post) %>
+  </div>
+  <div class="btn-group" role="group">
+    <%= link_to("Launch", launch_path(campaign.id), class: 'btn btn-default', data: {confirm: 'Are you sure you want to launch the phishing campaign?'}, method: :post) %>
+  </div>
+  <% if campaign.template.present? %>
+  <div class="btn-group" role="group">
+    <%= link_to("Edit Email", edit_template_path(campaign.template), class: 'btn btn-default') %>
+  </div>
+  <% end %>
+</div>

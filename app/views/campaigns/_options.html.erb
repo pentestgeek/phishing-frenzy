@@ -1,14 +1,13 @@
 <%= error_messages_for(@campaign) %>
-<%= error_messages_for(@email_settings) %>
 
 <div class="panel-group" id="accordion">
-  <%= render partial: 'campaign_settings', locals: {f: f} %>
+  <%= render partial: 'campaigns/campaign_settings', locals: {f: f} %>
 
-  <%= render partial: 'template_selection', locals: {f: f} %>
+  <%= render partial: 'campaigns/template_selection', locals: {f: f} %>
 
-  <%= render partial: 'smtp_settings', locals: {f: f} %>
+  <%= render partial: 'campaigns/smtp_settings', locals: {f: f} %>
 
-  <%= render partial: 'email_settings', locals: {f: f} %>
+  <%= render partial: 'campaigns/email_settings', locals: {f: f} %>
 
-  <%= render partial: 'phishing_options', locals: {f: f} %>
+  <%= render partial: 'campaigns/phishing_options', locals: {f: f} %>
 </div>

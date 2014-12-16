@@ -13,11 +13,11 @@ class GlobalSettings < ActiveRecord::Base
   end
 
   def self.apache_status
-    `#{first.command_apache_status}`
+    `#{first.command_apache_status} 2>&1`
   end
 
   def self.apache_vhosts
-    vhosts_output = `#{first.command_apache_vhosts}`
+    vhosts_output = `#{first.command_apache_vhosts} 2>&1`
     if vhosts_output.blank?
       []
     else

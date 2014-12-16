@@ -8,106 +8,150 @@
   </div>
   <div id="collapseThree" class="panel-collapse collapse">
     <div class="panel-body">
-      <table class='table borderless' summary="Campaign Settings">
-      <%= fields_for @campaign.email_settings do |es| %>
-        <tr>
-          <th>Pre-populate:</th>
-          <td>
-          <span class="ui-icon ui-icon-help" title='Pre-populate SMTP and Port settings for commonly used email providers'></span>
-          </td>
-          <td>
-          <select id="smtpPreFill" class="form-control">
-            <option>--Select--</option>
-            <option value="google">Gmail</option>
-            <option value="outlook">Outlook.com</option>
-            <option value="godaddy">GoDaddy</option>
-            <option value="sendgrid">Sendgrid</option>
-          </select>
-          </td>
-        </tr>
-        <tr>
-          <th>SMTP Server:</th>
-          <td><span class="ui-icon ui-icon-help" title='SMTP server used to received emails'></span></td>
-          <td>
-            <%= es.text_field(:smtp_server,
+      <%= f.fields_for :email_settings, @campaign.email_settings do |ff| %>
+        <div class="row">
+          <div class="col-xs-3">
+            <p>Pre-populate:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='Pre-populate SMTP and Port settings for commonly used email providers'></span>
+          </div>
+          <div class="col-xs-8">
+            <select id="smtpPreFill" class="form-control">
+              <option>--Select--</option>
+              <option value="google">Gmail</option>
+              <option value="outlook">Outlook.com</option>
+              <option value="godaddy">GoDaddy</option>
+              <option value="sendgrid">Sendgrid</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Server:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='SMTP server used to received emails'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.text_field(:smtp_server,
                   placeholder: 'mail.phishingfrenzy.local',
                   class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>SMTP Outbound Server:</th>
-          <td><span class="ui-icon ui-icon-help" title='SMTP server used to relay emails through'></span></td>
-          <td>
-            <%= es.text_field(:smtp_server_out,
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Outbound Server:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='SMTP server used to relay emails through'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.text_field(:smtp_server_out,
                     placeholder: 'smtp.phishingfrenzy.local',
                     class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>SMTP Domain:</th>
-          <td><span class="ui-icon ui-icon-help" title='Domain of email address'></span></td>
-          <td>
-            <%= es.text_field(:domain,
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Domain:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='Domain of email address'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.text_field(:domain,
                     placeholder: 'phishingfrenzy.local',
                     class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>SMTP Authentication:</th>
-          <td><span class="ui-icon ui-icon-help" title='SMTP Authentication Method'></span></td>
-          <td>
-            <%= es.select(:authentication, 
-                    @campaign.email_settings.authentications.collect { |a| [a, a] },{},
-                    {class: 'form-control'}) %>
-          </td>
-        </tr>
-        <tr>
-          <th>SMTP Username:</th>
-          <td><span class="ui-icon ui-icon-help" title='SMTP username to authenticate sending emails'></span></td>
-          <td>
-            <%= es.text_field(:smtp_username,
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Authentication:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='SMTP Authentication Method'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.select(:authentication, 
+                    @campaign.email_settings.authentications.collect { |a| [a, a] },{}, class: 'form-control') %>
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Username:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='SMTP username to authenticate sending emails'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.text_field(:smtp_username,
                     placeholder: 'username',
                     class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>SMTP Password:</th>
-          <td>
-            <span class="ui-icon ui-icon-help" title='SMTP password to authenticate sending emails'>
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Password:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='SMTP password to authenticate sending emails'>
             </span>
-          </td>
-          <td>
-            <%= es.password_field(:smtp_password,
+          </div>
+          <div class="col-xs-8">
+            <%= ff.password_field(:smtp_password,
                   placeholder: 'password',
                   value: @campaign.email_settings.smtp_password,
                   class: 'form-control') %>
-          </td>
-        </tr>
-        <tr>
-          <th>Openssl Verify Mode:</th>
-          <td><span class="ui-icon ui-icon-help" title='Session verification mode'></span></td>
-          <td>
-            <%= es.select(:openssl_verify_mode,
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>Openssl Verify Mode:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='Session verification mode'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.select(:openssl_verify_mode,
                     @campaign.email_settings.openssl_verify_modes.collect { |m| [m, m] },{},
                     {class: 'form-control'}) %>
-          </td>
-        </tr>
-        <tr>
-          <th>Enable Start TLS Automatically?:</th>
-          <td><span class="ui-icon ui-icon-help" title='Enable Start TLS Automatically?'></span></td>
-          <td><%= es.check_box(:enable_starttls_auto, class: 'span9') %></td>
-        </tr>
-        <tr>
-          <th>SMTP Port:</th>
-          <td><span class="ui-icon ui-icon-help" title='SMTP port used to relay emails through'></span></td>
-          <td>
-            <%= es.text_field(:smtp_port,
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>Enable Start TLS Automatically?:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='Enable Start TLS Automatically?'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.check_box(:enable_starttls_auto, class: 'span9') %>
+          </div>
+        </div>
+
+        <div class="row top-buffer">
+          <div class="col-xs-3">
+            <p>SMTP Port:</p>
+          </div>
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='SMTP port used to relay emails through'></span>
+          </div>
+          <div class="col-xs-8">
+            <%= ff.text_field(:smtp_port,
                     placeholder: '25',
                     class: 'form-control') %>
-          </td>
-        </tr>
+          </div>
+        </div>
       <% end %>
-      </table>
     </div>
   </div>
 </div>

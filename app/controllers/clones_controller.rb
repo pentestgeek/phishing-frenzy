@@ -86,7 +86,7 @@ class ClonesController < ApplicationController
     @clone.destroy
 
     respond_to do |format|
-      format.html { redirect_to clones_url, notice: 'Website Deleted' }
+      format.html { redirect_to clones_url, warning: 'Website Deleted' }
       format.json { head :no_content }
     end
   end

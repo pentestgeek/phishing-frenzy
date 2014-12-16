@@ -3,6 +3,7 @@ PhishingFramework::Application.configure do
 
   # Code is not reloaded between requests
   config.cache_classes = true
+  config.action_view.cache_template_loading = false
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
@@ -64,4 +65,6 @@ PhishingFramework::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  config.eager_load = true
 end

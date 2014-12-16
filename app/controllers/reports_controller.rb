@@ -1,7 +1,7 @@
 require 'net/http'
 
 class ReportsController < ApplicationController
-  skip_before_filter :authenticate_admin!, :only => [ :results, :image  ]
+  skip_before_filter :authenticate_admin!, only: [ :results, :image ]
 
   def index
     list
@@ -9,27 +9,23 @@ class ReportsController < ApplicationController
   end
 
   def list
-    # gather the launched campaigns
-    @campaigns = Campaign.launched.page(params[:page]).per(8)
-  end
-
-  def visit_pool
-    @visits = 0
-    victims = Victim.where(campaign_id: params[:id])
-    victims.each do |victim|
-      @visits.append(Visit.where(victim_id: victim.id)).size
-    end
+    @campaigns = Campaign.launched.order(created_at: :desc)
   end
 
   def image
     victims = Victim.where(:uid => params[:uid])
+    unless victims.present?
+      render text: "No UID Found"
+      return
+    end
+
     visit = Visit.new
     victim = victims.first
     visit.victim_id = victim.id
     visit.browser = request.env["HTTP_USER_AGENT"]
     visit.ip_address = request.env["REMOTE_ADDR"]
     visit.extra = "SOURCE: EMAIL"
-    visit.save()
+    visit.save
     send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
   end
 
@@ -78,42 +74,27 @@ class ReportsController < ApplicationController
 
   def stats_sum
     # Campaign for the reports
-    @campaign = Campaign.find_by_id(params[:id])
+    @campaign = Campaign.includes(:victims).find(params[:id])
 
     # Time since campaign was started.
     t = (Time.now - @campaign.created_at)
     @time = "%sD - %sH - %sM - %sS" % [(((t/60)/60)/24).floor, ((((t)/60)/60)% 24).floor, ((t / 60) % 60).floor, (t % 60).floor]
 
-    # Name of template.
-    @template_name = Template.where(id: ((@campaign).template_id)).first.name
-
     # Total number of emails sent.
-    @emails_sent =  Victim.where(campaign_id: @campaign.id, sent: true).count
-
-    # Unique vistors.
-    @uvic = 0
+    @emails_sent =  @campaign.victims.where(sent: true).size
 
     # Total visits to the website.
-    @visits = Campaign.clicks(@campaign)
-    @opened = Campaign.opened(@campaign)
-
-    Victim.where(campaign_id: params[:id]).each do |victim|
-      s = Visit.where(:victim_id => victim.id).where('extra is null OR extra not LIKE ?', "%EMAIL%").size
-      if (s > 0)
-        @uvic = @uvic + 1
-        @visits = @visits + s
-      end
-      @opened = Campaign.opened(@campaign)
-    end
+    @visits = @campaign.clicks
+    @opened = @campaign.opened
 
     @jsonToSend = Hash.new()
     @jsonToSend["campaign_name"] = @campaign.name
     @jsonToSend["time"] = @time
     @jsonToSend["active"] = @campaign.active
-    @jsonToSend["template"] = @template_name
+    @jsonToSend["template"] = @campaign.template.name if @campaign.template
     @jsonToSend["sent"] = @emails_sent
     @jsonToSend["opened"] = @opened
-    @jsonToSend["clicked"] = @uvic
+    @jsonToSend["clicked"] = @visits
 
     render json: @jsonToSend
   end
@@ -322,7 +303,7 @@ class ReportsController < ApplicationController
     # clear campaign statistics
     campaign = Campaign.find(params[:id])
     campaign.victims.destroy_all
-    redirect_to :back, notice: "Cleared Campaign Stats"
+    redirect_to :back, notice: "Cleared Campaign Stats and removed Victims"
   end
 
 end

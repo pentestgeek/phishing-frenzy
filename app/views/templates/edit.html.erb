@@ -6,10 +6,10 @@
   <h2>Update Phishing Template</h2>
 </div>
 <div class="template update">
-	<%= nested_form_for @template, :html => {:multipart => true} do |f| %>
-	<%= render(:partial => "form", :locals => {:f => f}) %>
-	<p>
-		<%= submit_tag("Update Template", class: 'btn btn-primary') %>
-	</p>
-	<% end %>
+  <%= nested_form_for @template, :html => {:multipart => true} do |f| %>
+  <%= render(:partial => "form", :locals => {:f => f}) %>
+  <p>
+    <%= submit_tag("Update Template", class: 'btn btn-primary') %>
+  </p>
+  <% end %>
 </div>

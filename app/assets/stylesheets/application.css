@@ -10,8 +10,8 @@
  *
  *= require bootstrap.min
  *= require_self
- *= require dataTables/jquery.dataTables.bootstrap
- *= require jquery.ui.tooltip
+ *= require dataTables/jquery.dataTables
+ *= require codemirror
  */
 
  @font-face {
@@ -127,4 +127,38 @@ A:hover
 #content > div.alert.alert-alert,
 #content > div.alert.alert-warning {
   line-height: 2px;
+}
+
+.alert-notice {
+  background: rgb(72, 214, 89);
+}
+
+#errorExplanation {
+  border-radius: 5px;
+  border: 2px solid #ca0002;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #ca0002;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
 }

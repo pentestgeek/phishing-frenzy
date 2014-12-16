@@ -1,16 +1,14 @@
 $( document ).ready(function() {
   $('#victims-table').dataTable( {
   "sAjaxSource": '/reports/uid_json/' + window.location.href.split("/").pop(),
-  "sPaginationType": "bootstrap",
   "aLengthMenu": [
       [25, 50, 100, 500, -1],
       [25, 50, 100, 500, "All"]]
   });
 
   $('#victims-summary-table').dataTable( {
-    "sPaginationType": "bootstrap",
     "sAjaxSource": '/reports/victims_list/' + window.location.href.split("=").pop(),
-    "aoColumnDefs": [            
+    "aoColumnDefs": [
     {
      "aTargets": [ 0 ], // Column to target
      "mRender": function ( data, type, full ) {
@@ -26,4 +24,8 @@ $( document ).ready(function() {
       [25, 50, 100, 500, "All"]]
   } );
 
+  // datatable for reports#list launched campaigns
+  $('#launched-campains').dataTable({
+    "iDisplayLength": 25
+  });
 });

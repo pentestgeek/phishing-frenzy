@@ -32,7 +32,7 @@
       <td><%= victim.uid %></td>
       <td><%= victim.sent %></td>
       <td>
-        <%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}) %>
+        <%= link_to(image_tag('red_x.png', :size => '35x35'), {:controller => 'campaigns', :action => 'delete_victim', :id => victim.id, :method => 'delete', :remote => true}, id: "delete") %>
       </td>
     </tr>
     <% end %>

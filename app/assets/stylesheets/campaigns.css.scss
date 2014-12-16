@@ -2,17 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#campaigns > thead > tr > th:nth-child(1) {
-  width: .5em;
-}
-
 #dashboard-campaign:hover > div {
   background-color: #F5F5F5;
-}
-
-.borderless > tbody > tr > th,
-.borderless > tbody > tr > td {
-  border: none;
 }
 
 #campaign-buttons .btn {
@@ -21,4 +12,15 @@
 
 #show-campaign-buttons .btn {
   margin-top: 1.5em;
+}
+
+#dashboard-campaign > div > div > h3 {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.top-buffer { margin-top:5px; }
+
+#accordion div.panel-heading {
+  cursor: pointer;
 }

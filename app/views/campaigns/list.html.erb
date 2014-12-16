@@ -31,13 +31,11 @@
       <td><span class='glyphicon glyphicon-envelope'></span></td>      
       <td><%= campaign.name %></td>
       <td><%= truncate(campaign.description) %></td>
-      <td><%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %></td>
       <td>
-        <% if Victim.where("campaign_id = ?", campaign.id).size != 0 %>
-          <%= image_tag('green-light.png', :size => '11x11') %>
-        <% else %>
-          <%= image_tag('red-light.png', :size => '11x11') %>
-        <% end %>
+        <%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %>
+      </td>
+      <td>
+        <%= campaign.victims.present? ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %>
       </td>
       <td class="actions">
         <div id="actions-buttons">
@@ -47,9 +45,9 @@
                 title: 'Campaign Options') %>
           <%= link_to "<span class='glyphicon glyphicon-remove'></span>".html_safe,
                 campaign_path(campaign), method: :delete,
-                confirm: 'Are you sure you want to permanently delete this campaign?', rel: 'tooltip',
+                data: { confirm: 'Are you sure you want to permanently delete this campaign?', placement: 'bottom'}, rel: 'tooltip',
                 class: 'btn btn-danger btn-xs',
-                data: {placement: 'bottom'}, title: 'Delete Campaign' %>
+                title: 'Delete Campaign' %>
         </div>
       </td>
     </tr>
