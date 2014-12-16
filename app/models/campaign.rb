@@ -159,7 +159,12 @@ class Campaign < ActiveRecord::Base
   end
 
   def vhost_text(campaign, virtual_host_type)
-    template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/#{virtual_host_type}.txt.erb",))
+    template = nil
+    if self.campaign_settings.use_beef?
+      template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/#{virtual_host_type}_beefproxy.txt.erb",))
+    else
+      template = ERB.new File.read(File.join(Rails.root, "app/views/campaigns/#{virtual_host_type}.txt.erb",))
+    end
     template.result(campaign.get_binding)
   end
 
@@ -220,10 +225,7 @@ class Campaign < ActiveRecord::Base
       # copy template files to deployment directory
       FileUtils.cp(page.file.current_path, loc)
       if File.extname(page.file.current_path) == '.php'
-
-
         file = File.read(loc)
-
         if self.campaign_settings.use_beef?
           # add BeEF hook tag if enabled, replacing </body> with <script src="..beef.."></script></body>
           beef_hook = tag_beef
@@ -237,6 +239,17 @@ class Campaign < ActiveRecord::Base
             logger.error("Error: </body> or </BODY> tags not found. BeEF hook was not added.")
           end
         end
+
+        if self.campaign_settings.track_hits?
+          tracking_code = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
+          file = tracking_code.result + file
+          logger.debug("Added hits tracking code to file [#{loc}]")
+        end
+
+        File.open(loc, 'w') do |f|
+          f.write(file)
+        end
+
       end
       if inflatable?(loc)
         inflate(loc, deployment_directory)
@@ -256,9 +269,9 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def tag_beef(tags)
+  def tag_beef
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    return beef.result(self.beef_binding(select_beef_url)) + tags.result
+    return beef.result(self.beef_binding(select_beef_url))
   end
 
   def select_beef_url

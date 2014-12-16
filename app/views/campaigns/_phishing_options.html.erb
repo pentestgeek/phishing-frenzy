@@ -17,7 +17,7 @@
           <span class="glyphicon glyphicon-question-sign" title='Some spam filters will flag the emails as spam if they are sent too fast. This option allows you to provide a delay between each email. Note this will not work if you are configured to send emails in the background with sidekiq.'></span>
         </div>
         <div class="col-xs-8">
-          <%= ff.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %></td>
+          <%= ff.select(:smtp_delay, @campaign.campaign_settings.smtp_delays, {}, {class: 'form-control'}) %>
         </div>
       </div>
 
@@ -47,14 +47,26 @@
 
     <div id="beef-url" class="row top-buffer">
       <div class="col-xs-3">
-        <p>BeeF Hook URL:</p>
+        <p>BeEF Hook URL:</p>
       </div>
       <div class="col-xs-1">
-        <span class="glyphicon glyphicon-question-sign" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span>
+        <span class="glyphicon glyphicon-question-sign" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running BeEF service to hook properly'></span>
       </div>
       <div class="col-xs-8">
-        <%= ff.text_field(:beef_url, class: 'form-control') %></td>
+        <%= ff.text_field(:beef_url, class: 'form-control') %>
       </div>
+    </div>
+
+    <div id="beef-apikey" class="row top-buffer">
+     <div class="col-xs-3">
+         <p>BeEF RESTful API key:</p>
+     </div>
+        <div class="col-xs-1">
+            <span class="glyphicon glyphicon-question-sign" title='BeEF RESTful API key. You can find this in BeEF console output'></span>
+        </div>
+        <div class="col-xs-8">
+            <%= ff.text_field(:beef_apikey, class: 'form-control') %>
+        </div>
     </div>
 
     <div class="row top-buffer">

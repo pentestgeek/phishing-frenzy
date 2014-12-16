@@ -1,0 +1,49 @@
+<VirtualHost *:80>
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    Redirect / https://<%= @fqdn %>/
+</VirtualHost>
+
+#<!--start <%= @campaign_id %>-->
+<VirtualHost *:443>
+    SSLEngine On
+
+    <% if @ssl.find_by_function("SSLCertificateFile").filename.present? %>
+    SSLCertificateFile <%= @ssl.find_by_function("SSLCertificateFile").filename.file.file %>
+    <% end %>
+    <% if @ssl.find_by_function("SSLCertificateKeyFile").filename.present? %>
+    SSLCertificateKeyFile <%= @ssl.find_by_function("SSLCertificateKeyFile").filename.file.file %>
+    <% end %>
+    <% if @ssl.find_by_function("SSLCertificateChainFile").filename.present? %>
+    SSLCertificateChainFile <%= @ssl.find_by_function("SSLCertificateChainFile").filename.file.file %>
+    <% end %>
+
+    ProxyPreserveHost On
+	ProxyPass /jquery.js http://127.0.0.1:8443/jquery.js
+	ProxyPass /init http://127.0.0.1:8443/init
+	ProxyPass /dh http://127.0.0.1:8443/dh
+	ProxyPass /event http://127.0.0.1:8443/event
+	ProxyPass /api http://127.0.0.1:8443/api
+	ProxyPass /requester http://127.0.0.1:8443/requester
+	ProxyPass /proxy http://127.0.0.1:8443/proxy
+	ProxyPass /requester http://127.0.0.1:8443/requester
+	ProxyPass /beef_secret_console http://127.0.0.1:8443/beef_secret_console
+
+	ProxyPassReverse /jquery.js http://127.0.0.1:8443/jquery.js
+	ProxyPassReverse /init http://127.0.0.1:8443/init
+	ProxyPassReverse /dh http://127.0.0.1:8443/dh
+	ProxyPassReverse /event http://127.0.0.1:8443/event
+	ProxyPassReverse /api http://127.0.0.1:8443/api
+	ProxyPassReverse /requester http://127.0.0.1:8443/requester
+	ProxyPassReverse /proxy http://127.0.0.1:8443/proxy
+	ProxyPassReverse /requester http://127.0.0.1:8443/requester
+	ProxyPassReverse /beef_secret_console http://127.0.0.1:8443/beef_secret_console
+
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    DocumentRoot <%= @template_location %>
+    DirectoryIndex <%= @directory_index %>
+    CustomLog     <%= @approot %>/log/www-campaign-<%= @campaign_id %>-access.log combined
+    ErrorLog      <%= @approot %>/log/www-campaign-<%= @campaign_id %>-error.log
+</VirtualHost>
+#<!--end <%= @campaign_id %>-->
