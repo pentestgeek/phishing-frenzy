@@ -96,3 +96,7 @@ group :test do
   gem 'database_cleaner'
   gem 'faker'
 end
+
+# ruby code style checker
+gem 'rubocop'
+
