@@ -128,11 +128,11 @@ class ReportsController < ApplicationController
       offline = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/offline?token=#{campaign_settings.beef_apikey}"))
 
       JSON.parse(online)['aaData'].each do |hb|
-        store_hooked_browsers hb
+        store_hooked_browsers campaign_id, hb
       end
 
       JSON.parse(offline)['aaData'].each do |hb|
-        store_hooked_browsers hb
+        store_hooked_browsers campaign_id, hb
       end
     rescue => e
       flash[:notice] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
@@ -140,23 +140,23 @@ class ReportsController < ApplicationController
 
   end
 
-  def store_hooked_browsers(hb)
+  def store_hooked_browsers(campaign_id, hb)
     victim_uid = hb[2]
 
     if HookedBrowsers.where(hb_id: hb[0]).empty?
-      victim = Victim.find_by_uid(victim_uid)
+      victim = Victim.where(campaign_id: campaign_id).where(uid: victim_uid)
       hooked_browser = HookedBrowsers.create(
           hb_id: hb[0],
-              ip: hb[1],
-              victim_id: victim.id,
-              btype: hb[3],
-              bversion: hb[4],
-              os: hb[5],
-              platform: hb[6],
-              language: hb[7],
-              plugins: hb[8],
-              city: hb[9],
-              country: hb[10]
+          ip: hb[1],
+          victim_id: victim.id,
+          btype: hb[3],
+          bversion: hb[4],
+          os: hb[5],
+          platform: hb[6],
+          language: hb[7],
+          plugins: hb[8],
+          city: hb[9],
+          country: hb[10]
       )
 
       # update Victim table with HookedBrowser relation
