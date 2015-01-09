@@ -132,7 +132,6 @@
 
         // new BeEF tables
         $('#online-hooked-browsers-table').dataTable( {
-            "sPaginationType": "bootstrap",
             "sAjaxSource": beef_server + '/api/hooks/pf/online?token=' + beef_apikey,
             "aoColumns" : [
                 { "sWidth": "15px" },
@@ -186,7 +185,6 @@
         });
 
         $('#offline-hooked-browsers-table').dataTable( {
-            "sPaginationType": "bootstrap",
             "sAjaxSource": beef_server + '/api/hooks/pf/offline?token=' + beef_apikey,
             "aoColumns" : [
                 { "sWidth": "15px" },
