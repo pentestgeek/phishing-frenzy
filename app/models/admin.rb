@@ -11,8 +11,8 @@ class Admin < ActiveRecord::Base
 	has_paper_trail on: [:update], only: [:current_sign_in_at, :current_sign_in_ip]
 
 	validates :name, presence: true, length: { maximum: 255 }
-	validates :username, presence: true, length: { maximum: 255 }
-	validates :email, presence: true, length: { maximum: 255 }
+	validates :username, presence: true, length: { maximum: 255 }, :uniqueness => {:message => "Invalid username"}
+	validates :email, presence: true, length: { maximum: 255 }, :uniqueness => {:message => "Invalid email address"}
 	validates_format_of :name, :with => /[A-Za-z\d]([-\w]{,498}[A-Za-z\d])?/i, :message => "Invalid Name: Alphanumerics only"
 	validates_format_of :username, :with => /[A-Za-z\d]([-\w]{,498}[A-Za-z\d])?/i, :message => "Invalid Username: Alphanumerics only"
   validate :validate_password_complexity
