@@ -22,7 +22,11 @@ RSpec.describe Admin, :type => :model do
   end
 
   it "is invalid with password less than 8 characters" do
-    expect(build(:admin, password: "short")).to_not be_valid
+    expect(build(:admin, password: "1Short")).to_not be_valid
+  end
+
+  it "is invalid with password without one uppercase letter, one lowercase letter, and one number" do
+    expect(build(:admin, password: "notshortbutnonumber")).to_not be_valid
   end
 
   it "is invalid with non alpha numeric name format" do
