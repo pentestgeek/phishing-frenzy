@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :system_status
 
   add_flash_types :warning
+  before_filter :bust_cache
 
   protected
   def configure_permitted_parameters
@@ -31,5 +32,11 @@ class ApplicationController < ActionController::Base
       @redis = false
     end
   end
-
+  
+  def bust_cache
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+  end
+  
 end
