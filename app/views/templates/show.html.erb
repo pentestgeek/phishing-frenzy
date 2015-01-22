@@ -36,7 +36,7 @@
       <td>
         <% @template.website_files.each do |www| %>
             <p>
-              <%= link_to www[:file], www.file.url %>
+              <%= www[:file] %>
               <% if www.function == 'website-index' %>
                 <small>*</small>
               <% end %>
@@ -50,7 +50,7 @@
       <td>
         <% @template.email_files.each do |email| %>
             <p>
-              <%= link_to email[:file], email.file.url %>
+              <%= email[:file] %>
             </p>
         <% end %>
       </td>
