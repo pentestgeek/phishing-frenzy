@@ -19,11 +19,11 @@ class Admin < ActiveRecord::Base
 
 	scope :sorted, order("admins.name ASC")
 
-  def validate_password_complexity
-    if password.present? and not password.match(/^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)
-      errors.add :password, "must include at least one uppercase letter, one lowercase letter, and one number"
-    end
-  end
+	def validate_password_complexity
+		if password.present? and not password.match(/^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)
+			errors.add :password, "must include at least one uppercase letter, one lowercase letter, and one number"
+		end
+	end
 
 	def active_for_authentication?
 		super && approved?
