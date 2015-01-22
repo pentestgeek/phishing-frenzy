@@ -80,6 +80,7 @@ PhishingFramework::Application.routes.draw do
 			post 'approve'
 			post 'revoke'
 			delete 'destroy'
+      post 'unlock'
 		end
 	end
 

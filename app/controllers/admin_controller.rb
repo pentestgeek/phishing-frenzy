@@ -83,5 +83,12 @@ class AdminController < ApplicationController
 		@admin.save
 		redirect_to(:action => 'list')
 	end
+  
+  def unlock
+		@admin = Admin.find(params[:id])
+		@admin.locked_at = false
+		@admin.save
+		redirect_to(:action => 'list')
+  end
 
 end
