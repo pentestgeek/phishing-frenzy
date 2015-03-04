@@ -147,23 +147,25 @@ class ReportsController < ApplicationController
 
     if HookedBrowsers.where(hb_id: hb[0]).empty?
       victim = Victim.where(campaign_id: campaign_id).where(uid: victim_uid)
-      hooked_browser = HookedBrowsers.create(
-          hb_id: hb[0],
-          ip: hb[1],
-          victim_id: victim.first.id,
-          btype: hb[3],
-          bversion: hb[4],
-          os: hb[5],
-          platform: hb[6],
-          language: hb[7],
-          plugins: hb[8],
-          city: hb[9],
-          country: hb[10]
-      )
+      if victim != nil && victim.first != nil
+        hooked_browser = HookedBrowsers.create(
+            hb_id: hb[0],
+            ip: hb[1],
+            victim_id: victim.first.id,
+            btype: hb[3],
+            bversion: hb[4],
+            os: hb[5],
+            platform: hb[6],
+            language: hb[7],
+            plugins: hb[8],
+            city: hb[9],
+            country: hb[10]
+        )
 
-      # update Victim table with HookedBrowser relation
-      victim.first.hb_id = hooked_browser.id
-      victim.save
+        # update Victim table with HookedBrowser relation
+        victim.first.hb_id = hooked_browser.id
+        victim.first.save
+      end
     end
   end
 
