@@ -175,8 +175,10 @@
                     "aTargets": [ 2 ], // browser type
                     "mRender": function ( data, type, full ) {
                         var email = victims_uids[data];
-                        if(email != null){
+                        if(email){ // ensure that the value is not null, undefined, NaN, empty
                             return email;
+                        }else{
+                            return 'n/a';
                         }
                     }
                 }
@@ -228,8 +230,10 @@
                     "aTargets": [ 2 ], // browser type
                     "mRender": function ( data, type, full ) {
                         var email = victims_uids[data];
-                        if(email != null){
+                        if(email){ // ensure that the value is not null, undefined, NaN, empty
                             return email;
+                        }else{
+                            return 'n/a';
                         }
                     }
                 }
