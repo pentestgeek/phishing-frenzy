@@ -135,7 +135,9 @@ class ReportsController < ApplicationController
         store_hooked_browsers campaign_id, hb
       end
     rescue => e
-      flash[:notice] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
+      logger.error e.message
+      logger.error e.backtrace.join("\n")
+      flash[:error] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
     end
 
   end
@@ -148,7 +150,7 @@ class ReportsController < ApplicationController
       hooked_browser = HookedBrowsers.create(
           hb_id: hb[0],
           ip: hb[1],
-          victim_id: victim.id,
+          victim_id: victim.first.id,
           btype: hb[3],
           bversion: hb[4],
           os: hb[5],
@@ -160,7 +162,7 @@ class ReportsController < ApplicationController
       )
 
       # update Victim table with HookedBrowser relation
-      victim.hb_id = hooked_browser.id
+      victim.first.hb_id = hooked_browser.id
       victim.save
     end
   end
