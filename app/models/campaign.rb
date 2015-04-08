@@ -291,7 +291,7 @@ class Campaign < ActiveRecord::Base
 
   def reload_apache
     restart_apache = GlobalSettings.first.command_apache_restart
-    system("#{restart_apache} > /dev/null")
+    Process.spawn("#{restart_apache} > /dev/null")
   end
 
 end
