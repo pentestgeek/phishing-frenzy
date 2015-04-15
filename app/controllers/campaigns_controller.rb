@@ -9,7 +9,7 @@ class CampaignsController < ApplicationController
 
 	def list
 		# grab the campaigns and sort by created_at date
-		@campaigns = Campaign.order("created_at DESC")
+		@campaigns = Campaign.includes(:victims).order("created_at DESC")
 	end
 
 	def home

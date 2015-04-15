@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111063547) do
+ActiveRecord::Schema.define(version: 20150415015416) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20141111063547) do
     t.string   "message",           default: "Started  "
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "baits_count",       default: 0
   end
 
   create_table "campaign_settings", force: true do |t|
@@ -85,6 +86,7 @@ ActiveRecord::Schema.define(version: 20141111063547) do
     t.datetime "updated_at"
     t.integer  "smtp_delay",             default: 0
     t.string   "beef_url"
+    t.string   "beef_apikey"
     t.boolean  "ssl"
   end
 
@@ -160,6 +162,7 @@ ActiveRecord::Schema.define(version: 20141111063547) do
     t.string   "bing_api"
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
+    t.string   "beef_apikey"
   end
 
   create_table "harvested_emails", force: true do |t|
@@ -173,6 +176,24 @@ ActiveRecord::Schema.define(version: 20141111063547) do
   end
 
   add_index "harvested_emails", ["email_search_id"], name: "index_harvested_emails_on_email_search_id", using: :btree
+
+  create_table "hooked_browser", force: true do |t|
+    t.integer  "victim_id"
+    t.string   "hb_id"
+    t.string   "ip"
+    t.string   "btype"
+    t.string   "bversion"
+    t.string   "os"
+    t.string   "platform"
+    t.string   "language"
+    t.string   "plugins"
+    t.string   "city"
+    t.string   "country"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hooked_browser", ["victim_id"], name: "index_hooked_browser_on_victim_id", using: :btree
 
   create_table "smtp_communications", force: true do |t|
     t.string   "to"
@@ -240,6 +261,7 @@ ActiveRecord::Schema.define(version: 20141111063547) do
     t.string   "lastname"
     t.boolean  "archive",       default: false
     t.boolean  "sent",          default: false
+    t.integer  "hb_id"
   end
 
   create_table "visits", force: true do |t|

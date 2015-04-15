@@ -37,4 +37,9 @@ PhishingFramework::Application.configure do
   config.assets.debug = true
 
   config.eager_load = false
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+  end
 end

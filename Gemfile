@@ -100,3 +100,5 @@ end
 # ruby code style checker
 gem 'rubocop'
 
+# optimize queries
+gem "bullet", :group => "development"
