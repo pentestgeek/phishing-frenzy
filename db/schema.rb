@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150415015416) do
+ActiveRecord::Schema.define(version: 20150415021923) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20150415015416) do
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
     t.string   "beef_apikey"
+    t.integer  "reports_refresh",        default: 15
   end
 
   create_table "harvested_emails", force: true do |t|
