@@ -31,6 +31,9 @@
         <td><%= admin.name %></td>
         <td><%= admin.username %></td>
         <td class="actions">
+          <% if admin.locked_at %>
+              <%= link_to "Unlock", unlock_admin_path(admin), method: :post, class: 'btn btn-default btn-xs' %>
+		  <% end %>
           <% if admin.approved? %>
               <%= link_to "Revoke", revoke_admin_path(admin), method: :post, class: 'btn btn-default btn-xs' %>
           <% else %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111063547) do
+ActiveRecord::Schema.define(version: 20150122003726) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -33,6 +33,9 @@ ActiveRecord::Schema.define(version: 20141111063547) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.boolean  "approved",               default: false, null: false
+    t.integer  "failed_attempts"
+    t.datetime "locked_at"
+    t.string   "unlock_token"
   end
 
   add_index "admins", ["approved"], name: "index_admins_on_approved", using: :btree
