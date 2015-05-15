@@ -16,6 +16,13 @@ class PhishingFrenzyMailer < ActionMailer::Base
       attachments.inline[image[:file]] = File.read(image.file.current_path)
     end
 
+    @campaign.template.file_attachments.each do |attachment|
+      attachments[File.basename attachment.file.to_s] = {
+        content_type: attachment.file.content_type,
+        body: File.read(attachment.file.current_path)
+      }
+    end
+
     if method==ACTIVE
       uid = victim_uid(@target, campaign_id)
       @url = "#{phishing_url}?uid=#{uid}"

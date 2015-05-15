@@ -167,6 +167,11 @@ class TemplatesController < ApplicationController
 
 		begin
 			@attachment_content = File.read(Dir.glob(attachment_location)[0])
+
+			unless @attachment_content.is_utf8?
+				flash[:warning] = "Cannot Edit Files that are not UTF-8 sequence"
+				redirect_to :back
+			end
 		rescue
 			flash[:warning] = "Issue Reading Attachment File"
 			redirect_to :back

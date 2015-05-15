@@ -35,6 +35,10 @@ class Template < ActiveRecord::Base
 		end
 	end
 
+	def file_attachments
+		attachments.where(function: 'file_attachment')
+	end
+
 	def index_file
 		directory_index.blank? ? 'index.php' : directory_index
 	end
