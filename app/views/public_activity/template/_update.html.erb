@@ -1,0 +1,7 @@
+<li class="list-group-item">
+  <% if a.trackable %>
+    <%= a.decorate.template_icon %> <%= a.decorate.owner %> edited template <i><%= a.trackable.name %></i>
+  <% else %>
+    <%= a.decorate.template_icon %> A template that is currently deleted was edited.
+  <% end %>
+</li>

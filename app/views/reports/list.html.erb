@@ -20,14 +20,13 @@
   <tbody>
     <% @campaigns.each do |campaign| %>
     <tr>
-      <td><span class="glyphicon glyphicon-stats"></span></td>      
+      <td><%= campaign.decorate.report_icon %></td>      
       <td><%= campaign.name %></td>
       <td><%= campaign.sent %></td>
       <td><%= campaign.clicks %></td>
-      <td><%= campaign.active ? image_tag('green-light.png', size: '11x11') : 
-                image_tag('red-light.png', size: '11x11') %></td>
+      <td><%= campaign.decorate.active_icon %></td>
       <td class="actions">
-        <%= link_to("Stats", stats_reports_path(id: campaign.id), 
+        <%= link_to(campaign.decorate.options_icon, stats_reports_path(id: campaign.id), 
               class: 'btn btn-primary btn-xs') %>
       </td>
     </tr>
