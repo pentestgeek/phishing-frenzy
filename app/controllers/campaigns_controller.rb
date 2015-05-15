@@ -80,6 +80,10 @@ class CampaignsController < ApplicationController
 		end
 	end
 
+	def activity
+		@activities = PublicActivity::Activity.includes(:trackable, :owner).order('created_at DESC').page(params[:page]).per(30)
+	end
+
 	def victims
 		@victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
 	end
