@@ -1,15 +1,19 @@
 <% @page_title = "Update Template" %>
 
-<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+<% if @campaign.present? %>
+  <ol class="breadcrumb">
+    <li><%= link_to "Campaigns", campaigns_path %></li>
+    <li><%= link_to "Campaign", campaign_path(@campaign) %></li>
+  </ol>
+<% end %>
 
-<div class='page-header'>
-  <h2>Update Phishing Template</h2>
-</div>
+<h2>Update Phishing Template</h2>
+
 <div class="template update">
   <%= nested_form_for @template, :html => {:multipart => true} do |f| %>
-  <%= render(:partial => "form", :locals => {:f => f}) %>
-  <p>
-    <%= submit_tag("Update Template", class: 'btn btn-primary') %>
-  </p>
+    <%= render(:partial => "form", :locals => {:f => f}) %>
+    <%= hidden_field_tag :campaign_id, params[:campaign_id] %>
+
+    <%= submit_tag("Update Template", class: 'btn btn-primary btn-block pad-bot') %>
   <% end %>
 </div>

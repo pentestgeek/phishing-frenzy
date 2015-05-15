@@ -30,13 +30,15 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit
+		@campaign = campaign_present
 		@template = Template.find(params[:id])
 	end
 
 	def update
+		@campaign = campaign_present
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
-			redirect_to edit_template_path, notice: "Template Updated"
+			redirect_to edit_template_path(campaign_id: @campaign.id), notice: "Template Updated"
 		else
 			render('edit')
 		end
@@ -162,6 +164,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit_email
+		@campaign = campaign_present
 		@attachment = Attachment.find(params[:format])
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
 
@@ -192,6 +195,10 @@ class TemplatesController < ApplicationController
 	end
 
 private
+
+	def campaign_present
+		params[:campaign_id].present? ? Campaign.find_by_id(params[:campaign_id]) : nil
+	end
 
 	def copy_template(template)
 		# generate random string
