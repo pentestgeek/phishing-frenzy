@@ -1,0 +1,9 @@
+<li class="list-group-item">
+  <% if a.trackable %>
+    <%= a.decorate.template_icon %> <%= a.decorate.owner %> edited template <i>
+    <%= link_to a.trackable.name, campaign_path(a.trackable) %></i>
+  <% else %>
+    <%= a.decorate.template_icon %> A template that is currently deleted was edited by <%= a.decorate.owner %>
+  <% end %>
+  <%= a.decorate.format_date %>
+</li>

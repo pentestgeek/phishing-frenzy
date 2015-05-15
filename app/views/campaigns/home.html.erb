@@ -1,7 +1,9 @@
-<% @page_title = "Home" %>
-<div class="page-header">
-  <h2>Dashboard</h2>
-</div>
+<% @page_title = "Dashboard" %>
+
+<h3>Recent Activity</h3>
+<%= render_activities @activities %>
+<%= link_to "All Activity", activity_campaigns_path, class: "btn btn-primary btn-block" %>
+
 <h3>Launched Phishing Campaigns</h3>
 
 <div class="container-fluid">

@@ -18,7 +18,7 @@
     <tr class="header">
       <th></th>
       <th>Client</th>
-      <th>Description</th>
+      <th>Owner</th>
       <th>Active</th>
       <th>Emails</th>
       <th>Actions</th>
@@ -28,15 +28,11 @@
     <% @campaigns.each do |campaign| %>
     
     <tr>
-      <td><span class='glyphicon glyphicon-envelope'></span></td>      
+      <td><%= campaign.decorate.campaign_icon %></td>      
       <td><%= campaign.name %></td>
-      <td><%= truncate(campaign.description) %></td>
-      <td>
-        <%= campaign.active ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %>
-      </td>
-      <td>
-        <%= campaign.victims.present? ? image_tag('green-light.png', :size => '11x11') : image_tag('red-light.png', :size => '11x11') %>
-      </td>
+      <td><%= campaign.decorate.owner %></td>
+      <td><%= campaign.decorate.active_icon %></td>
+      <td><%= campaign.decorate.emails_icon %></td>
       <td class="actions">
         <div id="actions-buttons">
           <%= link_to("<span class='glyphicon glyphicon-search'></span>".html_safe,

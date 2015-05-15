@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150415021923) do
+ActiveRecord::Schema.define(version: 20150515012820) do
+
+  create_table "activities", force: true do |t|
+    t.integer  "trackable_id"
+    t.string   "trackable_type"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "key"
+    t.text     "parameters"
+    t.integer  "recipient_id"
+    t.string   "recipient_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
+  add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
+  add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -86,7 +103,6 @@ ActiveRecord::Schema.define(version: 20150415021923) do
     t.datetime "updated_at"
     t.integer  "smtp_delay",             default: 0
     t.string   "beef_url"
-    t.string   "beef_apikey"
     t.boolean  "ssl"
   end
 
@@ -103,8 +119,10 @@ ActiveRecord::Schema.define(version: 20150415021923) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "test_email"
+    t.integer  "admin_id"
   end
 
+  add_index "campaigns", ["admin_id"], name: "index_campaigns_on_admin_id", using: :btree
   add_index "campaigns", ["template_id"], name: "index_campaigns_on_template_id", using: :btree
 
   create_table "clones", force: true do |t|
@@ -162,7 +180,6 @@ ActiveRecord::Schema.define(version: 20150415021923) do
     t.string   "bing_api"
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
-    t.string   "beef_apikey"
     t.integer  "reports_refresh",        default: 15
   end
 
@@ -177,24 +194,6 @@ ActiveRecord::Schema.define(version: 20150415021923) do
   end
 
   add_index "harvested_emails", ["email_search_id"], name: "index_harvested_emails_on_email_search_id", using: :btree
-
-  create_table "hooked_browser", force: true do |t|
-    t.integer  "victim_id"
-    t.string   "hb_id"
-    t.string   "ip"
-    t.string   "btype"
-    t.string   "bversion"
-    t.string   "os"
-    t.string   "platform"
-    t.string   "language"
-    t.string   "plugins"
-    t.string   "city"
-    t.string   "country"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "hooked_browser", ["victim_id"], name: "index_hooked_browser_on_victim_id", using: :btree
 
   create_table "smtp_communications", force: true do |t|
     t.string   "to"
@@ -237,8 +236,10 @@ ActiveRecord::Schema.define(version: 20150415021923) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "directory_index"
+    t.integer  "admin_id"
   end
 
+  add_index "templates", ["admin_id"], name: "index_templates_on_admin_id", using: :btree
   add_index "templates", ["campaign_id"], name: "index_templates_on_campaign_id", using: :btree
 
   create_table "versions", force: true do |t|
@@ -262,7 +263,6 @@ ActiveRecord::Schema.define(version: 20150415021923) do
     t.string   "lastname"
     t.boolean  "archive",       default: false
     t.boolean  "sent",          default: false
-    t.integer  "hb_id"
   end
 
   create_table "visits", force: true do |t|

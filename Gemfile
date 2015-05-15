@@ -102,3 +102,8 @@ gem 'rubocop'
 
 # optimize queries
 gem "bullet", :group => "development"
+
+gem 'public_activity'
+
+# decorators
+gem 'draper', '~> 1.3'

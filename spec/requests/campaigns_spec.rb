@@ -7,7 +7,7 @@ RSpec.describe "Campaigns", :type => :request do
   describe "GET /" do
     it "request the dashboard of campaigns" do
       visit root_path
-      expect(page).to have_content("Dashboard")
+      expect(page).to have_content("Recent Activity")
     end
 
     it "clicks on the reports button for an existing campaign from the dashboard" do

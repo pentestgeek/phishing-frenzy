@@ -6,7 +6,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.all
+		@templates = Template.includes(:admin).all
 	end
 
 	def show
@@ -20,6 +20,8 @@ class TemplatesController < ApplicationController
 
 	def create
 		@template = Template.new(params[:template])
+		@template.admin_id = current_admin.id
+
 		if @template.save
 			flash[:notice] = "Template Created"
 			redirect_to(:action => 'list')
