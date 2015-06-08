@@ -38,9 +38,10 @@ class TemplatesController < ApplicationController
 
 	def update
 		@campaign = campaign_present
+		campaign_id = @campaign.present? ? @campaign.id : nil
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
-			redirect_to edit_template_path(campaign_id: @campaign.id), notice: "Template Updated"
+			redirect_to edit_template_path(campaign_id: campaign_id), notice: "Template Updated"
 		else
 			render('edit')
 		end
