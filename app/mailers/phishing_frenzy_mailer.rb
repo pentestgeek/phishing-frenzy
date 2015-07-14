@@ -1,5 +1,5 @@
 class PhishingFrenzyMailer < ActionMailer::Base
-  
+
   PREVIEW = 0
   ACTIVE = 1
 
@@ -16,23 +16,25 @@ class PhishingFrenzyMailer < ActionMailer::Base
       attachments.inline[image[:file]] = File.read(image.file.current_path)
     end
 
-    if method==ACTIVE
+    mail_opts =  {
+        to: @target.email_address,
+        from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
+        subject: @campaign.email_settings.subject,
+        template_path: @campaign.template.email_template_path,
+        template_name: @campaign.template.email_files.first[:file],
+    }
+
+    mail_opts[:reply_to] = @campaign.email_settings.reply_to unless @campaign.email_settings.reply_to.blank?
+
+
+    case method
+    when ACTIVE
       uid = victim_uid(@target, campaign_id)
       @url = "#{phishing_url}?uid=#{uid}"
       @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
-      mail_opts =  {
-          to: @target.email_address,
-          from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
-          subject: @campaign.email_settings.subject,
-          template_path: @campaign.template.email_template_path,
-          template_name: @campaign.template.email_files.first[:file],
-          delivery_method: :smtp
-      }
 
-      mail_opts[:reply_to] = @campaign.email_settings.reply_to unless @campaign.email_settings.reply_to.blank?
-
+      mail_opts[:delivery_method] = :smtp
       bait = mail(mail_opts)
-
       # if no authentication is selected send anonymous smtp
       if @campaign.email_settings.authentication == "none"
         bait.delivery_method.settings.merge!(campaign_anonymous_smtp_settings)
@@ -40,15 +42,12 @@ class PhishingFrenzyMailer < ActionMailer::Base
         bait.delivery_method.settings.merge!(campaign_smtp_settings)
       end
       cast(blast, bait)
-    else
-      uid = victim_uid(@target, campaign_id)
-      bait = mail(
-          to: @target.email_address,
-          subject: @campaign.email_settings.subject,
-          template_path: @campaign.template.email_template_path,
-          template_name: @campaign.template.email_files.first[:file],
-          delivery_method: :letter_opener_web)
+    when PREVIEW
+      mail_opts[:delivery_method] = :letter_opener_web
+      bait = mail(mail_opts)
       cast(blast, bait)
+    else
+      raise RuntimeError, 'Unknown mailer action'
     end
   end
 
