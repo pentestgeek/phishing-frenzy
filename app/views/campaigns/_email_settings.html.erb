@@ -53,6 +53,20 @@
 
       <div class="row top-buffer">
         <div class="col-xs-3">
+          <p>Reply to:</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='What you want set for the reply to field'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.text_field(:reply_to,
+                  placeholder: 'email@phishingfrenzy.local',
+                  class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
           <p>Phishing URL:</p>
         </div>
         <div class="col-xs-1">

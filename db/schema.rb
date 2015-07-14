@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111063547) do
+ActiveRecord::Schema.define(version: 20150714194319) do
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 20141111063547) do
     t.string   "domain"
     t.string   "authentication"
     t.boolean  "enable_starttls_auto"
+    t.string   "reply_to"
   end
 
   add_index "email_settings", ["campaign_id"], name: "index_email_settings_on_campaign_id", using: :btree

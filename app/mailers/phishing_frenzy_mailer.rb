@@ -20,15 +20,19 @@ class PhishingFrenzyMailer < ActionMailer::Base
       uid = victim_uid(@target, campaign_id)
       @url = "#{phishing_url}?uid=#{uid}"
       @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
-      bait = mail(
+      mail_opts =  {
           to: @target.email_address,
           from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
           subject: @campaign.email_settings.subject,
           template_path: @campaign.template.email_template_path,
           template_name: @campaign.template.email_files.first[:file],
           delivery_method: :smtp
-      )
-      
+      }
+
+      mail_opts[:reply_to] = @campaign.email_settings.reply_to unless @campaign.email_settings.reply_to.blank?
+
+      bait = mail(mail_opts)
+
       # if no authentication is selected send anonymous smtp
       if @campaign.email_settings.authentication == "none"
         bait.delivery_method.settings.merge!(campaign_anonymous_smtp_settings)
