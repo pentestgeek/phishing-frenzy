@@ -48,6 +48,9 @@ class CampaignsController < ApplicationController
 
 	def update
 		@campaign = Campaign.find(params[:id])
+		if params[:campaign][:email_settings_attributes][:smtp_password].blank? && !@campaign.email_settings.smtp_password.blank?
+			params[:campaign][:email_settings_attributes][:smtp_password] = @campaign.email_settings.smtp_password
+		end
 		if @campaign.update_attributes(params[:campaign])
 			redirect_to @campaign, notice: "Campaign Updated"
 		else
