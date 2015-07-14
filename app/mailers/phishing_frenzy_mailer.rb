@@ -7,13 +7,23 @@ class PhishingFrenzyMailer < ActionMailer::Base
     @campaign = Campaign.find(campaign_id)
     @display_from = @campaign.email_settings.display_from
     @date = Time.now.to_formatted_s(:long_ordinal)
-    track = @campaign.campaign_settings.track_uniq_visitors?
     phishing_url = @campaign.email_settings.phishing_url
     target.class == String ? @target = Victim.new(email_address: target) : @target = target
     blast = @campaign.blasts.find(blast_id)
 
     @campaign.template.images.each do |image|
       attachments.inline[image[:file]] = File.read(image.file.current_path)
+    end
+
+    uid = victim_uid(@target, campaign_id)
+
+    if @campaign.campaign_settings.track_uniq_visitors?
+      @url = "#{phishing_url}?uid=#{uid}"
+      @image_url = "#{PhishingFramework::SITE_URL}/reports/image/#{uid}.png"
+    else
+      @url = phishing_url
+      # Don't know a default non-tracking image?
+      @image_url = "#{PhishingFramework::SITE_URL}/reports/image/000000.png"
     end
 
     mail_opts =  {
@@ -29,10 +39,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
     case method
     when ACTIVE
-      uid = victim_uid(@target, campaign_id)
-      @url = "#{phishing_url}?uid=#{uid}"
-      @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
-
       mail_opts[:delivery_method] = :smtp
       bait = mail(mail_opts)
       # if no authentication is selected send anonymous smtp
@@ -41,14 +47,14 @@ class PhishingFrenzyMailer < ActionMailer::Base
       else
         bait.delivery_method.settings.merge!(campaign_smtp_settings)
       end
-      cast(blast, bait)
     when PREVIEW
       mail_opts[:delivery_method] = :letter_opener_web
       bait = mail(mail_opts)
-      cast(blast, bait)
     else
       raise RuntimeError, 'Unknown mailer action'
     end
+
+    cast(blast, bait)
   end
 
   def cast(blast, bait)
@@ -76,16 +82,11 @@ class PhishingFrenzyMailer < ActionMailer::Base
   end
 
   def campaign_smtp_settings
-    {
-      :openssl_verify_mode => @campaign.email_settings.openssl_verify_mode_class,
-      address: @campaign.email_settings.smtp_server_out,
-      port: @campaign.email_settings.smtp_port,
+    campaign_anonymous_smtp_settings.merge({
       user_name: @campaign.email_settings.smtp_username,
       password: @campaign.email_settings.smtp_password,
       authentication: @campaign.email_settings.authentication.to_sym,
-      enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
-      return_response: true
-    }
+    })
   end
 
   def campaign_anonymous_smtp_settings
@@ -98,6 +99,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     }
   end
 
+
   def victim_uid(target, campaign_id)
     victim = Victim.where(:email_address => target.email_address, :campaign_id => campaign_id)
     if victim.present?
@@ -105,6 +107,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     else
       uid = "000000"
     end
-    return uid
+
+    uid
   end
 end
