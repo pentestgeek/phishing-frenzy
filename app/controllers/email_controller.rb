@@ -19,8 +19,8 @@ class EmailController < ApplicationController
       end
     rescue Redis::CannotConnectError => e
       flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
-    rescue::NoMethodError => e
-      flash[:error] = e.message #"Template is missing an email file, upload and create new email"
+    rescue::NoMethodError
+      flash[:error] = "Template is missing an email file, upload and create new email"
     rescue => e
       flash[:error] = "Generic Template Issue: #{e}"
     end
