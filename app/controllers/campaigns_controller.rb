@@ -13,8 +13,8 @@ class CampaignsController < ApplicationController
 	end
 
 	def home
-		@activities = PublicActivity::Activity.includes(:trackable, :owner).order('created_at DESC').limit(10)
-		@campaigns = Campaign.launched.order("created_at DESC").limit(6)
+		@activities = PublicActivity::Activity.includes(:trackable, :owner).order('created_at DESC').limit(30)
+		@campaigns = Campaign.launched.order("created_at DESC").limit(10)
 	end
 
 	def show

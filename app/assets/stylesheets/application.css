@@ -170,3 +170,7 @@ A:hover
 .pad-bot {
   margin-bottom: 10px;
 }
+
+.nav-tabs {
+  padding-top: 10px;
+}

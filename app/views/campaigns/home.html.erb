@@ -1,13 +1,26 @@
 <% @page_title = "Dashboard" %>
 
-<h3>Recent Activity</h3>
-<%= render_activities @activities %>
-<%= link_to "All Activity", activity_campaigns_path, class: "btn btn-primary btn-block" %>
+  <!-- Homepage Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#charts" aria-controls="charts" role="tab" data-toggle="tab">Charts</a></li>
+    <li role="presentation"><a href="#activity" aria-controls="activity" role="tab" data-toggle="tab">Activity</a></li>
+  </ul>
 
-<h3>Launched Phishing Campaigns</h3>
+  <!-- Homepage Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="charts">
+      <h3>Launched Phishing Campaigns</h3>
 
-<div class="container-fluid">
-  <div class="row">
-    <%= render partial: "campaign", collection: @campaigns %>
+      <div class="container-fluid">
+        <div class="row">
+          <%= render partial: "campaign", collection: @campaigns %>
+        </div>
+      </div> 
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="activity">
+      <h3>Recent Activity</h3>
+      <%= render_activities @activities %>
+      <%= link_to "All Activity", activity_campaigns_path, class: "btn btn-primary btn-block" %>
+    </div>
   </div>
-</div>
