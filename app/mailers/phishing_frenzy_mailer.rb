@@ -1,5 +1,5 @@
 class PhishingFrenzyMailer < ActionMailer::Base
-
+  
   PREVIEW = 0
   ACTIVE = 1
 
@@ -13,6 +13,13 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
     @campaign.template.images.each do |image|
       attachments.inline[image[:file]] = File.read(image.file.current_path)
+    end
+
+    @campaign.template.file_attachments.each do |attachment|
+      attachments[File.basename attachment.file.to_s] = {
+        content_type: attachment.file.content_type,
+        body: File.read(attachment.file.current_path)
+      }
     end
 
     uid = victim_uid(@target, campaign_id)
@@ -98,7 +105,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
       return_response: true
     }
   end
-
 
   def victim_uid(target, campaign_id)
     victim = Victim.where(:email_address => target.email_address, :campaign_id => campaign_id)

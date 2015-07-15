@@ -53,7 +53,7 @@
         <span class="glyphicon glyphicon-question-sign" title='Hook Browsers when targets land on your phishing website. Each php website file will be taged with the javascript required to hook target browsers. Must be running beef service to hook properly'></span>
       </div>
       <div class="col-xs-8">
-        <%= ff.text_field(:beef_url, class: 'form-control') %></td>
+        <%= ff.text_field(:beef_url, value: GlobalSettings.first.beef_url, class: 'form-control') %></td>
       </div>
     </div>
 

@@ -162,3 +162,15 @@ A:hover
   font-size: 12px;
   list-style: square;
 }
+
+.breadcrumb {
+  margin-top: 10px;
+}
+
+.pad-bot {
+  margin-bottom: 10px;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+}

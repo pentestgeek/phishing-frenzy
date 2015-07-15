@@ -1,0 +1,9 @@
+<li class="list-group-item">
+  <% if a.trackable %>
+    <%= a.decorate.campaign_icon %> <%= a.decorate.owner %> added campaign <i>
+    <%= link_to a.trackable.name, campaign_path(a.trackable) %></i>
+  <% else %>
+    <%= a.decorate.campaign_icon %> A campaign that is currently deleted was added by <%= a.decorate.owner %>
+  <% end %>
+  <%= a.decorate.format_date %>
+</li>

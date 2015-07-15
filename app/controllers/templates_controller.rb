@@ -6,7 +6,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.all
+		@templates = Template.includes(:admin).all
 	end
 
 	def show
@@ -20,6 +20,8 @@ class TemplatesController < ApplicationController
 
 	def create
 		@template = Template.new(params[:template])
+		@template.admin_id = current_admin.id
+
 		if @template.save
 			flash[:notice] = "Template Created"
 			redirect_to(:action => 'list')
@@ -30,13 +32,16 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit
+		@campaign = campaign_present
 		@template = Template.find(params[:id])
 	end
 
 	def update
+		@campaign = campaign_present
+		campaign_id = @campaign.present? ? @campaign.id : nil
 		@template = Template.find(params[:id])
 		if @template.update_attributes(params[:template])
-			redirect_to edit_template_path, notice: "Template Updated"
+			redirect_to edit_template_path(campaign_id: campaign_id), notice: "Template Updated"
 		else
 			render('edit')
 		end
@@ -162,11 +167,17 @@ class TemplatesController < ApplicationController
 	end
 
 	def edit_email
+		@campaign = campaign_present
 		@attachment = Attachment.find(params[:format])
 		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
 
 		begin
 			@attachment_content = File.read(Dir.glob(attachment_location)[0])
+
+			unless @attachment_content.is_utf8?
+				flash[:warning] = "Cannot Edit Files that are not UTF-8 sequence"
+				redirect_to :back
+			end
 		rescue
 			flash[:warning] = "Issue Reading Attachment File"
 			redirect_to :back
@@ -187,6 +198,10 @@ class TemplatesController < ApplicationController
 	end
 
 private
+
+	def campaign_present
+		params[:campaign_id].present? ? Campaign.find_by_id(params[:campaign_id]) : nil
+	end
 
 	def copy_template(template)
 		# generate random string

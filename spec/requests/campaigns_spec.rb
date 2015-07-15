@@ -7,7 +7,7 @@ RSpec.describe "Campaigns", :type => :request do
   describe "GET /" do
     it "request the dashboard of campaigns" do
       visit root_path
-      expect(page).to have_content("Dashboard")
+      expect(page).to have_content("Recent Activity")
     end
 
     it "clicks on the reports button for an existing campaign from the dashboard" do
@@ -85,7 +85,7 @@ RSpec.describe "Campaigns", :type => :request do
       expect(page).to have_selector("#campaign_email_settings_attributes_smtp_server_out[value='smtpout.secureserver.net']")
       expect(page).to have_selector("#campaign_email_settings_attributes_domain[value='phishingfrenzy.local']")
       expect(page).to have_selector("#campaign_email_settings_attributes_smtp_username[value='user@phishingfrenzy.local']")
-      expect(page).to have_selector("#campaign_email_settings_attributes_smtp_password[value='secretPasswd']")
+      expect(page).to_not have_selector("#campaign_email_settings_attributes_smtp_password[value='secretPasswd']")
       expect(page).to have_selector("#campaign_email_settings_attributes_smtp_port[value='3535']")
       expect(page).to have_selector("#campaign_email_settings_attributes_subject[value='Subject Line']")
       expect(page).to have_selector("#campaign_email_settings_attributes_from[value='user@phishingfrenzy.local']")

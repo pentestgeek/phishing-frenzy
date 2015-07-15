@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714194319) do
+ActiveRecord::Schema.define(version: 20150515012820) do
+
+  create_table "activities", force: true do |t|
+    t.integer  "trackable_id"
+    t.string   "trackable_type"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "key"
+    t.text     "parameters"
+    t.integer  "recipient_id"
+    t.string   "recipient_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
+  add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
+  add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
 
   create_table "admins", force: true do |t|
     t.string   "name"
@@ -68,6 +85,7 @@ ActiveRecord::Schema.define(version: 20150714194319) do
     t.string   "message",           default: "Started  "
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "baits_count",       default: 0
   end
 
   create_table "campaign_settings", force: true do |t|
@@ -101,8 +119,10 @@ ActiveRecord::Schema.define(version: 20150714194319) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "test_email"
+    t.integer  "admin_id"
   end
 
+  add_index "campaigns", ["admin_id"], name: "index_campaigns_on_admin_id", using: :btree
   add_index "campaigns", ["template_id"], name: "index_campaigns_on_template_id", using: :btree
 
   create_table "clones", force: true do |t|
@@ -161,6 +181,7 @@ ActiveRecord::Schema.define(version: 20150714194319) do
     t.string   "bing_api"
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
+    t.integer  "reports_refresh",        default: 15
   end
 
   create_table "harvested_emails", force: true do |t|
@@ -216,8 +237,10 @@ ActiveRecord::Schema.define(version: 20150714194319) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "directory_index"
+    t.integer  "admin_id"
   end
 
+  add_index "templates", ["admin_id"], name: "index_templates_on_admin_id", using: :btree
   add_index "templates", ["campaign_id"], name: "index_templates_on_campaign_id", using: :btree
 
   create_table "versions", force: true do |t|

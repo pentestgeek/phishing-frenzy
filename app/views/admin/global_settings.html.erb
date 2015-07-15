@@ -31,6 +31,11 @@
       <td><%= f.text_field(:sites_enabled_path, class: 'form-control') %></td>
     </tr>
     <tr>
+      <th>Reports Refresh Time</th>
+      <td><span class="ui-icon ui-icon-help" title='Time in seconds use to poll the server for stats on the campaign stats page'></span></td>
+      <td><%= f.text_field(:reports_refresh, class: 'form-control') %></td>
+    </tr>
+    <tr>
       <th>SMTP Timeout</th>
       <td><span class="ui-icon ui-icon-help" title='Timeout in seconds to allow when sending phishing emails through the SMTP server'></span></td>
       <td><%= f.text_field(:smtp_timeout, class: 'form-control') %></td>

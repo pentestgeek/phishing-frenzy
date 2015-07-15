@@ -281,7 +281,7 @@ $(document).ready(function() {
     });
 
 
-  }, 3000);
+  }, <%= (GlobalSettings.first.reports_refresh.to_f * 1000.0).to_i %>);
 });
 
 /*

@@ -1,49 +1,54 @@
 <%= error_messages_for(@template) %>
 
-<table id="template-table" class="table borderless">
-  <tr>
-    <th>Name</th>
-    <td><span class="ui-icon ui-icon-help" title="Template name to distinguish itself"></span></td>
-    <td><%= f.text_field(:name, required: true, class: "form-control") %></td>
- </tr>
-  <tr>
-    <th>Description</th>
-    <td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
-    <td><%= f.text_area(:description, :size => "31x2", class: "form-control") %></td>
-  </tr>
-  <tr>
-    <th>Notes</th>
-    <td>
-      <span class="ui-icon ui-icon-help" title="Enter any notes or details pertaining to the phishing template"></span>
-    </td>
-    <td><%= f.text_area(:notes, :size => "31x2", class: "form-control") %></td>
-  </tr>
-  <tr>
-    <th>Index</th>
-    <td>
-      <span class="ui-icon ui-icon-help" title="This is the file displayed at the root URL. Defaults to index.html"/>
-    </td>
-    <td><%= f.text_field(:directory_index, class: "form-control") %></td>
-  </tr>
-</table>
-<h3>Template Files</h3>
-
-<div id="attachments">
-  <%= f.fields_for :attachments, f.object.attachments.order(:function) do |attachment_form| %>
-    <div class="row form-group">
-      <div class="col-xs-2">
-        <%= attachment_form.link_to_remove "Remove" %>
-      </div>
-      <div class="col-xs-2">
-        <%= link_to attachment_form.object[:file], edit_email_templates_path(attachment_form.object[:id]) unless attachment_form.object[:file].nil? %>
-      </div>
-      <div class="col-xs-4">
-        <%= attachment_form.select(:function, %w(website email attachment), {}, {class: "form-control"}) %>
-      </div>
-      <div class="col-xs-4">
-        <%= attachment_form.file_field :file, class: 'form-control btn btn-default btn-file' %>
-      </div>
-    </div>
-  <% end %>
+<div class="well">
+  <table id="template-table" class="table borderless">
+    <tr>
+      <th>Name</th>
+      <td><span class="ui-icon ui-icon-help" title="Template name to distinguish itself"></span></td>
+      <td><%= f.text_field(:name, required: true, class: "form-control", placeholder: "Template Name") %></td>
+   </tr>
+    <tr>
+      <th>Description</th>
+      <td><span class="ui-icon ui-icon-help" title="Describe the details of the phishing campaign"></span></td>
+      <td><%= f.text_area(:description, class: "form-control", placeholder: "Description...") %></td>
+    </tr>
+    <tr>
+      <th>Notes</th>
+      <td>
+        <span class="ui-icon ui-icon-help" title="Enter any notes or details pertaining to the phishing template"></span>
+      </td>
+      <td><%= f.text_area(:notes, class: "form-control", placeholder: "Notes") %></td>
+    </tr>
+    <tr>
+      <th>Index</th>
+      <td>
+        <span class="ui-icon ui-icon-help" title="This is the file displayed at the root URL. Defaults to index.html"/>
+      </td>
+      <td><%= f.text_field(:directory_index, required: true, class: "form-control", placeholder: "index.php") %></td>
+    </tr>
+  </table>
 </div>
-<%= f.link_to_add "Add attachment", :attachments, "data-target" => "#attachments" %>
+
+<div class="well">
+  <h3>Template Files</h3>
+
+  <div id="attachments">
+    <%= f.fields_for :attachments, f.object.attachments.order(:function) do |attachment_form| %>
+      <div class="row form-group">
+        <div class="col-xs-2">
+          <%= attachment_form.link_to_remove "Remove" %>
+        </div>
+        <div class="col-xs-2">
+          <%= link_to attachment_form.object[:file], edit_email_templates_path(attachment_form.object[:id], campaign_id: params[:campaign_id]) unless attachment_form.object[:file].nil? %>
+        </div>
+        <div class="col-xs-4">
+          <%= attachment_form.select(:function, Attachment::FUNCTIONS, {}, {class: "form-control"}) %>
+        </div>
+        <div class="col-xs-4">
+          <%= attachment_form.file_field :file, class: 'form-control btn btn-default btn-file' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <%= f.link_to_add "Add attachment", :attachments, "data-target" => "#attachments" %>
+</div>
