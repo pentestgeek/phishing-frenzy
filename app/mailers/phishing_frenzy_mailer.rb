@@ -1,14 +1,13 @@
 class PhishingFrenzyMailer < ActionMailer::Base
-  
+
   PREVIEW = 0
   ACTIVE = 1
 
-  def phish(campaign_id, target, blast_id, method=PREVIEW)
+  def phish(campaign_id, target_email, blast_id, method=PREVIEW)
     @campaign = Campaign.find(campaign_id)
     @display_from = @campaign.email_settings.display_from
     @date = Time.now.to_formatted_s(:long_ordinal)
     phishing_url = @campaign.email_settings.phishing_url
-    target.class == String ? @target = Victim.new(email_address: target) : @target = target
     blast = @campaign.blasts.find(blast_id)
 
     @campaign.template.images.each do |image|
@@ -22,7 +21,8 @@ class PhishingFrenzyMailer < ActionMailer::Base
       }
     end
 
-    uid = victim_uid(@target, campaign_id)
+    victim = get_victim(target_email, campaign_id)
+    uid = victim.uid.to_s
 
     if @campaign.campaign_settings.track_uniq_visitors?
       @url = "#{phishing_url}?uid=#{uid}"
@@ -34,7 +34,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     mail_opts =  {
-        to: @target.email_address,
+        to: victim.email_address,
         from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
         subject: @campaign.email_settings.subject,
         template_path: @campaign.template.email_template_path,
@@ -42,7 +42,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
     }
 
     mail_opts[:reply_to] = @campaign.email_settings.reply_to unless @campaign.email_settings.reply_to.blank?
-
 
     case method
     when ACTIVE
@@ -106,14 +105,10 @@ class PhishingFrenzyMailer < ActionMailer::Base
     }
   end
 
-  def victim_uid(target, campaign_id)
-    victim = Victim.where(:email_address => target.email_address, :campaign_id => campaign_id)
-    if victim.present?
-      uid = victim.first.uid
-    else
-      uid = "000000"
-    end
+  def get_victim(email, campaign_id)
+    victim = Victim.find_by(email_address: email, campaign_id: campaign_id)
+    victim = Victim.new(email_address: email, uid: '000000') unless victim
 
-    uid
+    victim
   end
 end
