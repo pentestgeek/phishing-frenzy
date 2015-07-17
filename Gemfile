@@ -105,5 +105,8 @@ gem "bullet", :group => "development"
 
 gem 'public_activity'
 
+# Used to tail log files
+gem 'file-tail'
+
 # decorators
 gem 'draper', '~> 1.3'
