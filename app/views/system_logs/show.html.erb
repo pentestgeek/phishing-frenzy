@@ -23,7 +23,7 @@
               <% klass.read.each do |line| %>
                 <li>
                   <p>
-                    <%= line %>
+                    <%= line.blank? ? raw('&nbsp;') : line %>
                   </p>
                 </li>
               <% end %>
