@@ -1,22 +1,22 @@
 <% @page_title = "System Logs" %>
-<% loggers = [::PhishingFrenzy::Logger, ::PhishingFrenzy::SidekiqLogger] %>
+<% loggers = [SystemLogsHelper::Logger, SystemLogsHelper::SidekiqLogger] %>
 
 <div class="system_logs tabbable">
   <h2>System Logs</h2>
+  <p class="light">To prevent performance issues admin logs output the last 2000 lines</p>
   <ul class="nav nav-tabs log-tabs" role="tablist">
     <% loggers.each do |klass| %>
-      <li class="<%= (klass == PhishingFrenzy::Logger ? 'active' : '') %>">
+      <li class="<%= (klass == SystemLogsHelper::Logger ? 'active' : '') %>">
         <%= link_to klass::file_name_noext, "##{klass::file_name_noext}", 'data-toggle' => 'tab' %>
       </li>
     <% end %>
   </ul>
-  <p class="light">To prevent performance issues admin logs output the last 2000 lines</p>
   <div class="tab-content">
     <% loggers.each do |klass| %>
-      <div class="tab-pane <%= (klass == PhishingFrenzy::Logger ? 'active' : '') %>" id="<%= klass::file_name_noext %>">
+      <div class="tab-pane <%= (klass == SystemLogsHelper::Logger ? 'active' : '') %>" id="<%= klass::file_name_noext %>">
         <div class="file-holder" id="README">
           <div class="file-title">
-            <i class="fa fa-file"><%= klass::file_name_noext %></i>
+            <i class="fa fa-file"><%= klass::path %></i>
           </div>
           <div class="file-content logs">
             <ol>
