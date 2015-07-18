@@ -75,10 +75,7 @@ ActiveRecord::Schema.define(version: 20150718095758) do
     t.integer  "blast_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "message_id"
   end
-
-  add_index "baits", ["message_id"], name: "index_baits_on_message_id", using: :btree
 
   create_table "blasts", force: true do |t|
     t.integer  "campaign_id"
