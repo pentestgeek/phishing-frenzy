@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'zip'
+require 'apache_controller'
 
 class Campaign < ActiveRecord::Base
   include PublicActivity::Model
@@ -17,7 +18,7 @@ class Campaign < ActiveRecord::Base
   has_many :smtp_communications
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
-  
+
   accepts_nested_attributes_for :email_settings, allow_destroy: true
   accepts_nested_attributes_for :campaign_settings, allow_destroy: true
   accepts_nested_attributes_for :ssl, allow_destroy: true#, :reject_if => proc {|attributes| attributes['filename'].blank?}
@@ -30,7 +31,7 @@ class Campaign < ActiveRecord::Base
   scope :launched, -> { where(email_sent: true) }
 
   before_save :parse_email_addresses
-  before_validation :active_deps?, :if => :active_changed?
+  before_validation :active_deps, :if => :active_changed?
   after_update :devops, :if => :active_changed?
   after_destroy :undeploy
   after_create :create_deps
@@ -177,10 +178,10 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def active_deps?
+  def active_deps
     # ensure we have a FQDN before going active
     errors.add(:fqdn, "cannot be nil when making campaign active") unless campaign_settings.fqdn.present? unless active
-    ApacheHelper.sites_path_writable.each do |error|
+    ApacheController.sites_path_writable.each do |error|
       errors.add(error.first, error.last)
     end
 
@@ -200,9 +201,9 @@ class Campaign < ActiveRecord::Base
     # remove phishing directory
     FileUtils.rm_rf deployment_directory
     # remove apache vhost file if exists
-    ApacheHelper.disable_site(id)
-    ApacheHelper.rm_vhost_file(id)
-    ApacheHelper.reload
+    ApacheController.disable_site(id)
+    ApacheController.rm_vhost_file(id)
+    ApacheController.reload
   end
 
   def deploy
@@ -211,8 +212,8 @@ class Campaign < ActiveRecord::Base
 
     # write vhost config and restart apache
     write_vhost(virtual_host_type)
-    ApacheHelper.enable_site(id)
-    ApacheHelper.reload
+    ApacheController.enable_site(id)
+    ApacheController.reload
 
     # deploy phishing website files
     FileUtils.mkdir_p(deployment_directory)
@@ -240,7 +241,7 @@ class Campaign < ActiveRecord::Base
 
   def write_vhost(vhost_type)
     # add vhost file to sites-available
-    File.open(ApacheHelper.vhost_file_path(id), "w") do |f|
+    File.open(ApacheController.vhost_file_path(id), "w") do |f|
       template = Template.find_by_id(self.template_id)
       if template.nil?
         raise 'Template #{self.template_id} not found'
