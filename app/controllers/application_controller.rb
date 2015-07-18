@@ -28,12 +28,12 @@ protected
       q = Sidekiq::Stats.new.enqueued
       @redis = true
       if q > 0 and !@sidekiq
-        flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but sidekiq is not running"
+        flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but Sidekiq is not running"
       end
     rescue Redis::CannotConnectError => e
-      flash[:warning] = e.message
       logger.error e.message
       @redis = false
+      flash[:warning] = e.message if e.message =~ /timeout/i
     end
   end
 
