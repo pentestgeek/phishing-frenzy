@@ -8,12 +8,6 @@ module PhishingFramework
   # Default website for reports stuff, must change to callback.
   SITE_URL = "http://phishingfrenzy.local"
 
-  # Move to an config/apache.rb?
-  APACHE_STATUS_COMMAND = '/etc/init.d/apache2 status'
-  APACHE_RESTART_COMMAND = 'sudo /etc/init.d/apache2 reload'
-  APACHE_VHOSTS_COMMAND = 'apache2ctl -S'
-  APACHE_CONFIG_PATH = '/etc/apache2/'
-
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

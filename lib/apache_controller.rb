@@ -1,11 +1,15 @@
-module ApacheHelper
+module ApacheController
+  APACHE_STATUS_COMMAND = '/etc/init.d/apache2 status'
+  APACHE_RESTART_COMMAND = 'sudo /etc/init.d/apache2 reload'
+  APACHE_VHOSTS_COMMAND = 'apache2ctl -S'
+  APACHE_CONFIG_PATH = '/etc/apache2/'
 
   def self.running?
-    `#{PhishingFramework::APACHE_STATUS_COMMAND} 2>&1` =~ /pid/
+    !!(`#{APACHE_STATUS_COMMAND} 2>&1` =~ /pid/)
   end
 
   def self.vhosts
-    vhosts_output = `#{PhishingFramework::APACHE_VHOSTS_COMMAND} 2>&1`
+    vhosts_output = `#{APACHE_VHOSTS_COMMAND} 2>&1`
     if vhosts_output.blank?
       []
     else
@@ -14,15 +18,15 @@ module ApacheHelper
   end
 
   def self.config_path
-    PhishingFramework::APACHE_CONFIG_PATH
+    APACHE_CONFIG_PATH
   end
 
   def self.sites_enabled_path
-    File.join(PhishingFramework::APACHE_CONFIG_PATH, 'sites-enabled')
+    File.join(APACHE_CONFIG_PATH, 'sites-enabled')
   end
 
   def self.sites_available_path
-    File.join(PhishingFramework::APACHE_CONFIG_PATH, 'sites-available')
+    File.join(APACHE_CONFIG_PATH, 'sites-available')
   end
 
   def self.vhost_file_path(id)
@@ -58,7 +62,7 @@ module ApacheHelper
   end
 
   def self.reload
-    log `#{PhishingFramework::APACHE_RESTART_COMMAND} 2&>1`
+    log `#{APACHE_RESTART_COMMAND} 2&>1`
   end
 
   def self.rm_vhost_file(id)

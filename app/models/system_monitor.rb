@@ -1,13 +1,15 @@
+require 'apache_controller'
+
 class SystemMonitor
 
   # determine if apache is running
   def self.apache
-    ApacheHelper.running?
+    ApacheController.running?
   end
 
   # retrieve configured vhosts
   def self.vhosts
-    ApacheHelper.vhosts
+    ApacheController.vhosts
   end
 
   # determine if metasploit is running
