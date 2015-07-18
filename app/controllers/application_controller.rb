@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include PublicActivity::StoreController
 
   protect_from_forgery
-  
+
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_admin!
   before_filter :system_status
@@ -31,6 +31,8 @@ protected
         flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but sidekiq is not running"
       end
     rescue Redis::CannotConnectError => e
+      flash[:warning] = e.message
+      logger.error e.message
       @redis = false
     end
   end
