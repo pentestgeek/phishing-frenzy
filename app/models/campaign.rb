@@ -183,8 +183,8 @@ class Campaign < ActiveRecord::Base
       errors.add(:fqdn, "cannot be nil when making campaign active") unless campaign_settings.fqdn.present?
 
       # ensure we have write access to sites-enabled   
-      unless File.writable?(GlobalSettings.first.sites_enabled_path)
-        errors.add(:apache, "File Permission Issue: chmod -R 755 and chown www-data:www-data #{GlobalSettings.first.sites_enabled_path}")
+      unless File.writable?(GlobalSettings.instance.sites_enabled_path)
+        errors.add(:apache, "File Permission Issue: chmod -R 755 and chown www-data:www-data #{GlobalSettings.instance.sites_enabled_path}")
       end
     end
 
@@ -260,7 +260,7 @@ class Campaign < ActiveRecord::Base
 
   def select_beef_url
     return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
-    return GlobalSettings.first.beef_url unless GlobalSettings.first.beef_url.empty?
+    return GlobalSettings.instance.beef_url unless GlobalSettings.instance.beef_url.empty?
     return "#{PhishingFramework::SITE_URL}:3000/hook.js"
   end
 
@@ -269,7 +269,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def vhost_file
-    "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
+    "#{GlobalSettings.instance.sites_enabled_path}/#{self.id}.conf"
   end
 
   def inflatable?(file)
@@ -294,7 +294,7 @@ class Campaign < ActiveRecord::Base
   end
 
   def reload_apache
-    restart_apache = GlobalSettings.first.command_apache_restart
+    restart_apache = GlobalSettings.instance.command_apache_restart
     Process.spawn("#{restart_apache} > /dev/null")
   end
 

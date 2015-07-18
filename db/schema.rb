@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714194319) do
+ActiveRecord::Schema.define(version: 20150718094845) do
 
   create_table "activities", force: true do |t|
     t.integer  "trackable_id"
@@ -75,7 +75,10 @@ ActiveRecord::Schema.define(version: 20150714194319) do
     t.integer  "blast_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "message_id"
   end
+
+  add_index "baits", ["message_id"], name: "index_baits_on_message_id", using: :btree
 
   create_table "blasts", force: true do |t|
     t.integer  "campaign_id"
@@ -182,7 +185,10 @@ ActiveRecord::Schema.define(version: 20150714194319) do
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
     t.integer  "reports_refresh",        default: 15
+    t.integer  "singleton"
   end
+
+  add_index "global_settings", ["singleton"], name: "index_global_settings_on_singleton", unique: true, using: :btree
 
   create_table "harvested_emails", force: true do |t|
     t.string   "email"

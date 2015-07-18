@@ -5,7 +5,7 @@ class ToolsController < ApplicationController
 
   def emails
     # warn user if bing api key is not configured
-    if GlobalSettings.first.bing_api.to_s.empty?
+    if GlobalSettings.instance.bing_api.to_s.empty?
       flash.now[:warning] = "Bing API Key Required for Email Enumeration"
     end
 
@@ -41,7 +41,7 @@ class ToolsController < ApplicationController
 
   def enumerate_emails
     # ensure bing api key is entered
-    bing_api = GlobalSettings.first.bing_api
+    bing_api = GlobalSettings.instance.bing_api
     if bing_api.to_s.empty?
       redirect_to tools_emails_path, notice: "Unable to perform Operation without Bing API Key"
       return
