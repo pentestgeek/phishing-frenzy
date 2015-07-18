@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150718022848) do
+ActiveRecord::Schema.define(version: 20150718023513) do
 
   create_table "activities", force: true do |t|
     t.integer  "trackable_id"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20150718022848) do
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
     t.integer  "reports_refresh",        default: 15
+    t.string   "site_url",               default: "https://phishingfrenzy.local"
   end
 
   create_table "harvested_emails", force: true do |t|
