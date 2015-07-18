@@ -8,6 +8,11 @@ module PhishingFramework
   # Default website for reports stuff, must change to callback.
   SITE_URL = "http://phishingfrenzy.local"
 
+  # Move to an config/apache.rb?
+  APACHE_STATUS_COMMAND = '/etc/init.d/apache2 status'
+  APACHE_RESTART_COMMAND = 'sudo /etc/init.d/apache2 reload'
+  APACHE_VHOSTS_COMMAND = 'apache2ctl -S'
+  APACHE_CONFIG_PATH = '/etc/apache2/'
 
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -16,7 +21,7 @@ module PhishingFramework
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    
+
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]

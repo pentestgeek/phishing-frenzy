@@ -30,9 +30,9 @@ class Campaign < ActiveRecord::Base
   scope :launched, -> { where(email_sent: true) }
 
   before_save :parse_email_addresses
-  before_validation :active_deps, :if => :active_changed?
+  before_validation :active_deps?, :if => :active_changed?
   after_update :devops, :if => :active_changed?
-  after_destroy :cleanup_apache
+  after_destroy :undeploy
   after_create :create_deps
 
   # validate form before saving
@@ -116,7 +116,7 @@ class Campaign < ActiveRecord::Base
         # firstname, lastname, email
         parse_triple_csv
       end
-      
+
       # clear the Campaigns.emails holder
       self.update_attribute(:emails, " ")
     end
@@ -177,19 +177,15 @@ class Campaign < ActiveRecord::Base
     end
   end
 
-  def active_deps
+  def active_deps?
     # ensure we have a FQDN before going active
-    if active.eql? true
-      errors.add(:fqdn, "cannot be nil when making campaign active") unless campaign_settings.fqdn.present?
-
-      # ensure we have write access to sites-enabled   
-      unless File.writable?(GlobalSettings.instance.sites_enabled_path)
-        errors.add(:apache, "File Permission Issue: chmod -R 755 and chown www-data:www-data #{GlobalSettings.instance.sites_enabled_path}")
-      end
+    errors.add(:fqdn, "cannot be nil when making campaign active") unless campaign_settings.fqdn.present? unless active
+    ApacheHelper.sites_path_writable.each do |error|
+      errors.add(error.first, error.last)
     end
 
     # check ssl deps if enabled and going active
-    if campaign_settings.ssl and active.eql? true
+    if campaign_settings.ssl && active
       # validate we have certificate files
       ssl_status = self.ssl.map {|m| m.filename.present?}
       errors.add(:active, "process needs SSL certificate files uploaded for HTTPS") if ssl_status.include?(false)
@@ -204,9 +200,9 @@ class Campaign < ActiveRecord::Base
     # remove phishing directory
     FileUtils.rm_rf deployment_directory
     # remove apache vhost file if exists
-    FileUtils.rm_rf vhost_file if File.exists?(vhost_file)
-
-    reload_apache
+    ApacheHelper.disable_site(id)
+    ApacheHelper.rm_vhost_file(id)
+    ApacheHelper.reload
   end
 
   def deploy
@@ -215,7 +211,8 @@ class Campaign < ActiveRecord::Base
 
     # write vhost config and restart apache
     write_vhost(virtual_host_type)
-    reload_apache
+    ApacheHelper.enable_site(id)
+    ApacheHelper.reload
 
     # deploy phishing website files
     FileUtils.mkdir_p(deployment_directory)
@@ -242,8 +239,8 @@ class Campaign < ActiveRecord::Base
   end
 
   def write_vhost(vhost_type)
-    # add vhost file to sites-enabled
-    File.open(vhost_file, "w") do |f|
+    # add vhost file to sites-available
+    File.open(ApacheHelper.vhost_file_path(id), "w") do |f|
       template = Template.find_by_id(self.template_id)
       if template.nil?
         raise 'Template #{self.template_id} not found'
@@ -268,10 +265,6 @@ class Campaign < ActiveRecord::Base
     File.join(Rails.root, "public/deployed/campaigns", id.to_s)
   end
 
-  def vhost_file
-    "#{GlobalSettings.instance.sites_enabled_path}/#{self.id}.conf"
-  end
-
   def inflatable?(file)
     File.extname(file) == '.zip'
   end
@@ -284,18 +277,6 @@ class Campaign < ActiveRecord::Base
         zip_file.extract(f, f_path) unless File.exist?(f_path)
       }
     }
-  end
-
-  def cleanup_apache
-    # delete phishing files for campaign
-    FileUtils.rm_rf deployment_directory
-    # delete apache vhost configuration
-    FileUtils.rm_rf vhost_file if File.exists?(vhost_file)
-  end
-
-  def reload_apache
-    restart_apache = GlobalSettings.instance.command_apache_restart
-    Process.spawn("#{restart_apache} > /dev/null")
   end
 
 end

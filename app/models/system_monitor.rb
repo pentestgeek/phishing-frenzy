@@ -2,13 +2,12 @@ class SystemMonitor
 
   # determine if apache is running
   def self.apache
-    apache_output = GlobalSettings.apache_status
-    apache_output =~ /pid/
+    ApacheHelper.running?
   end
 
-  # determine if any VHOST are configured
+  # retrieve configured vhosts
   def self.vhosts
-    GlobalSettings.apache_vhosts
+    ApacheHelper.vhosts
   end
 
   # determine if metasploit is running

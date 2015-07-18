@@ -19,20 +19,6 @@ class GlobalSettings < ActiveRecord::Base
   end
 
   def self.asynchronous?
-    first.asynchronous?
-  end
-
-  def self.apache_status
-    #`#{PhishingFrenzy::APACHE_STATUS_COMMAND} 2>&1`
-  end
-
-  def self.apache_vhosts
-    vhosts_output = ""
-    #vhosts_output = `#{PhishingFrenzy::APACHE_VHOSTS_COMMAND} 2>&1`
-    if vhosts_output.blank?
-      []
-    else
-      vhosts_output.split("\n")[3..20]
-    end
+    instance.asynchronous?
   end
 end
