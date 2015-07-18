@@ -10,7 +10,6 @@ $( document ).ready(function() {
     var myValue = $(this).val();
     switch (myValue) {
       case 'google':
-        $('#campaign_email_settings_attributes_smtp_server').val('smtp.gmail.com');
         $('#campaign_email_settings_attributes_smtp_server_out').val('smtp.gmail.com');
         $('#campaign_email_settings_attributes_authentication').val('plain');
         $('#campaign_email_settings_attributes_domain').val('gmail.com');
@@ -19,19 +18,16 @@ $( document ).ready(function() {
         $('#campaign_email_settings_attributes_smtp_port').val('587');
         break;
       case 'outlook':
-        $('#campaign_email_settings_attributes_smtp_server').val('smtp.outlook.com');
         $('#campaign_email_settings_attributes_smtp_server_out').val('smtp.outlook.com');
         $('#campaign_email_settings_attributes_smtp_port').val('25');
         break;
       case 'godaddy':
-        $('#campaign_email_settings_attributes_smtp_server').val('smtp.secureserver.net');
         $('#campaign_email_settings_attributes_smtp_server_out').val('smtpout.secureserver.net');
         $('#campaign_email_settings_attributes_smtp_port').val('3535');
         break;
       case 'sendgrid':
-        $('#campaign_email_settings_attributes_smtp_server').val('smtp.sendgrid.net');
         $('#campaign_email_settings_attributes_smtp_server_out').val('smtp.sendgrid.net');
-        $('#campaign_email_settings_attributes_smtp_port').val('25');
+        $('#campaign_email_settings_attributes_smtp_port').val('2525');
         break;
     }
   });

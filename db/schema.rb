@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150718095758) do
+ActiveRecord::Schema.define(version: 20150718023513) do
 
   create_table "activities", force: true do |t|
     t.integer  "trackable_id"
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 20150718095758) do
     t.string   "beef_url"
     t.integer  "reports_refresh", default: 15
     t.integer  "singleton"
+    t.string   "site_url",              default: "https://phishingfrenzy.local"
   end
 
   add_index "global_settings", ["singleton"], name: "index_global_settings_on_singleton", unique: true, using: :btree

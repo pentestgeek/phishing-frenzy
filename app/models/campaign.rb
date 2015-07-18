@@ -259,7 +259,7 @@ class Campaign < ActiveRecord::Base
   def select_beef_url
     return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
     return GlobalSettings.instance.beef_url unless GlobalSettings.instance.beef_url.empty?
-    return "#{PhishingFramework::SITE_URL}:3000/hook.js"
+    return "#{GlobalSettings.instance.site_url}:3000/hook.js"
   end
 
   def deployment_directory
