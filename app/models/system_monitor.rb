@@ -19,7 +19,7 @@ class SystemMonitor
 
   # determine if BeeF is running
   def self.beef
-    beef_output = `ps aux | grep beef | grep -v color`
+    beef_output = `ps aux | grep '[b]eef'`
     beef_output =~ /beef/
   end
 
