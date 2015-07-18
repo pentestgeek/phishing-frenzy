@@ -29,7 +29,8 @@ class SystemMonitor
       pid = File.read(pid_file)
       Process.getpgid(pid.to_i)
     rescue Exception => e
-      Rails.logger.error e
+      Rails.logger.error %Q(Sidekiq is not running, or pid file, '#{pid_file}' is invalid:
+      #{e.class} - #{e.message})
       false
     end
   end
