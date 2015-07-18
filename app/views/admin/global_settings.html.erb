@@ -10,6 +10,13 @@
 
   <table class="table borderless" summary="Global Settings fields">
     <tr>
+      <th>Application Site URL</th>
+      <td><span class="ui-icon ui-icon-help" title='Full Site url including HTTP(S) protocol that will be used as the base callback url for tracking phishing details from visitors'></span></td>
+      <td><%= f.text_field(:site_url, placeholder: 'https://phishingfrenzy.local',
+                    required: true, class: 'form-control') %></td>
+    </tr>
+    <tr>
+    <tr>
       <th>Apache Restart Command</th>
       <td><span class="ui-icon ui-icon-help" title='Command used on the Operating System to restart Apache. This is required to manage the virtual hosts for phishing websites'></span></td>
       <td><%= f.text_field(:command_apache_restart, class: 'form-control') %></td>

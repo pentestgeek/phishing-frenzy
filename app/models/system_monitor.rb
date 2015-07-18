@@ -19,7 +19,7 @@ class SystemMonitor
 
   # determine if BeeF is running
   def self.beef
-    beef_output = `ps aux | grep beef | grep -v color`
+    beef_output = `ps aux | grep '[b]eef'`
     beef_output =~ /beef/
   end
 
@@ -29,7 +29,8 @@ class SystemMonitor
       pid = File.read(pid_file)
       Process.getpgid(pid.to_i)
     rescue Exception => e
-      Rails.logger.error e
+      Rails.logger.error %Q(Sidekiq is not running, or pid file, '#{pid_file}' is invalid:
+      #{e.class} - #{e.message})
       false
     end
   end
