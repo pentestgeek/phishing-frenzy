@@ -10,7 +10,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     phishing_url = @campaign.email_settings.phishing_url
     blast = @campaign.blasts.find(blast_id)
 
-    # We use our a custom message and content ID to prevent leaking data
+    # We use a custom message and content ID to prevent leaking data
     # about our phishing setup
     mid = cid = "<#{Mail.random_tag}@#{@campaign.email_settings.domain}>"
 
