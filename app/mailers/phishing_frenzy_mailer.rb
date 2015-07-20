@@ -34,6 +34,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     mail_opts =  {
+        message_id: "<#{Mail.random_tag}@#{@campaign.email_settings.domain}>",
         to: victim.email_address,
         from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
         subject: @campaign.email_settings.subject,
