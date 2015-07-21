@@ -21,8 +21,8 @@ class PhishingFrenzyMailer < ActionMailer::Base
       }
     end
 
-    victim = get_victim(target_email, campaign_id)
-    uid = victim.uid.to_s
+    @target = get_victim(target_email, campaign_id)
+    uid = @target.uid.to_s
 
     if @campaign.campaign_settings.track_uniq_visitors?
       @url = "#{phishing_url}?uid=#{uid}"
@@ -34,7 +34,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     mail_opts =  {
-        to: victim.email_address,
+        to: @target.email_address,
         from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
         subject: @campaign.email_settings.subject,
         template_path: @campaign.template.email_template_path,
@@ -107,7 +107,10 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
   def get_victim(email, campaign_id)
     victim = Victim.find_by(email_address: email, campaign_id: campaign_id)
-    victim = Victim.new(email_address: email, uid: '000000') unless victim
+    victim = Victim.new(email_address: email,
+                        uid: '000000',
+                        firstname: 'Firstname',
+                        lastname: 'Lastname') unless victim
 
     victim
   end
