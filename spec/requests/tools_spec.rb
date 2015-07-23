@@ -11,7 +11,7 @@ RSpec.describe "Tools", :type => :request do
     end
 
     it "request email enumeration page with bing API key entered in global settings" do
-      global_settings = GlobalSettings.first
+      global_settings = GlobalSettings.instance
       global_settings.bing_api = "BKqC2hIKr8foem2E1qiRvB5ttBQJK8objH8kZE/WJVs="
       global_settings.save
       visit tools_emails_path
@@ -27,7 +27,7 @@ RSpec.describe "Tools", :type => :request do
     end
 
     it "perform email harvesting process with bing API key entered but invalid" do
-      global_settings = GlobalSettings.first
+      global_settings = GlobalSettings.instance
       global_settings.bing_api = "BKqC2hIKr8foem2E1qiRvB5ttBQJK8objH8kZE/WJVs="
       global_settings.save
       visit tools_emails_path
