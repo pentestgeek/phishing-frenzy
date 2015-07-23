@@ -26,16 +26,15 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  # add devise test_helpers to login
-  config.include Devise::TestHelpers, :type => :controller
-  config.include Warden::Test::Helpers
-  config.extend ControllerMacros, :type => :controller
-
   # add factory_girl to replace fixtures
   config.include FactoryGirl::Syntax::Methods
 
   # add capybara to make actual requests for testing
   config.include Capybara::DSL
+
+  # add devise helpers
+  config.include Warden::Test::Helpers
+  config.include Devise::TestHelpers, :type => :controller
 
   # add devise helpers for authentication
   config.extend ControllerMacros

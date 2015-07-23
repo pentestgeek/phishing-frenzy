@@ -1,12 +1,8 @@
 require 'rails_helper'
 require 'devise'
 
-RSpec.configure do |config|
-    config.include Devise::TestHelpers, :type => :controller
-end
-
 describe SystemLogsController, type: :controller do
-  login_admin
+  login_controller_admin
 
   before do
     controller.stub(:system_status)
