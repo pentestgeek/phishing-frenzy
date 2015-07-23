@@ -59,8 +59,8 @@ class EmailController < ApplicationController
           PhishingFrenzyMailer.phish(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
         end
         target.update_attribute(:sent, true)
-        flash[:notice] = "Campaign blast launched"
       end
+      flash[:notice] = "Campaign blast launched"
     rescue Redis::CannotConnectError => e
       flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
     rescue::NoMethodError
