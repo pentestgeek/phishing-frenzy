@@ -169,7 +169,7 @@ class TemplatesController < ApplicationController
 	def edit_email
 		@campaign = campaign_present
 		@attachment = Attachment.find(params[:format])
-		attachment_location = File.join(Rails.root.to_s, "public", "uploads", "attachment", "file", params[:format], "*")
+		attachment_location = @attachment.file.current_path
 
 		begin
 			@attachment_content = File.read(Dir.glob(attachment_location)[0])

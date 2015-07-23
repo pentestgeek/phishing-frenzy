@@ -43,6 +43,9 @@ class Campaign < ActiveRecord::Base
             :length => {:maximum => 255}
   validates :emails,
             :length => {:maximum => 60000}
+
+  validate :validate_email_addresses
+
   validates :scope, :numericality => {:greater_than_or_equal_to => 0},
             :length => {:maximum => 4}, :allow_nil => true
 
@@ -104,63 +107,53 @@ class Campaign < ActiveRecord::Base
 
   private
 
-  def parse_email_addresses
-    if not self.emails.blank?
-      entry = self.emails.split("\r\n")[0]
-      if entry.scan(/,/).count == 0
-        # email
-        parse_single_csv
-      elsif entry.scan(/,/).count == 1
-        # firstname, email
-        parse_double_csv
-      elsif entry.scan(/,/).count == 2
-        # firstname, lastname, email
-        parse_triple_csv
+  def validate_email_addresses
+    return if self.emails.blank?
+    count = self.emails.lines.first.split(',').count
+
+    if count > 3
+      errors.add(:emails, "Invalid input format '#{self.emails.lines.first}'")
+      return
+    end
+
+    self.emails.each_line do |l|
+      split = l.split(',').map(&:strip)
+      unless split.count == count
+        errors.add(:emails, "Email format is not consistent '#{l}'")
       end
 
-      # clear the Campaigns.emails holder
-      self.update_attribute(:emails, " ")
+      unless split.last =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+        errors.add(:emails, "Invalid email format '#{split.last}'")
+      end
     end
   end
 
-  def parse_single_csv
-    victims = self.emails.split("\r\n")
-    victims.each do |v|
+  def parse_email_addresses
+    return if self.emails.blank?
+    count = self.emails.lines.first.split(',').count
+    return if count > 3
+
+    self.emails.each_line do |l|
+      split = l.split(',').map(&:strip)
+      next unless split.count == count
+
       victim = Victim.new
       victim.campaign_id = self.id
       victim.firstname = ""
       victim.lastname = ""
-      victim.email_address = v
+      victim.email_address = split.last
+      case count
+      when 2
+        victim.firstname = split.first
+      when 3
+        victim.firstname = split.first
+        victim.lastname = split[1]
+      end
       victim.save
     end
-  end
 
-  def parse_double_csv
-    victims = self.emails.split("\r\n")
-    victims.each do |v|
-      firstname = v.split(",")[0].strip
-      email = v.split(",")[1].strip
-      victim = Victim.new
-      victim.campaign_id = self.id
-      victim.firstname = firstname
-      victim.email_address = email
-      victim.save
-    end
-  end
-
-  def parse_triple_csv
-    victims = self.emails.split("\r\n")
-    victims.each do |v|
-      firstname = v.split(",")[0].strip
-      lastname = v.split(",")[1].strip
-      email = v.split(",")[2].strip
-      victim = Victim.new
-      victim.campaign_id = self.id
-      victim.firstname = firstname
-      victim.lastname = lastname
-      victim.email_address = email
-      victim.save
-    end
+    # clear the Campaigns.emails holder
+    self.update_attribute(:emails, " ")
   end
 
   def vhost_text(campaign, virtual_host_type)
@@ -259,7 +252,7 @@ class Campaign < ActiveRecord::Base
   def select_beef_url
     return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
     return GlobalSettings.instance.beef_url unless GlobalSettings.instance.beef_url.empty?
-    return "#{PhishingFramework::SITE_URL}:3000/hook.js"
+    return "#{GlobalSettings.instance.site_url}:3000/hook.js"
   end
 
   def deployment_directory

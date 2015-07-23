@@ -107,3 +107,6 @@ gem 'public_activity'
 
 # decorators
 gem 'draper', '~> 1.3'
+
+# foreman helper
+gem 'foreman'
