@@ -12,6 +12,7 @@ class GlobalSettings < ActiveRecord::Base
       find(1)
     rescue ActiveRecord::RecordNotFound
       row = GlobalSettings.new
+      row.id = 1
       row.singleton = 0
       row.save!
       row
