@@ -28,7 +28,7 @@ RSpec.describe "Admins", :type => :request do
     it "delete an existing admins account" do
       create(:admin)
       visit list_admin_index_path
-      first(:link, "Delete").click
+      all(:link, "Delete").last.click
       expect(page).to have_content("Admin Destroyed")
     end
   end
