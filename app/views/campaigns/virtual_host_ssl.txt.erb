@@ -2,6 +2,8 @@
     ServerName <%= @fqdn %>
     ServerAlias <%= @fqdn %>
     Redirect / https://<%= @fqdn %>/
+    ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/reports/image
+    ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/reports/image
 </VirtualHost>
 
 #<!--start <%= @campaign_id %>-->
@@ -24,5 +26,8 @@
     DirectoryIndex <%= @directory_index %>
     CustomLog     <%= @approot %>/log/www-campaign-<%= @campaign_id %>-access.log combined
     ErrorLog      <%= @approot %>/log/www-campaign-<%= @campaign_id %>-error.log
+
+    ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/reports/image
+    ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/reports/image
 </VirtualHost>
 #<!--end <%= @campaign_id %>-->
