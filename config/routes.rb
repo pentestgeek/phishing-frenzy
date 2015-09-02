@@ -6,7 +6,7 @@ PhishingFramework::Application.routes.draw do
 	# image tracking routes.
 	get '/reports/image/:uid.png' => 'reports#image'
 
-	# only allow emails to be send from POST request
+	# only allow emails to be sent from POST request
 	post '/email/preview_email/:id' => 'email#preview', as: 'preview_email'
 	post '/email/test_email/:id' =>    'email#test', as: 'test_email'
 	post '/email/launch_email/:id' =>  'email#launch', as: 'launch'
@@ -36,9 +36,14 @@ PhishingFramework::Application.routes.draw do
 			delete 'destroy'
 		end
 		member do
+      get 'view_campaign'
 			post 'clear_victims'
 		end
 	end
+
+# Custom Route for viewing Campaigns template files directly...
+get 'campaigns/view_campaign/:id/:filename', to: 'campaigns#view_campaign', constraints: { filename: /[^\/]+/ }
+post 'campaigns/view_campaign/:id/:filename', to: 'campaigns#view_campaign', constraints: { filename: /[^\/]+/ }
 
 	resources :blasts, only: [:show], shallow: true
 
