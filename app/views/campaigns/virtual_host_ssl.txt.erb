@@ -2,6 +2,13 @@
     ServerName <%= @fqdn %>
     ServerAlias <%= @fqdn %>
     Redirect / https://<%= @fqdn %>/
+
+<% if GlobalSettings.first.site_url.downcase.include?('https://') %>
+    SSLProxyEngine On
+    SSLProxyCheckPeerCN off
+    SSLProxyCheckPeerExpire off
+<% end %>
+
     ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/reports/image
     ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/reports/image
 </VirtualHost>
