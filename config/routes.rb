@@ -36,14 +36,14 @@ PhishingFramework::Application.routes.draw do
 			delete 'destroy'
 		end
 		member do
-      get 'view_campaign'
 			post 'clear_victims'
 		end
 	end
 
 # Custom Route for viewing Campaigns template files directly...
-get 'campaigns/view_campaign/:id/:filename', to: 'campaigns#view_campaign', constraints: { filename: /[^\/]+/ }
-post 'campaigns/view_campaign/:id/:filename', to: 'campaigns#view_campaign', constraints: { filename: /[^\/]+/ }
+get 'site_delivery/view/:id/:filename', to: 'site_delivery#view', constraints: { filename: /[^\/]+/ }
+post 'site_delivery/view/:id/:filename', to: 'site_delivery#view', constraints: { filename: /[^\/]+/ }
+
 
 	resources :blasts, only: [:show], shallow: true
 
