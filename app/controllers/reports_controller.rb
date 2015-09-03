@@ -54,11 +54,11 @@ class ReportsController < ApplicationController
     jsonToSend["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
     i = 0
     Victim.where(campaign_id: params[:id]).each do |victim|
-      passwordSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
+      passwordSeen = Credential.joins(:visit).where(visits: { victim_id: victim.id }).count > 0 ? 'Yes' : 'No'
       imageSeen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
       emailSent = victim.sent ? "Yes" : "No"
-      emailClicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
-      emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
+      emailClicked =  Visit.where(:victim_id => victim.id).where('extra IS NULL OR extra NOT LIKE ?', '%EMAIL%').count > 0 ? 'Yes' : 'No'
+      emailSeen = Visit.where(:victim_id => victim.id).count > 0 ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
       jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen,emailSeen]
       i += 1
     end
@@ -145,7 +145,7 @@ class ReportsController < ApplicationController
   def passwords
     # display all password harvested within campaign
     @campaign = Campaign.find(params[:id])
-    @visits = @campaign.visits.where('extra LIKE ?', "%password%")
+    @visits = Visit.includes(:victim, :credential).joins(:victim, :credential).where(victims: { campaign_id: params[:id] })
   end
 
   def smtp

