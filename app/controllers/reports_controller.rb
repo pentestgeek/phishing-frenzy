@@ -55,11 +55,12 @@ class ReportsController < ApplicationController
     i = 0
     Victim.where(campaign_id: params[:id]).each do |victim|
       passwordSeen = Credential.joins(:visit).where(visits: { victim_id: victim.id }).count > 0 ? 'Yes' : 'No'
-      imageSeen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
-      emailSent = victim.sent ? "Yes" : "No"
-      emailClicked =  Visit.where(:victim_id => victim.id).where('extra IS NULL OR extra NOT LIKE ?', '%EMAIL%').count > 0 ? 'Yes' : 'No'
-      emailSeen = Visit.where(:victim_id => victim.id).count > 0 ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
-      jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen,emailSeen]
+      visits = Visit.where(victim_id: victim.id).order(:created_at)
+      imageSeen = visits.empty? ? 'No' : 'Yes'
+      emailSent = victim.sent ? 'Yes' : 'No'
+      emailClicked =  visits.select{ |v| v.extra.nil? }.count > 0 ? 'Yes' : 'No'
+      email_last_seen = visits.count > 0 ? visits.last.created_at : 'N/A'
+      jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen, email_last_seen]
       i += 1
     end
 
