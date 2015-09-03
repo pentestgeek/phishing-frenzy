@@ -1,6 +1,7 @@
 class Victim < ActiveRecord::Base
 	belongs_to :campaign
 	has_many :visits, dependent: :destroy
+  has_many :credentials, through: :visits
 
 	validates_format_of :email_address, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 	validates_uniqueness_of :email_address, scope: :campaign_id

