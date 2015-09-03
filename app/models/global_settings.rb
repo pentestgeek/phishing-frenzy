@@ -1,13 +1,3 @@
-class UriValidator < ActiveModel::Validator
-  require 'uri'
-
-  def validate(uri)
-    !!URI.parse(uri)
-  rescue URI::InvalidURIError
-    false
-  end
-end
-
 class GlobalSettings < ActiveRecord::Base
 
   attr_accessible :site_url, :command_apache_restart, :command_apache_vhosts, :command_apache_status, :sites_enabled_path, :smtp_timeout, :asynchronous, :bing_api, :beef_url, :reports_refresh
