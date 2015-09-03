@@ -15,7 +15,8 @@ class SiteDeliveryController < ApplicationController
   end
 
   def create_visit(victim, extra)
-    visit = victim.build_visit
+    visit = Visit.new
+    visit.victim_id = victim.id
     visit.browser = request.env['HTTP_USER_AGENT']
     visit.ip_address = request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
     visit.extra = extra
