@@ -13,8 +13,8 @@
     SSLProxyCheckPeerExpire off
 <% end %>
 
-    ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/reports/image
-    ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/reports/image
+    ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/site_delivery/tracking_image/<%= @campaign_id %>
+    ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/site_delivery/tracking_image/<%= @campaign_id %>
     ProxyPass / <%= GlobalSettings.first.site_url %>/site_delivery/view/<%= @campaign_id %>/
     ProxyPassReverse / <%= GlobalSettings.first.site_url %>/site_delivery/view/<%= @campaign_id %>/
 

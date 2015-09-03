@@ -1,5 +1,4 @@
 class ReportsController < ApplicationController
-  skip_before_filter :authenticate_admin!, only: [ :results, :image ]
 
   def index
     list
@@ -8,23 +7,6 @@ class ReportsController < ApplicationController
 
   def list
     @campaigns = Campaign.launched.order(created_at: :desc)
-  end
-
-  def image
-    victims = Victim.where(:uid => params[:uid])
-    if victims.present?
-      visit = Visit.new
-      victim = victims.first
-      visit.victim_id = victim.id
-      visit.browser = request.env["HTTP_USER_AGENT"]
-      visit.ip_address = request.env["REMOTE_ADDR"]
-      visit.extra = "SOURCE: EMAIL"
-      visit.save
-    else
-      logger.info  "Image request for unknown UID: #{params[:uid]}"
-    end
-
-    send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
   end
 
   def stats
@@ -38,36 +20,6 @@ class ReportsController < ApplicationController
                               disposition: "inline"
       end
     end
-  end
-
-  def results
-    finish = "start, "
-    if params[:uid]
-      finish += "uid check, "
-      victims = Victim.where(:uid => params[:uid])
-      finish += "length " + victims.length.to_s + ", "
-      if victims.length > 0
-        finish += "over 1, "
-        v = victims.first()
-        visit = Visit.new()
-        visit.victim_id = v.id
-        if params[:browser_info]
-          finish += "browser info, "
-          visit.browser = params[:browser_info]
-        end
-        if params[:ip_address]
-          finish += "ip address, "
-          visit.ip_address = params[:ip_address]
-        end
-        if params[:extra]
-          finish += "extra, "
-          visit.extra = params[:extra]
-        end
-        visit.save()
-      end
-    end
-
-    render text: finish
   end
 
   def stats_sum
@@ -97,7 +49,7 @@ class ReportsController < ApplicationController
     render json: @jsonToSend
   end
 
-  def victims_list 
+  def victims_list
     jsonToSend = Hash.new()
     jsonToSend["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
     i = 0
