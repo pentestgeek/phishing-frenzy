@@ -13,7 +13,7 @@ development:
   encoding: utf8
   reconnect: false
   database: pf_dev
-  pool: 5
+  pool: 25
   username: pf_dev
   password: password
   host: localhost
@@ -26,7 +26,7 @@ test:
   encoding: utf8
   reconnect: false
   database: pf_test
-  pool: 5
+  pool: 25
   username: pf_test
   password: password
   host: localhost
@@ -36,7 +36,7 @@ production:
   encoding: utf8
   reconnect: false
   database: pf_prod
-  pool: 5
+  pool: 25
   username: pf_prod
   password: password
   host: localhost
