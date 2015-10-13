@@ -8,21 +8,23 @@ class EmailController < ApplicationController
   def test_delivery(action, redirect, async_success_notice, sync_success_notice)
     campaign = Campaign.find(params[:id])
     blast = campaign.blasts.create(test: true)
-    begin
-      # There is no reason we would want to queue a preview.
-      if GlobalSettings.asynchronous? && action != PhishingFrenzyMailer::PREVIEW
+    # There is no reason we would want to queue a preview.
+    if GlobalSettings.asynchronous? && action != PhishingFrenzyMailer::PREVIEW
+      begin
         MailWorker.perform_async(campaign.id, campaign.test_victim.email_address, blast.id, action)
         flash[:notice] = async_success_notice
-      else
+      rescue Redis::CannotConnectError => e
+        flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
+      end
+    else
+      begin
         PhishingFrenzyMailer.phish(campaign.id, campaign.test_victim.email_address, blast.id, action)
         flash[:notice] = sync_success_notice
+      rescue::NoMethodError
+        flash[:error] = "Template is missing an email file, upload and create new email"
+      rescue => e
+        flash[:error] = "Generic Template Issue: #{e}"
       end
-    rescue Redis::CannotConnectError => e
-      flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
-    rescue::NoMethodError
-      flash[:error] = "Template is missing an email file, upload and create new email"
-    rescue => e
-      flash[:error] = "Generic Template Issue: #{e}"
     end
 
     redirect_to redirect
@@ -50,7 +52,7 @@ class EmailController < ApplicationController
     end
 
     if GlobalSettings.asynchronous?
-      logger.info "Queueing emails for background delivery"
+      logger.info "Queueing emails for background delivery for campaign #{params[:id]}"
       QueueMailWorker.perform_async(params[:id])
     else
       campaign.update_attributes(active: true, email_sent: true)

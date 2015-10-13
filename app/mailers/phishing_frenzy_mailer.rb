@@ -61,7 +61,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     sent = cast(blast, bait)
-    @target.update_attribute(:sent, true) if sent
+    @target.update_attribute(:sent, true) if sent && (method == ACTIVE)
   end
 
   def cast(blast, bait)
