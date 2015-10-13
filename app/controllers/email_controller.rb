@@ -43,6 +43,10 @@ class EmailController < ApplicationController
   end
 
   def launch
+    QueueMailWorker.perform_async(params[:id]) if GlobalSettings.asynchronous?
+    flash[:notice] = "Campaign blast launched"
+    redirect_to :back
+    return
     campaign = Campaign.find(params[:id])
     if campaign.errors.present?
       render template: "/campaigns/show"
@@ -54,6 +58,7 @@ class EmailController < ApplicationController
     async = GlobalSettings.asynchronous?
 
     logger.info "Queueing #{victims.count} emails for background delivery" if async
+    return
     victims.each do |target|
       if async
         begin
