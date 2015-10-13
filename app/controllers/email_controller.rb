@@ -50,7 +50,7 @@ class EmailController < ApplicationController
     end
 
     if GlobalSettings.asynchronous?
-      logger.info "Queueing emails for background delivery for campaign #{params[:id]}"
+      logger.info "Queueing emails for background delivery"
       QueueMailWorker.perform_async(params[:id])
     else
       campaign.update_attributes(active: true, email_sent: true)
