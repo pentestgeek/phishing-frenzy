@@ -43,31 +43,21 @@ class EmailController < ApplicationController
   end
 
   def launch
-    QueueMailWorker.perform_async(params[:id]) if GlobalSettings.asynchronous?
-    flash[:notice] = "Campaign blast launched"
-    redirect_to :back
-    return
     campaign = Campaign.find(params[:id])
     if campaign.errors.present?
       render template: "/campaigns/show"
       return false
     end
-    campaign.update_attributes(active: true, email_sent: true)
-    blast = campaign.blasts.create(test: false)
-    victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
-    async = GlobalSettings.asynchronous?
 
-    logger.info "Queueing #{victims.count} emails for background delivery" if async
-    return
-    victims.each do |target|
-      if async
-        begin
-          MailWorker.perform_async(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
-        rescue Redis::CannotConnectError
-          flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
-          break
-        end
-      else
+    if GlobalSettings.asynchronous?
+      logger.info "Queueing #{victims.count} emails for background delivery"
+      QueueMailWorker.perform_async(params[:id])
+    else
+      campaign.update_attributes(active: true, email_sent: true)
+      blast = campaign.blasts.create(test: false)
+      victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
+
+      victims.each do |target|
         begin
           PhishingFrenzyMailer.phish(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
         rescue ::NoMethodError
