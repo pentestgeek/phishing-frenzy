@@ -52,7 +52,8 @@ class EmailController < ApplicationController
     blast = campaign.blasts.create(test: false)
     victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
     async = GlobalSettings.asynchronous?
-    logger.info "Queueing #{victims.count} emails for background delivery"
+
+    logger.info "Queueing #{victims.count} emails for background delivery" if async
     victims.each do |target|
       if async
         begin
