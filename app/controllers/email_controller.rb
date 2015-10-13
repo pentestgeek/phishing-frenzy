@@ -52,8 +52,9 @@ class EmailController < ApplicationController
     blast = campaign.blasts.create(test: false)
     victims = Victim.where("campaign_id = ? and archive = ?", params[:id], false)
     begin
+      async = GlobalSettings.asynchronous?
       victims.each do |target|
-        if GlobalSettings.asynchronous?
+        if async
           MailWorker.perform_async(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
         else
           PhishingFrenzyMailer.phish(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
