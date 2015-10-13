@@ -11,7 +11,7 @@ class QueueMailWorker
 
     logger.info "Queueing #{victims.count} emails for background delivery"
     victims.each do |target|
-      PhishingFrenzyMailer.phish(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
+      MailWorker.perform_async(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
     end
   end
 end
