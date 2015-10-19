@@ -83,8 +83,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.integer  "number_of_targets"
     t.integer  "emails_sent",       default: 0
     t.string   "message",           default: "Started  "
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "baits_count",       default: 0
   end
 
@@ -174,8 +174,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
   create_table "global_settings", force: true do |t|
     t.string   "command_apache_restart"
     t.integer  "smtp_timeout",           default: 5
-    t.datetime "created_at",                                                    null: false
-    t.datetime "updated_at",                                                    null: false
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
     t.string   "command_apache_status"
     t.string   "command_apache_vhosts",  default: "apache2ctl -S"
     t.boolean  "asynchronous",           default: true

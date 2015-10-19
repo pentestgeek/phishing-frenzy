@@ -12,7 +12,7 @@ PhishingFramework::Application.routes.draw do
 	post '/email/launch_email/:id' =>  'email#launch', as: 'launch'
 
 	# only allow deletion from POST requests
-	get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
+	# get '/campaigns/delete_smtp_entry/:id' => 'campaigns#list'
 
 	get "reports/list"
 	get "reports/show"
@@ -33,6 +33,7 @@ PhishingFramework::Application.routes.draw do
 			get 'aboutus'
 			get 'victims'
 			get 'activity'
+      get 'deactivate_and_clean'
 			delete 'destroy'
 		end
 		member do
