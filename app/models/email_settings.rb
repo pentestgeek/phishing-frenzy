@@ -3,7 +3,7 @@ class EmailSettings < ActiveRecord::Base
 
   attr_accessible :campaign_id, :to, :cc, :bcc, :from, :display_from, :subject, :phishing_url,
                   :smtp_server, :smtp_username, :smtp_password, :smtp_port, :smtp_server_out,
-                  :openssl_verify_mode, :domain, :authentication, :enable_starttls_auto
+                  :openssl_verify_mode, :domain, :authentication, :enable_starttls_auto, :reply_to
 
   validates :campaign_id, :presence => true,
             :length => {:maximum => 255}

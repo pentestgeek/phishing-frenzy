@@ -32,6 +32,7 @@ PhishingFramework::Application.routes.draw do
 			get 'list'
 			get 'aboutus'
 			get 'victims'
+			get 'activity'
 			delete 'destroy'
 		end
 		member do

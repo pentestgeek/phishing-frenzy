@@ -7,7 +7,7 @@ RSpec.describe "Campaigns", :type => :request do
   describe "GET /" do
     it "request the dashboard of campaigns" do
       visit root_path
-      expect(page).to have_content("Dashboard")
+      expect(page).to have_content("Recent Activity")
     end
 
     it "clicks on the reports button for an existing campaign from the dashboard" do
@@ -68,7 +68,6 @@ RSpec.describe "Campaigns", :type => :request do
       campaign = create(:campaign)
       visit campaign_path(campaign)
       fill_in("campaign_test_email", with: "user@phishingfrenzy.local")
-      fill_in("campaign_email_settings_attributes_smtp_server", with: "smtp.secureserver.net")
       fill_in("campaign_email_settings_attributes_smtp_server_out", with: "smtpout.secureserver.net")
       fill_in("campaign_email_settings_attributes_domain", with: "phishingfrenzy.local")
       fill_in("campaign_email_settings_attributes_smtp_username", with: "user@phishingfrenzy.local")
@@ -81,11 +80,10 @@ RSpec.describe "Campaigns", :type => :request do
       fill_in("campaign_campaign_settings_attributes_fqdn", with: "sub.phishingfrenzy.local")
       click_on("Save Settings")
       expect(page).to have_selector("#campaign_test_email[value='user@phishingfrenzy.local']")
-      expect(page).to have_selector("#campaign_email_settings_attributes_smtp_server[value='smtp.secureserver.net']")
       expect(page).to have_selector("#campaign_email_settings_attributes_smtp_server_out[value='smtpout.secureserver.net']")
       expect(page).to have_selector("#campaign_email_settings_attributes_domain[value='phishingfrenzy.local']")
       expect(page).to have_selector("#campaign_email_settings_attributes_smtp_username[value='user@phishingfrenzy.local']")
-      expect(page).to have_selector("#campaign_email_settings_attributes_smtp_password[value='secretPasswd']")
+      expect(page).to_not have_selector("#campaign_email_settings_attributes_smtp_password[value='secretPasswd']")
       expect(page).to have_selector("#campaign_email_settings_attributes_smtp_port[value='3535']")
       expect(page).to have_selector("#campaign_email_settings_attributes_subject[value='Subject Line']")
       expect(page).to have_selector("#campaign_email_settings_attributes_from[value='user@phishingfrenzy.local']")
@@ -163,7 +161,7 @@ RSpec.describe "Campaigns", :type => :request do
       select("Intel Password Checker", from: "campaign_template_id")
       click_on("Save Settings")
       click_on("Test")
-      expect(page).to have_content("Campaign test email sent")
+      expect(page).to have_content("Campaign test email queued for test")
       expect(page).to have_css("#recentBlasts > div > table > tbody > tr:nth-child(1)")
     end
 

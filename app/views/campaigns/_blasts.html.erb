@@ -20,12 +20,12 @@
             </tr>
           </thead>
           <tbody>
-          <% campaign.blasts.order("id DESC").each do |blast| %>
+          <% campaign.blasts.includes(:baits).order("id DESC").each do |blast| %>
             <tr>
               <td><%= link_to "#{time_ago_in_words(blast.created_at)} ago", blast %></td>
               <td><%= blast.test? %></td>
               <td><%= blast.baits.size %></td>
-              <td><%= blast.smtp_failures %></td>
+              <td><%= link_to blast.smtp_failures, blast %></td>
             </tr>
           <% end %>
           </tbody>

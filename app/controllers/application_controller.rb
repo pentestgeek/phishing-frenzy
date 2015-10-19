@@ -1,13 +1,16 @@
 class ApplicationController < ActionController::Base
+  include PublicActivity::StoreController
+
   protect_from_forgery
-  
+
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_admin!
   before_filter :system_status
 
   add_flash_types :warning
 
-  protected
+protected
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username) }
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :name, :email, :password, :password_confirmation) }
@@ -25,10 +28,12 @@ class ApplicationController < ActionController::Base
       q = Sidekiq::Stats.new.enqueued
       @redis = true
       if q > 0 and !@sidekiq
-        flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but sidekiq is not running"
+        flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but Sidekiq is not running"
       end
     rescue Redis::CannotConnectError => e
+      logger.error e.message
       @redis = false
+      flash[:warning] = e.message if e.message =~ /timeout/i
     end
   end
 

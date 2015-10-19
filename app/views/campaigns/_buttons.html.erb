@@ -13,7 +13,7 @@
   </div>
   <% if campaign.template.present? %>
   <div class="btn-group" role="group">
-    <%= link_to("Edit Email", edit_template_path(campaign.template), class: 'btn btn-default') %>
+    <%= link_to("Edit Email", edit_template_path(campaign.template, campaign_id: campaign.id), class: 'btn btn-default') %>
   </div>
   <% end %>
 </div>

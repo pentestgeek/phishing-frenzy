@@ -9,12 +9,12 @@ class CampaignsController < ApplicationController
 
 	def list
 		# grab the campaigns and sort by created_at date
-		@campaigns = Campaign.order("created_at DESC")
+		@campaigns = Campaign.includes(:victims, :admin).order("created_at DESC")
 	end
 
 	def home
-		# grab only the launched campaigns
-		@campaigns = Campaign.launched.order("created_at DESC").limit(50)
+		@activities = PublicActivity::Activity.includes(:trackable, :owner).order('created_at DESC').limit(30)
+		@campaigns = Campaign.launched.order("created_at DESC").limit(10)
 	end
 
 	def show
@@ -33,6 +33,8 @@ class CampaignsController < ApplicationController
 
 	def create 
 		@campaign = Campaign.new(params[:campaign])
+		@campaign.admin_id = current_admin.id
+
 		if @campaign.save 
 			redirect_to @campaign, notice: "Campaign Created"
 		else
@@ -46,6 +48,9 @@ class CampaignsController < ApplicationController
 
 	def update
 		@campaign = Campaign.find(params[:id])
+		if params[:campaign][:email_settings_attributes][:smtp_password].blank? && !@campaign.email_settings.smtp_password.blank?
+			params[:campaign][:email_settings_attributes][:smtp_password] = @campaign.email_settings.smtp_password
+		end
 		if @campaign.update_attributes(params[:campaign])
 			redirect_to @campaign, notice: "Campaign Updated"
 		else
@@ -76,6 +81,10 @@ class CampaignsController < ApplicationController
 			flash[:notice] = "Campaign Does not Exist"
 			redirect_to(:controller => 'campaigns', :action => 'list')
 		end
+	end
+
+	def activity
+		@activities = PublicActivity::Activity.includes(:trackable, :owner).order('created_at DESC').page(params[:page]).per(30)
 	end
 
 	def victims

@@ -2,7 +2,11 @@ require 'fileutils'
 require 'zip'
 
 class Campaign < ActiveRecord::Base
+  include PublicActivity::Model
+  tracked owner: ->(controller, model) { controller && controller.current_admin }
+
   # relationships
+  belongs_to :admin
   belongs_to :template
   has_one :campaign_settings, dependent: :destroy
   has_one :email_settings, dependent: :destroy
@@ -13,13 +17,13 @@ class Campaign < ActiveRecord::Base
   has_many :smtp_communications
   has_many :baits, through: :blasts
   has_many :visits, through: :victims
-  
+
   accepts_nested_attributes_for :email_settings, allow_destroy: true
   accepts_nested_attributes_for :campaign_settings, allow_destroy: true
   accepts_nested_attributes_for :ssl, allow_destroy: true#, :reject_if => proc {|attributes| attributes['filename'].blank?}
 
   # allow mass asignment
-  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email, :ssl_attributes,:email_sent, :email_settings_attributes, :campaign_settings_attributes
+  attr_accessible :name, :description, :active, :emails, :scope, :template_id, :test_email, :ssl_attributes, :email_sent, :admin_id, :email_settings_attributes, :campaign_settings_attributes
 
   # named scopes
   scope :active, -> { where(active: true) }
@@ -38,8 +42,12 @@ class Campaign < ActiveRecord::Base
             :length => {:maximum => 255}
   validates :emails,
             :length => {:maximum => 60000}
+
+  validate :validate_email_addresses
+
   validates :scope, :numericality => {:greater_than_or_equal_to => 0},
             :length => {:maximum => 4}, :allow_nil => true
+
 
   def create_deps
     Ssl.functions.each do |function|
@@ -99,63 +107,53 @@ class Campaign < ActiveRecord::Base
 
   private
 
-  def parse_email_addresses
-    if not self.emails.blank?
-      entry = self.emails.split("\r\n")[0]
-      if entry.scan(/,/).count == 0
-        # email
-        parse_single_csv
-      elsif entry.scan(/,/).count == 1
-        # firstname, email
-        parse_double_csv
-      elsif entry.scan(/,/).count == 2
-        # firstname, lastname, email
-        parse_triple_csv
+  def validate_email_addresses
+    return if self.emails.blank?
+    count = self.emails.lines.first.split(',').count
+
+    if count > 3
+      errors.add(:emails, "Invalid input format '#{self.emails.lines.first}'")
+      return
+    end
+
+    self.emails.each_line do |l|
+      split = l.split(',').map(&:strip)
+      unless split.count == count
+        errors.add(:emails, "Email format is not consistent '#{l}'")
       end
-      
-      # clear the Campaigns.emails holder
-      self.update_attribute(:emails, " ")
+
+      unless split.last =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+        errors.add(:emails, "Invalid email format '#{split.last}'")
+      end
     end
   end
 
-  def parse_single_csv
-    victims = self.emails.split("\r\n")
-    victims.each do |v|
+  def parse_email_addresses
+    return if self.emails.blank?
+    count = self.emails.lines.first.split(',').count
+    return if count > 3
+
+    self.emails.each_line do |l|
+      split = l.split(',').map(&:strip)
+      next unless split.count == count
+
       victim = Victim.new
       victim.campaign_id = self.id
       victim.firstname = ""
       victim.lastname = ""
-      victim.email_address = v
+      victim.email_address = split.last
+      case count
+      when 2
+        victim.firstname = split.first
+      when 3
+        victim.firstname = split.first
+        victim.lastname = split[1]
+      end
       victim.save
     end
-  end
 
-  def parse_double_csv
-    victims = self.emails.split("\r\n")
-    victims.each do |v|
-      firstname = v.split(",")[0].strip
-      email = v.split(",")[1].strip
-      victim = Victim.new
-      victim.campaign_id = self.id
-      victim.firstname = firstname
-      victim.email_address = email
-      victim.save
-    end
-  end
-
-  def parse_triple_csv
-    victims = self.emails.split("\r\n")
-    victims.each do |v|
-      firstname = v.split(",")[0].strip
-      lastname = v.split(",")[1].strip
-      email = v.split(",")[2].strip
-      victim = Victim.new
-      victim.campaign_id = self.id
-      victim.firstname = firstname
-      victim.lastname = lastname
-      victim.email_address = email
-      victim.save
-    end
+    # clear the Campaigns.emails holder
+    self.update_attribute(:emails, " ")
   end
 
   def vhost_text(campaign, virtual_host_type)
@@ -277,7 +275,7 @@ class Campaign < ActiveRecord::Base
   def select_beef_url
     return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
     return GlobalSettings.first.beef_url unless GlobalSettings.first.beef_url.empty?
-    "#{PhishingFramework::SITE_URL}:3000/hook.js"
+    return "#{GlobalSettings.first.site_url}:3000/hook.js"
   end
 
   def deployment_directory
@@ -312,7 +310,7 @@ class Campaign < ActiveRecord::Base
   def reload_apache
     # reload apache
     restart_apache = GlobalSettings.first.command_apache_restart
-    system("#{restart_apache} > /dev/null")
+    Process.spawn("#{restart_apache} > /dev/null")
   end
 
 end

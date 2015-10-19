@@ -30,8 +30,8 @@
             <% end %></li>
       <% end %>
       <% if @beef %>
-          <li><%= link_to("#{PhishingFramework::SITE_URL}:3000/ui/panel", target: "_blank") do %>
-                <span class="label label-success">BeeF</span>
+          <li><%= link_to("#{GlobalSettings.first.site_url}:3000/ui/panel", target: "_blank") do %>
+                <span class="label label-success">BeEF</span>
             <% end %></li>
       <% else %>
           <li><%= link_to("#") do %>

@@ -18,7 +18,7 @@
     <tr class="header">
       <th></th>
       <th>Name</th>
-      <th>Description</th>
+      <th>Owner</th>
       <th>Index</th>
       <th>Actions</th>
     </tr>
@@ -26,15 +26,15 @@
   <tbody>
     <% @templates.each do |template| %>
     <tr>
-      <td><span class='glyphicon glyphicon-tags'></span></td>      
+      <td><%= template.decorate.template_icon %></td>      
       <td><%= template.name %></td>
-      <td><%= truncate(template.description) %></td>
+      <td><%= template.decorate.owner %></td>
       <td><%= template.index_file %></td>
       <td class="actions">
-        <%= link_to("<span class='glyphicon glyphicon-edit'></span>".html_safe,
+        <%= link_to(template.decorate.edit_icon,
               {:action => 'edit', :id => template.id}, data: {placement: 'bottom'},
               class: 'btn btn-primary btn-xs', rel: 'tooltip', title: 'Edit Template') %>
-        <%= link_to("<span class='glyphicon glyphicon-search'></span>".html_safe,
+        <%= link_to(template.decorate.options_icon,
               {:action => 'show', :id => template.id}, data: {placement: 'bottom'},
               class: 'btn btn-default btn-xs', rel: 'tooltip', title: 'Show Template') %>
         <%= link_to("<span class='glyphicon glyphicon-retweet'></span>".html_safe,
