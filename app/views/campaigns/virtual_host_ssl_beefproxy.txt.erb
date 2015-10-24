@@ -6,6 +6,7 @@
 
 #<!--start <%= @campaign_id %>-->
 <VirtualHost *:443>
+    SSLProxyEngine on
     SSLEngine On
 
     <% if @ssl.find_by_function("SSLCertificateFile").filename.present? %>
@@ -19,25 +20,25 @@
     <% end %>
 
     ProxyPreserveHost On
-	ProxyPass /jquery.js http://127.0.0.1:8443/jquery.js
-	ProxyPass /init http://127.0.0.1:8443/init
-	ProxyPass /dh http://127.0.0.1:8443/dh
-	ProxyPass /event http://127.0.0.1:8443/event
-	ProxyPass /api http://127.0.0.1:8443/api
-	ProxyPass /requester http://127.0.0.1:8443/requester
-	ProxyPass /proxy http://127.0.0.1:8443/proxy
-	ProxyPass /requester http://127.0.0.1:8443/requester
-	ProxyPass /beef_secret_console http://127.0.0.1:8443/beef_secret_console
+	ProxyPass /jquery.js https://127.0.0.1:8443/jquery.js
+	ProxyPass /init https://127.0.0.1:8443/init
+	ProxyPass /dh https://127.0.0.1:8443/dh
+	ProxyPass /event https://127.0.0.1:8443/event
+	ProxyPass /api https://127.0.0.1:8443/api
+	ProxyPass /requester https://127.0.0.1:8443/requester
+	ProxyPass /proxy https://127.0.0.1:8443/proxy
+	ProxyPass /requester https://127.0.0.1:8443/requester
+	ProxyPass /beef_secret_console https://127.0.0.1:8443/beef_secret_console
 
-	ProxyPassReverse /jquery.js http://127.0.0.1:8443/jquery.js
-	ProxyPassReverse /init http://127.0.0.1:8443/init
-	ProxyPassReverse /dh http://127.0.0.1:8443/dh
-	ProxyPassReverse /event http://127.0.0.1:8443/event
-	ProxyPassReverse /api http://127.0.0.1:8443/api
-	ProxyPassReverse /requester http://127.0.0.1:8443/requester
-	ProxyPassReverse /proxy http://127.0.0.1:8443/proxy
-	ProxyPassReverse /requester http://127.0.0.1:8443/requester
-	ProxyPassReverse /beef_secret_console http://127.0.0.1:8443/beef_secret_console
+	ProxyPassReverse /jquery.js https://127.0.0.1:8443/jquery.js
+	ProxyPassReverse /init https://127.0.0.1:8443/init
+	ProxyPassReverse /dh https://127.0.0.1:8443/dh
+	ProxyPassReverse /event https://127.0.0.1:8443/event
+	ProxyPassReverse /api https://127.0.0.1:8443/api
+	ProxyPassReverse /requester https://127.0.0.1:8443/requester
+	ProxyPassReverse /proxy https://127.0.0.1:8443/proxy
+	ProxyPassReverse /requester https://127.0.0.1:8443/requester
+	ProxyPassReverse /beef_secret_console https://127.0.0.1:8443/beef_secret_console
 
     ServerName <%= @fqdn %>
     ServerAlias <%= @fqdn %>
