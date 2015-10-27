@@ -1,0 +1,150 @@
+/**
+ * File content holder
+ *
+ */
+
+$border-color: #E5E5E5;
+$background-color: #f5f5f5;
+$hover: #FFFAF1;
+
+// Nav tabs
+.nav.nav-tabs {
+  margin-bottom: 15px;
+
+  li {
+    > a {
+      margin-right: 5px;
+      line-height: 20px;
+      border-color: #EEE;
+      color: #888;
+      border-bottom: 1px solid #ddd;
+      .badge {
+        background-color: #eee;
+        color: #888;
+        text-shadow: 0 1px 1px #fff;
+      }
+      i.fa {
+        line-height: 14px;
+      }
+    }
+    &.active {
+      > a {
+        border-color: #CCC;
+        border-bottom: 1px solid #fff;
+        color: #333;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.nav-tabs > li > a,
+
+table {
+  &.table {
+    tr {
+      td, th {
+        padding: 8px 10px;
+        line-height: 20px;
+        vertical-align: middle;
+      }
+      th {
+        font-weight: normal;
+        font-size: 15px;
+        border-bottom: 1px solid $border-color !important;
+      }
+      td {
+        border-color: #F1F1F1 !important;
+        border-bottom: 1px solid;
+      }
+    }
+  }
+}
+
+.file-holder {
+  border: 1px solid $border-color;
+  margin-bottom: 1em;
+
+  table {
+    @extend .table;
+  }
+
+  .file-title {
+    position: relative;
+    background: $background-color;
+    border-bottom: 1px solid $border-color;
+    text-shadow: 0 1px 1px #fff;
+    margin: 0;
+    text-align: left;
+    padding: 10px 15px;
+
+    .file-actions {
+      float: right;
+      position: absolute;
+      top: 5px;
+      right: 15px;
+
+      .btn {
+        padding: 0px 10px;
+        font-size: 13px;
+        line-height: 28px;
+      }
+    }
+
+    .left-options {
+      margin-top: -3px;
+    }
+  }
+  .file-content {
+    background: #fff;
+
+    &.image_file {
+      background: #eee;
+      text-align: center;
+      img {
+        padding: 100px;
+        max-width: 50%;
+      }
+    }
+
+    &.wiki {
+      padding: 25px;
+
+      .highlight {
+        margin-bottom: 9px;
+
+        > pre {
+          margin: 0;
+        }
+      }
+    }
+
+    &.logs {
+      background: #eee;
+      max-height: 700px;
+      overflow-y: auto;
+
+      ol {
+        margin-left: 40px;
+        padding: 10px 0;
+        border-left: 1px solid $border-color;
+        margin-bottom: 0;
+        background: white;
+        li {
+          color: #888;
+          p {
+            margin: 0;
+            color: #333;
+            line-height: 24px;
+            padding-left: 10px;
+          }
+
+          &:hover {
+            background: $hover;
+          }
+        }
+      }
+    }
+  }
+}
+
