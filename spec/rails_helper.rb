@@ -34,6 +34,7 @@ RSpec.configure do |config|
 
   # add devise helpers
   config.include Warden::Test::Helpers
+  config.include Devise::TestHelpers, :type => :controller
 
   # add devise helpers for authentication
   config.extend ControllerMacros
