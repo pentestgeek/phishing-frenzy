@@ -171,19 +171,18 @@ ActiveRecord::Schema.define(version: 20150718023513) do
   add_index "email_settings", ["campaign_id"], name: "index_email_settings_on_campaign_id", using: :btree
 
   create_table "global_settings", force: true do |t|
-    t.string   "command_apache_restart"
-    t.integer  "smtp_timeout",           default: 5
+    t.integer  "smtp_timeout",    default: 5
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "command_apache_status"
-    t.string   "command_apache_vhosts",  default: "apache2ctl -S"
-    t.boolean  "asynchronous",           default: true
+    t.boolean  "asynchronous",    default: false
     t.string   "bing_api"
     t.string   "beef_url"
-    t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
-    t.integer  "reports_refresh",        default: 15
-    t.string   "site_url",               default: "https://phishingfrenzy.local"
+    t.integer  "reports_refresh", default: 15
+    t.integer  "singleton"
+    t.string   "site_url",              default: "https://phishingfrenzy.local"
   end
+
+  add_index "global_settings", ["singleton"], name: "index_global_settings_on_singleton", unique: true, using: :btree
 
   create_table "harvested_emails", force: true do |t|
     t.string   "email"

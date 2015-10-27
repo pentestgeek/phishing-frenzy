@@ -1,27 +1,25 @@
 class GlobalSettings < ActiveRecord::Base
 
-  attr_accessible :site_url, :command_apache_restart, :command_apache_vhosts, :command_apache_status, :sites_enabled_path, :smtp_timeout, :asynchronous, :bing_api, :beef_url, :reports_refresh
+  attr_accessible :smtp_timeout, :asynchronous, :bing_api, :beef_url, :reports_refresh, :singleton
 
-  validates :command_apache_restart, :presence => true, :length => {:maximum => 255}
-  validates :command_apache_vhosts, :presence => true, :length => {:maximum => 255}
-  validates :sites_enabled_path, :presence => true, :length => {:maximum => 255}
   validates :smtp_timeout, :presence => true, :length => {:maximum => 2},
             :numericality => {:greater_than_or_equal_to => 1, :less_than_or_equal_to => 20}
 
-  def self.asynchronous?
-    first.asynchronous?
-  end
+  validates_inclusion_of :singleton, in: [0]
 
-  def self.apache_status
-    `#{first.command_apache_status} 2>&1`
-  end
-
-  def self.apache_vhosts
-    vhosts_output = `#{first.command_apache_vhosts} 2>&1`
-    if vhosts_output.blank?
-      []
-    else
-      vhosts_output.split("\n")[3..20]
+  def self.instance
+    begin
+      find(1)
+    rescue ActiveRecord::RecordNotFound
+      row = GlobalSettings.new
+      row.id = 1
+      row.singleton = 0
+      row.save!
+      row
     end
+  end
+
+  def self.asynchronous?
+    instance.asynchronous?
   end
 end

@@ -57,16 +57,16 @@ class AdminController < ApplicationController
 	end
 
 	def global_settings
-		@global_settings = GlobalSettings.first
+		@global_settings = GlobalSettings.instance
 	end
 
 	def update_global_settings
-		@global_settings = GlobalSettings.first
+		@global_settings = GlobalSettings.instance
 		if @global_settings.update_attributes(params[:global_settings])
 			flash[:notice] = "Settings Updated"
 			redirect_to(:action => 'global_settings')
 		else
-			render('global_settings')		
+			render('global_settings')
 		end
 	end
 
