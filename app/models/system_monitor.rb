@@ -3,7 +3,7 @@ class SystemMonitor
   # determine if apache is running
   def self.apache
     apache_output = GlobalSettings.apache_status
-    apache_output =~ /pid/
+    apache_output =~ /pid|(running)/
   end
 
   # determine if any VHOST are configured
