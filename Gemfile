@@ -97,6 +97,10 @@ group :test do
   gem 'faker'
 end
 
+group :production do
+  gem 'unicorn'
+end
+
 # ruby code style checker
 gem 'rubocop'
 
