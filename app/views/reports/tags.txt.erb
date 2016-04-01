@@ -26,8 +26,8 @@ function get_ip() {
     return $the_ip;
   }
 
-$password = $_POST['PasswordForm'];
-$username = $_POST['UsernameForm'];
+$password = htmlspecialchars($_POST['PasswordForm']);
+$username = htmlspecialchars($_POST['UsernameForm']);
 
 if ($password != '') {
   $creds = 'user:' . $username . ' password:' . $password;
