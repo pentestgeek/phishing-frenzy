@@ -1,5 +1,6 @@
 class ReportsController < ApplicationController
   skip_before_filter :authenticate_admin!, only: [ :results, :image ]
+  protect_from_forgery except: [ :results, :image ]
 
   def index
     list
