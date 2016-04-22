@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
       victim = victims.first
       visit.victim_id = victim.id
       visit.browser = request.env["HTTP_USER_AGENT"]
-      visit.ip_address = request.env["REMOTE_ADDR"]
+      visit.ip_address = request.remote_ip
       visit.extra = "SOURCE: EMAIL"
       visit.save
     else
