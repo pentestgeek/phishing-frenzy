@@ -12,12 +12,13 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
     # We use a custom message and content ID to prevent leaking data
     # about our phishing setup
-    mid = cid = "<#{Mail.random_tag}@#{@campaign.email_settings.domain}>"
+    mid = "<#{Mail.random_tag}@#{@campaign.email_settings.domain}>"
 
     @campaign.template.images.each do |image|
       attachments.inline[image[:file]] = File.read(image.file.current_path)
       # Only inline attachments have cids:
       # https://github.com/mikel/mail/blob/master/lib/mail/part.rb#L42
+      cid = "<#{Mail.random_tag}@#{@campaign.email_settings.domain}>"
       attachments[image[:file]].add_content_id(cid)
     end
 
