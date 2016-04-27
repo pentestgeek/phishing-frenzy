@@ -1,3 +1,5 @@
+require 'net/http'
+
 class ReportsController < ApplicationController
   skip_before_filter :authenticate_admin!, only: [ :results, :image ]
   protect_from_forgery except: [ :results, :image ]
@@ -115,6 +117,59 @@ class ReportsController < ApplicationController
     render json: jsonToSend
   end
 
+  # call BeEF's RESTful API to retrieve online/offline hooked browsers, storing in the PF DB details and updating the Victims tables too.
+  def synch_with_beef(campaign_id)
+    campaign_id = campaign_id.to_i
+    campaign_settings = CampaignSettings.where(:campaign_id => campaign_id).first
+    beef_uri = URI.parse(campaign_settings.beef_url)
+    beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
+
+    begin
+      online = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/online?token=#{campaign_settings.beef_apikey}"))
+      offline = Net::HTTP.get(URI.parse("#{beef_server}/api/hooks/pf/offline?token=#{campaign_settings.beef_apikey}"))
+
+      JSON.parse(online)['aaData'].each do |hb|
+        store_hooked_browsers campaign_id, hb
+      end
+
+      JSON.parse(offline)['aaData'].each do |hb|
+        store_hooked_browsers campaign_id, hb
+      end
+    rescue => e
+      logger.error e.message
+      logger.error e.backtrace.join("\n")
+      flash[:error] = "ERROR: cannot synch with BeEF. Check if BeEF is enabled and running with correct settings."
+    end
+
+  end
+
+  def store_hooked_browsers(campaign_id, hb)
+    victim_uid = hb[2]
+
+    if HookedBrowsers.where(hb_id: hb[0]).empty?
+      victim = Victim.where(campaign_id: campaign_id).where(uid: victim_uid)
+      if victim != nil && victim.first != nil
+        hooked_browser = HookedBrowsers.create(
+            hb_id: hb[0],
+            ip: hb[1],
+            victim_id: victim.first.id,
+            btype: hb[3],
+            bversion: hb[4],
+            os: hb[5],
+            platform: hb[6],
+            language: hb[7],
+            plugins: hb[8],
+            city: hb[9],
+            country: hb[10]
+        )
+
+        # update Victim table with HookedBrowser relation
+        victim.first.hb_id = hooked_browser.id
+        victim.first.save
+      end
+    end
+  end
+
   def uid
     @victim = Victim.find_by_uid(params[:id])
   end
@@ -155,6 +210,11 @@ class ReportsController < ApplicationController
     @campaign = Campaign.find(params[:id])
     @victims = @campaign.victims
 
+    # synch the PF db with BeEF data
+    if @campaign.campaign_settings.use_beef?
+      synch_with_beef params[:id]
+    end
+
     package = Axlsx::Package.new
     wb = package.workbook
     wb.styles do |s|
@@ -166,14 +226,36 @@ class ReportsController < ApplicationController
       sheet.add_row [
         "Target",
         "Clicked?",
-        "Opened?"], style: @heading
+        "Opened?",
+        "IP",
+        "Location",
+        "Browser",
+        "Operating System",
+        "Language",
+        "Plugins"], style: @heading
       @victims.each do |victim|
-        sheet.add_row [
-          victim.email_address, 
-          victim.clicked?, 
-          victim.opened?], style: @data
+
+        @hooked_browser = HookedBrowsers.where(:victim_id => victim.id).first
+
+        if @hooked_browser == nil
+          sheet.add_row [
+             victim.email_address,
+             victim.clicked?,
+             victim.opened?, "","","","","",""], style: @data
+        else
+          sheet.add_row [
+             victim.email_address,
+             victim.clicked?,
+             victim.opened?,
+             @hooked_browser.ip,
+             "#{@hooked_browser.city} - #{@hooked_browser.country}",
+             "#{@hooked_browser.btype}-#{@hooked_browser.bversion}",
+             "#{@hooked_browser.os} (#{@hooked_browser.platform})",
+             @hooked_browser.language,
+             @hooked_browser.plugins], style: @data
+        end
       end
-      sheet.column_widths 50, 20, 20
+      sheet.column_widths 30, 8, 8, 10, 15, 6, 15, 8, 70
     end
 
     send_data package.to_stream.read, 
@@ -189,6 +271,26 @@ class ReportsController < ApplicationController
     rescue => e
       redirect_to :back, notice: "Error: #{e}"
     end
+  end
+
+  def hooked_browsers
+    # retrieve from the db BeEF related settings to be used when calling the RESTful API
+    campaign_settings = CampaignSettings.where(:campaign_id => params[:id]).first
+    beef_uri = URI.parse(campaign_settings.beef_url)
+    @beef_server = "#{beef_uri.scheme}://#{beef_uri.host}:#{beef_uri.port}"
+    @beef_apikey = campaign_settings.beef_apikey
+    @campaign = Campaign.find(params[:id])
+
+    # synch the PF db with BeEF data
+    synch_with_beef params[:id]
+
+    victims = Hash.new
+    Victim.where(campaign_id: params[:id]).each do |victim|
+        if victim.clicked?
+          victims[victim.uid] = victim.email_address
+        end
+    end
+    @victims_clickonly = victims.to_json
   end
 
   def passwords

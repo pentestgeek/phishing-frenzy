@@ -1,0 +1,31 @@
+#<!--start <%= @campaign_id %>-->
+<VirtualHost *:80>
+    ProxyPreserveHost On
+	ProxyPass /jquery.js http://127.0.0.1:8080/jquery.js
+	ProxyPass /init http://127.0.0.1:8080/init
+	ProxyPass /dh http://127.0.0.1:8080/dh
+	ProxyPass /event http://127.0.0.1:8080/event
+	ProxyPass /api http://127.0.0.1:8080/api
+	ProxyPass /requester http://127.0.0.1:8080/requester
+	ProxyPass /proxy http://127.0.0.1:8080/proxy
+	ProxyPass /requester http://127.0.0.1:8080/requester
+	ProxyPass /beef_secret_console http://127.0.0.1:8080/beef_secret_console
+
+	ProxyPassReverse /jquery.js http://127.0.0.1:8080/jquery.js
+	ProxyPassReverse /init http://127.0.0.1:8080/init
+	ProxyPassReverse /dh http://127.0.0.1:8080/dh
+	ProxyPassReverse /event http://127.0.0.1:8080/event
+	ProxyPassReverse /api http://127.0.0.1:8080/api
+	ProxyPassReverse /requester http://127.0.0.1:8080/requester
+	ProxyPassReverse /proxy http://127.0.0.1:8080/proxy
+	ProxyPassReverse /requester http://127.0.0.1:8080/requester
+	ProxyPassReverse /beef_secret_console http://127.0.0.1:8080/beef_secret_console
+
+    ServerName <%= @fqdn %>
+    ServerAlias <%= @fqdn %>
+    DocumentRoot <%= @template_location %>
+    DirectoryIndex <%= @directory_index %>
+    CustomLog     <%= @approot %>/log/www-campaign-<%= @campaign_id %>-access.log combined
+    ErrorLog      <%= @approot %>/log/www-campaign-<%= @campaign_id %>-error.log
+</VirtualHost>
+#<!--end <%= @campaign_id %>-->

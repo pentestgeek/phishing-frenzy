@@ -38,5 +38,5 @@ production:
   database: pf_prod
   pool: 25
   username: pf_prod
-  password: password
+  password: pf_prod
   host: localhost

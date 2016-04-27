@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "salt"
     t.boolean  "active",                 default: true
     t.string   "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
@@ -60,8 +60,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "file"
     t.integer  "attachable_id"
     t.string   "attachable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "function",        default: "website"
   end
 
@@ -73,8 +73,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "status"
     t.string   "message"
     t.integer  "blast_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "blasts", force: true do |t|
@@ -83,8 +83,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.integer  "number_of_targets"
     t.integer  "emails_sent",       default: 0
     t.string   "message",           default: "Started  "
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "baits_count",       default: 0
   end
 
@@ -99,10 +99,11 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.boolean  "iptable_restrictions",   default: false
     t.boolean  "schedule_campaign",      default: false
     t.boolean  "use_beef",               default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.integer  "smtp_delay",             default: 0
     t.string   "beef_url"
+    t.string   "beef_apikey"
     t.boolean  "ssl"
   end
 
@@ -116,8 +117,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.integer  "scope"
     t.text     "emails"
     t.boolean  "email_sent",  default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "test_email"
     t.integer  "admin_id"
   end
@@ -130,16 +131,16 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "status"
     t.text     "url"
     t.text     "page"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "email_searches", force: true do |t|
     t.string   "domain"
     t.integer  "crawls"
     t.integer  "harvested_email_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   add_index "email_searches", ["harvested_email_id"], name: "index_email_searches_on_harvested_email_id", using: :btree
@@ -159,8 +160,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "smtp_username"
     t.string   "smtp_password"
     t.integer  "emails_sent",          default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "openssl_verify_mode"
     t.string   "domain"
     t.string   "authentication"
@@ -173,14 +174,15 @@ ActiveRecord::Schema.define(version: 20150718023513) do
   create_table "global_settings", force: true do |t|
     t.string   "command_apache_restart"
     t.integer  "smtp_timeout",           default: 5
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
     t.string   "command_apache_status"
     t.string   "command_apache_vhosts",  default: "apache2ctl -S"
     t.boolean  "asynchronous",           default: true
     t.string   "bing_api"
     t.string   "beef_url"
     t.string   "sites_enabled_path",     default: "/etc/apache2/sites-enabled"
+    t.string   "beef_apikey"
     t.integer  "reports_refresh",        default: 15
     t.string   "site_url",               default: "https://phishingfrenzy.local"
   end
@@ -190,12 +192,30 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "group"
     t.text     "url"
     t.integer  "email_search_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "original"
   end
 
   add_index "harvested_emails", ["email_search_id"], name: "index_harvested_emails_on_email_search_id", using: :btree
+
+  create_table "hooked_browsers", force: true do |t|
+    t.integer  "victim_id"
+    t.string   "hb_id"
+    t.string   "ip"
+    t.string   "btype"
+    t.string   "bversion"
+    t.string   "os"
+    t.string   "platform"
+    t.string   "language"
+    t.string   "plugins"
+    t.string   "city"
+    t.string   "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "hooked_browsers", ["victim_id"], name: "index_hooked_browsers_on_victim_id", using: :btree
 
   create_table "smtp_communications", force: true do |t|
     t.string   "to"
@@ -203,8 +223,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "status"
     t.string   "string"
     t.integer  "campaign_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "smtp_communications", ["campaign_id"], name: "index_smtp_communications_on_campaign_id", using: :btree
@@ -225,8 +245,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "downloads"
     t.string   "unique_visitors"
     t.string   "visitors_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "templates", force: true do |t|
@@ -235,8 +255,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.string   "description"
     t.string   "location"
     t.string   "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "directory_index"
     t.integer  "admin_id"
   end
@@ -258,19 +278,20 @@ ActiveRecord::Schema.define(version: 20150718023513) do
   create_table "victims", force: true do |t|
     t.string   "email_address"
     t.integer  "campaign_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.string   "uid"
     t.string   "firstname"
     t.string   "lastname"
     t.boolean  "archive",       default: false
     t.boolean  "sent",          default: false
+    t.integer  "hb_id"
   end
 
   create_table "visits", force: true do |t|
     t.integer  "victim_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "browser"
     t.string   "ip_address"
     t.string   "extra"

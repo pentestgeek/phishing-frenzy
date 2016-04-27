@@ -1,0 +1,290 @@
+<% @page_title = "Campaign Hooked Browsers" %>
+
+<%= link_to '<< Back to Stats', :back, class: "back-link" %>
+
+<h3>Hooked Browsers - <%= @campaign.name %></h3>
+<hr>
+
+<!-- This will be read by jQuery before making calls to the BeEF RESTful API. Ideally we should be using Erubis and
+     have this information directly in JavaScript files. This is a current workaround as we read these value from reports.js-->
+<!--// TODO do output escaping for these values, context: html-->
+<div id="beef_apikey" style="visibility: hidden"><%= @beef_apikey %></div>
+<div id="beef_server_url" style="visibility: hidden"><%= @beef_server %></div>
+
+<link rel="stylesheet" href="/assets/leaflet.css" />
+<script src="/assets/leaflet.js"></script>
+
+<div id="map" style="width: 100%; height: 800px"></div>
+
+<script>
+
+    $( document ).ready(function() {
+    var map = L.map('map').setView([30, -20], 3);
+
+    // maps are offline ;-) see /assets/worldmap_zoom_level_4 directory
+    L.tileLayer('/assets/{id}/{z}/{x}/{y}.png', {
+        maxZoom: 4,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'worldmap_zoom_level_4'
+    }).addTo(map);
+
+    // TODO do output escaping for these values, context: JS
+    var beef_apikey = $('#beef_apikey').text();
+    var beef_server = $('#beef_server_url').text();
+
+    var beef_online_icon = L.icon({
+        iconUrl: '/assets/hooked_browsers/beef-online-icon.png',
+        iconSize:     [25, 41],
+        iconAnchor:   [12, 40],
+        popupAnchor:  [0, -35]
+    });
+
+    var beef_offline_icon = L.icon({
+        iconUrl: '/assets/hooked_browsers/beef-offline-icon.png',
+        iconSize:     [25, 41],
+        iconAnchor:   [12, 40],
+        popupAnchor:  [0, -35]
+    });
+
+    function add_icons(browser, os){
+        var output = "";
+        switch(browser){
+            case "C":
+                output += "<img src='/assets/hooked_browsers/chrome.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "FF":
+                output += "<img src='/assets/hooked_browsers/firefox.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "IE":
+                output += "<img src='/assets/hooked_browsers/msie.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "O":
+                output += "<img src='/assets/hooked_browsers/opera.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case "S":
+                output += "<img src='/assets/hooked_browsers/safari.png' style='width: 16px; height: 16px;'/>";
+                break;
+            default:
+                output += "<img src='/assets/hooked_browsers/unknown.png' style='width: 16px; height: 16px;'/>";
+        }
+
+        var operating_system = os.toLowerCase();
+        switch(true){
+            case /win/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/win.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /os x|osx|mac/i.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/mac.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /lin/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/linux.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /ios|iphone|ipad|ipod/i.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/ios.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /blackberry/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/blackberry.png' style='width: 16px; height: 16px;'/>";
+                break;
+            case /android/.test(operating_system):
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/android.png' style='width: 16px; height: 16px;'/>";
+                break;
+            default:
+                output += "&nbsp;&nbsp;<img src='/assets/hooked_browsers/unknown.png' style='width: 16px; height: 16px;'/>";
+
+        }
+        return output;
+    }
+
+
+        var victims_uids = $.parseJSON('<%== @victims_clickonly %>');
+
+        // TODO when jquery.dataTables will be updated to 1.10, we can use only 1 call (as in the normal BeEF api, with a
+        // TODO.. nested hash objects, containing both offline and online browsers)
+        // online browsers
+        $.getJSON(beef_server + '/api/hooks/pf/online?token=' + beef_apikey, function(data){
+            $.each( data['aaData'], function(key, val) {
+                var hd_id = val[0];
+                var ip = val[1];
+                var city = val[9];
+                var country = val[10];
+                var lat = val[11];
+                var lon = val[12];
+                L.marker([lat, lon], {icon: beef_online_icon})
+                        .addTo(map).bindPopup(add_icons(val[3],val[5]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
+            });
+        });
+
+        // offline browsers
+        $.getJSON(beef_server + '/api/hooks/pf/offline?token=' + beef_apikey, function(data){
+            $.each( data['aaData'], function(key, val) {
+                var hd_id = val[0];
+                var ip = val[1];
+                var city = val[9];
+                var country = val[10];
+                var lat = val[11];
+                var lon = val[12];
+                L.marker([lat, lon], {icon: beef_offline_icon})
+                        .addTo(map).bindPopup(add_icons(val[3],val[5]) + "<br/><b>" + city + "-" + country + "</b><br/>(#" + hd_id + ") " + ip);
+            });
+        });
+
+        // new BeEF tables
+        $('#online-hooked-browsers-table').dataTable( {
+            "sAjaxSource": beef_server + '/api/hooks/pf/online?token=' + beef_apikey,
+            "aoColumns" : [
+                { "sWidth": "15px" },
+                { "sWidth": "50px" },
+                { "sWidth": "50px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "300px" }
+            ],
+            "aoColumnDefs": [
+                {
+                    "aTargets": [ 3 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var name = "";
+                        switch(data){
+                            case "C":
+                                name = "Chrome";
+                                break;
+                            case "FF":
+                                name = "Firefox";
+                                break;
+                            case "IE":
+                                name = "InternetExplorer";
+                                break;
+                            case "O":
+                                name = "Opera";
+                                break;
+                            case "S":
+                                name = "Safari";
+                                break;
+                            default:
+                                name = data;
+                        }
+                        return name;
+                    }
+                },
+                {
+                    "aTargets": [ 2 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var email = victims_uids[data];
+                        if(email){ // ensure that the value is not null, undefined, NaN, empty
+                            return email;
+                        }else{
+                            return 'n/a';
+                        }
+                    }
+                }
+            ],
+            "bProcessing": true
+        });
+
+        $('#offline-hooked-browsers-table').dataTable( {
+            "sAjaxSource": beef_server + '/api/hooks/pf/offline?token=' + beef_apikey,
+            "aoColumns" : [
+                { "sWidth": "15px" },
+                { "sWidth": "50px" },
+                { "sWidth": "50px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "20px" },
+                { "sWidth": "300px" }
+            ],
+            "aoColumnDefs": [
+                {
+                    "aTargets": [ 3 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var name = "";
+                        switch(data){
+                            case "C":
+                                name = "Chrome";
+                                break;
+                            case "FF":
+                                name = "Firefox";
+                                break;
+                            case "IE":
+                                name = "InternetExplorer";
+                                break;
+                            case "O":
+                                name = "Opera";
+                                break;
+                            case "S":
+                                name = "Safari";
+                                break;
+                            default:
+                                name = data;
+                        }
+                        return name;
+                    }
+                },
+                {
+                    "aTargets": [ 2 ], // browser type
+                    "mRender": function ( data, type, full ) {
+                        var email = victims_uids[data];
+                        if(email){ // ensure that the value is not null, undefined, NaN, empty
+                            return email;
+                        }else{
+                            return 'n/a';
+                        }
+                    }
+                }
+            ],
+            "bProcessing": true
+        });
+
+    });
+</script>
+
+<br/>
+<h3>Online Hooked Browsers</h3>
+<hr>
+<table id="online-hooked-browsers-table" class="table-hover table-condense"
+       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="2" cellspacing="2" width="100%">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>IP</th>
+    <th>Email</th>
+    <th>Type</th>
+    <th>Version</th>
+    <th>OS</th>
+    <th>Platform</th>
+    <th>Language</th>
+    <th>Plugins</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+</table>
+<br/>
+<h3>Offline Hooked Browsers</h3>
+<hr>
+<table id="offline-hooked-browsers-table" class="table-hover table-condense"
+       style="border-bottom:1px solid #949494; border-top:1px solid #949494;" border="0" cellpadding="1" cellspacing="1" width="100%">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>IP</th>
+        <th>Email</th>
+        <th>Type</th>
+        <th>Version</th>
+        <th>OS</th>
+        <th>Platform</th>
+        <th>Language</th>
+        <th>Plugins</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>

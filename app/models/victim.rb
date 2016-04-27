@@ -6,7 +6,7 @@ class Victim < ActiveRecord::Base
 	validates_uniqueness_of :email_address, scope: :campaign_id
 	before_create :default_values
 
-	attr_accessible :email_address, :uid, :campaign_id, :firstname, :lastname
+	attr_accessible :email_address, :uid, :campaign_id, :firstname, :lastname, :hb_id
 
 	def default_values
 		self.uid = (0...8).map { (65 + rand(26)).chr }.join 	

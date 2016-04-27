@@ -117,4 +117,11 @@ class CampaignsController < ApplicationController
 			format.js
 		end
 	end
+
+	def deactivate_and_clean
+		campaign = Campaign.find(params[:id])
+		campaign.update_attribute(:active, false)
+		campaign.victims.destroy_all
+		redirect_to(:controller => 'campaigns', :action => 'list')
+	end
 end

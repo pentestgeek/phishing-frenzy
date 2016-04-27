@@ -32,15 +32,45 @@ $( document ).ready(function() {
     }
   });
 
+  //// if use_beef checked function
+  //function is_beef_checked() {
+  //  if ($("#campaign_settings_use_beef").is(':checked')) {
+  //    // enable beef_url form
+  //    $("#campaign_settings_beef_url").prop('disabled', false);
+  //  }
+  //  else {
+  //    // disable beef_url form
+  //    $("#campaign_settings_beef_url").prop('disabled', true);
+  //  }
+  //
+  //  if ($("#campaign_campaign_settings_attributes_ssl").is(':checked')) {
+  //    // display ssl form
+  //    $("[id=ssl-row]").show( 1500 );
+  //  }
+  //  else {
+  //    // hide ssl form
+  //    $("[id=ssl-row]").hide( 1000 );
+  //  }
+  //}
+  //
+  //// enable beef_url if use_beef is checked on page load
+  //is_beef_checked();
+  //
+  //// click event handler to for checked stuff
+  //$( "#campaign_campaign_settings_attributes_use_beef" ).on( "click", is_stuff_checked);
+  //$( "#campaign_campaign_settings_attributes_ssl" ).on( "click", is_stuff_checked);
   // if use_beef checked function
+
   function is_stuff_checked() {
     if ($("#campaign_campaign_settings_attributes_use_beef").is(':checked')) {
       // enable beef_url form
       $("#beef-url").show( 1500 );
+      $("#beef-apikey").show( 1500 );
     }
     else {
       // disable beef_url form
       $("#beef-url").hide( 1000 );
+      $("#beef-apikey").hide( 1000 );
     }
 
     if ($("#campaign_campaign_settings_attributes_ssl").is(':checked')) {
