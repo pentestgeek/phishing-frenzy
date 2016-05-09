@@ -1,17 +1,17 @@
 class Victim < ActiveRecord::Base
-	belongs_to :campaign
-	has_many :visits, dependent: :destroy
+  belongs_to :campaign
+  has_many :visits, dependent: :destroy
   has_many :credentials, through: :visits
 
-	validates_format_of :email_address, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-	validates_uniqueness_of :email_address, scope: :campaign_id
-	before_create :default_values
+  validates_format_of :email_address, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  validates_uniqueness_of :email_address, scope: :campaign_id
+  before_create :default_values
 
-	attr_accessible :email_address, :uid, :campaign_id, :firstname, :lastname
+  attr_accessible :email_address, :uid, :campaign_id, :firstname, :lastname
 
-	def default_values
-		self.uid = (0...8).map { (65 + rand(26)).chr }.join 	
-	end
+  def default_values
+    self.uid = (0...8).map { (65 + rand(26)).chr }.join 	
+  end
 
   def clicked?
     # determine if victim has clicked on link or not
