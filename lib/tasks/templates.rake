@@ -56,5 +56,15 @@ namespace :templates do
     a = t.attachments.create(function: 'attachment')
     a.file = File.open("#{Rails.root}/vendor/templates/efax/efax.jpg")
     a.save!
+    t = Template.create(name: 'Sample Website', directory_index: 'index.html.erb', description: 'A sample template for an ERB enabled wwebsite')
+    a = t.attachments.create(function: 'website')
+    a.file = File.open("#{Rails.root}/vendor/templates/sample/index.html.erb")
+    a.save!
+    a = t.attachments.create(function: 'website')
+    a.file = File.open("#{Rails.root}/vendor/templates/sample/test.js.erb")
+    a.save!
+    a = t.attachments.create(function: 'website')
+    a.file = File.open("#{Rails.root}/vendor/templates/sample/logo.png")
+    a.save!
   end
 end
