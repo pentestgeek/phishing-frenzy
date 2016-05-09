@@ -1,5 +1,7 @@
 PhishingFramework::Application.routes.draw do
 
+	get 'system_logs' => 'system_logs#show'
+
 	devise_for :admins
 
 

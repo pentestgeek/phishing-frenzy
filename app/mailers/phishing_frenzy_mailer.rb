@@ -60,16 +60,19 @@ class PhishingFrenzyMailer < ActionMailer::Base
       raise RuntimeError, 'Unknown mailer action'
     end
 
-    cast(blast, bait)
+    sent = cast(blast, bait)
+    @target.update_attribute(:sent, true) if sent && (method == ACTIVE)
   end
 
   def cast(blast, bait)
+    sent = false
     # log smtp communication
     response = nil
     error = nil
     begin
       sleep(@campaign.campaign_settings.smtp_delay)
       response = bait.deliver!
+      sent = true
     rescue => e
       error = e
     end
@@ -85,6 +88,8 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
     # commit changes
     smtp.save
+
+    sent
   end
 
   def campaign_smtp_settings

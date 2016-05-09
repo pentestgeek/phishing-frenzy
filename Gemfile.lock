@@ -112,6 +112,8 @@ GEM
     faker (1.4.3)
       i18n (~> 0.5)
     ffi (1.9.8)
+    file-tail (1.1.0)
+      tins (~> 1.0)
     foreman (0.78.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
@@ -319,6 +321,7 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
+    tins (1.5.4)
     ttfunk (1.2.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -354,6 +357,7 @@ DEPENDENCIES
   execjs
   factory_girl_rails
   faker
+  file-tail
   foreman
   geokit
   googlecharts

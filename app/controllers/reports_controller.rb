@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+  protect_from_forgery except: [ :results, :image ]
 
   def index
     list
