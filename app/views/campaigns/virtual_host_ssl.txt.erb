@@ -40,6 +40,8 @@
     SSLProxyCheckPeerExpire off
 <% end %>
 
+    ProxyRequests Off
+    ProxyPreserveHost Off
     ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/site_delivery/tracking_image/<%= @campaign_id %>/
     ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/site_delivery/tracking_image/<%= @campaign_id %>/
     ProxyPass / <%= GlobalSettings.first.site_url %>/site_delivery/view/<%= @campaign_id %>/
