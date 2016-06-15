@@ -51,16 +51,19 @@ class SiteDeliveryController < ApplicationController
   end
 
   def tracking_image
-    uid = get_uid
-    victim = get_victim(uid)
+    begin
+      @campaign = Campaign.find(params[:id])
+      uid = get_uid
+      victim = get_victim(uid)
 
-    if victim
-      create_visit(victim, 'SOURCE: EMAIL')
-    else
-      logger.info  "Tracking image request for unknown UID: #{uid}"
+      if victim
+        create_visit(victim, 'SOURCE: EMAIL')
+      else
+        logger.info  "Tracking image request for unknown UID: #{uid}"
+      end
+    ensure
+      send_file File.join(Rails.root.to_s, 'public', 'tracking_pixel.png'), :type => 'image/png', :disposition => 'inline'
     end
-
-    send_file File.join(Rails.root.to_s, 'public', 'tracking_pixel.png'), :type => 'image/png', :disposition => 'inline'
   end
 
   def view
