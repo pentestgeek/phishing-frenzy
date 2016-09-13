@@ -16,7 +16,7 @@ class Admin < ActiveRecord::Base
 	validates_format_of :name, :with => /[A-Za-z\d]([-\w]{,498}[A-Za-z\d])?/i, :message => "Invalid Name: Alphanumerics only"
 	validates_format_of :username, :with => /[A-Za-z\d]([-\w]{,498}[A-Za-z\d])?/i, :message => "Invalid Username: Alphanumerics only"
 
-	scope :sorted, order("admins.name ASC")
+	scope :sorted, -> { order("admins.name ASC") }
 
 	def active_for_authentication?
 		super && approved?

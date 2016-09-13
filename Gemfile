@@ -3,11 +3,12 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.7'
 
 gem 'mysql2'
-gem 'sass-rails'
+gem 'sass-rails', '~> 5.0', '>= 5.0.6'
 gem 'coffee-rails'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', :platforms => :ruby
+gem "libv8"
+gem "therubyracer"
 
 # core rails helpers
 gem 'uglifier'
