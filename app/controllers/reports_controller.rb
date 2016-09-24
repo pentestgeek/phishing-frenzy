@@ -1,5 +1,6 @@
 class ReportsController < ApplicationController
   skip_before_filter :authenticate_admin!, only: [ :results, :image ]
+  protect_from_forgery except: [ :results, :image ]
 
   def index
     list
@@ -163,16 +164,38 @@ class ReportsController < ApplicationController
 
     wb.add_worksheet(name: "Targets") do |sheet|
       sheet.add_row [
-        "Target",
-        "Clicked?",
-        "Opened?"], style: @heading
+        "Firstname",
+        "Lastname",
+        "Email",
+        "Email First Viewed",
+        "Email Viewed",
+        "Link First Clicked",
+        "Link Clicked",
+        "Credentials First Entered",
+        "Credentials Entered"
+      ], style: @heading
       @victims.each do |victim|
+        visits = Visit.where(victim_id: victim.id).order(created_at: :asc)
+        first_email_visit = visits.find {|v| v.extra == 'SOURCE: EMAIL' }
+        first_click_visit = visits.find {|v| v.extra.blank? }
+        first_pass_visit = visits.find {|v| (v.extra && v.extra.include?('password'))}
+        pass_time = first_pass_visit ? first_pass_visit.created_at.to_formatted_s(:db) : nil
+        click_time = first_click_visit ? first_click_visit.created_at.to_formatted_s(:db) : nil
+        email_time = first_email_visit ? first_email_visit.created_at.to_formatted_s(:db) : nil
+
         sheet.add_row [
-          victim.email_address, 
-          victim.clicked?, 
-          victim.opened?], style: @data
+          victim.firstname,
+          victim.lastname,
+          victim.email_address,
+          email_time,
+          victim.opened?,
+          click_time,
+          victim.clicked?,
+          pass_time,
+          victim.password?
+        ], style: @data
       end
-      sheet.column_widths 50, 20, 20
+      sheet.column_widths 20, 20, 20, 20, 20
     end
 
     send_data package.to_stream.read, 
