@@ -103,12 +103,11 @@ PhishingFramework::Application.routes.draw do
 
 	authenticate :admin do
 		mount Sidekiq::Web => '/sidekiq'
+		mount LetterOpenerWeb::Engine, at: 'letter_opener'
 	end
 
 	require 'sidekiq/api'
 	match "queue-status" => proc { [200, {"Content-Type" => "text/plain"}, [Sidekiq::Queue.new.size < 100 ? "OK" : "UHOH" ]] }, via: :get
-
-	mount LetterOpenerWeb::Engine, at: 'letter_opener'
 
 	match ':controller(/:action(/:id))(.:format)', via: [:get, :post]
 end
