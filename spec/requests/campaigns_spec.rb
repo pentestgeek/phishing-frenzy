@@ -152,7 +152,7 @@ RSpec.describe "Campaigns", :type => :request do
       click_on("Save Settings")
       expect(page).to have_content("Campaign Updated")
       click_on("Preview")
-      expect(page).to have_content("Campaign test email available for preview")
+      expect(page).to have_content("Letters")
     end
 
     it "test campaign email with a template assigned" do

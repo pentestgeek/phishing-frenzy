@@ -38,15 +38,17 @@ class PhishingFrenzyMailer < ActionMailer::Base
         from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
         subject: @campaign.email_settings.subject,
         template_path: @campaign.template.email_template_path,
-        template_name: @campaign.template.email_files.first[:file],
+        template_name: @campaign.template.email_files.first[:file]
     }
 
     mail_opts[:reply_to] = @campaign.email_settings.reply_to unless @campaign.email_settings.reply_to.blank?
-
     case method
     when ACTIVE
       mail_opts[:delivery_method] = :smtp
-      bait = mail(mail_opts)
+      bait = mail(mail_opts) do |format|
+        format.html { render @campaign.template.email_files.first.file.path }
+        # format.txt { render file: @campaign.template.email_files.first.file.path }
+      end
       # if no authentication is selected send anonymous smtp
       if @campaign.email_settings.authentication == "none"
         bait.delivery_method.settings.merge!(campaign_anonymous_smtp_settings)

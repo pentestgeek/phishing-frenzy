@@ -55,8 +55,8 @@ gem 'ptools'
 gem 'execjs'
 
 # bootstrap
-gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', :branch => 'bootstrap3'
+gem "less-rails"
+gem 'bootstrap-sass'
 
 # For uploading email attacments
 gem 'carrierwave'
@@ -96,6 +96,7 @@ group :test do
   gem "guard-rspec"
   gem 'database_cleaner'
   gem 'faker'
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 group :production do
