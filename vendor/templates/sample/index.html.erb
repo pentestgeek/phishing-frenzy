@@ -1,0 +1,24 @@
+
+<html>
+<head>
+	<title>Sample Template</title>
+  	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+</head>
+
+<body>
+  <script src="test.js"></script>
+Website Image : <img src="logo.png"><br/>
+Victim UID : <%%= @victim.uid %> : <%= @victim.uid %><br/>
+Victim Firstname : <%%= @victim.firstname %> : <%= @victim.firstname %><br/>
+Victim Lastname : <%%= @victim.lastname %> : <%= @victim.lastname %><br/>
+Victim Email : <%%= @victim.email_address %> : <%= @victim.email_address %><br/>
+Victim Visit Count : <%%= @victim.visits.count %> : <%= @victim.visits.count %><br/>
+Campaign ID : <%%= @campaign.id %> : <%= @campaign.id %><br/>
+Campaign URL : <%%= @campaign.campaign_settings.fqdn %> : <%= @campaign.campaign_settings.fqdn %><br/>
+Campaign Link : <%%= @campaign.email_setting.phishing_url, %> : <%= @campaign.email_settings.phishing_url %><br/>
+BeEF URL : <%%= @campaign.campaign_settings.beef_url %> : <%= @campaign.campaign_settings.beef_url %><br/>  
+User Agent : <%%= request.env['HTTP_USER_AGENT'] %> : <%= request.env['HTTP_USER_AGENT'] %><br/>
+Remote IP : <%%= request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip %> : <%= request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip %><br/>
+
+</body>
+</html>

@@ -1,5 +1,4 @@
 class ReportsController < ApplicationController
-  skip_before_filter :authenticate_admin!, only: [ :results, :image ]
   protect_from_forgery except: [ :results, :image ]
 
   def index
@@ -9,23 +8,6 @@ class ReportsController < ApplicationController
 
   def list
     @campaigns = Campaign.launched.order(created_at: :desc)
-  end
-
-  def image
-    victims = Victim.where(:uid => params[:uid])
-    unless victims.present?
-      render text: "No UID Found"
-      return
-    end
-
-    visit = Visit.new
-    victim = victims.first
-    visit.victim_id = victim.id
-    visit.browser = request.env["HTTP_USER_AGENT"]
-    visit.ip_address = request.env["REMOTE_ADDR"]
-    visit.extra = "SOURCE: EMAIL"
-    visit.save
-    send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
   end
 
   def stats
@@ -39,36 +21,6 @@ class ReportsController < ApplicationController
                               disposition: "inline"
       end
     end
-  end
-
-  def results
-    finish = "start, "
-    if params[:uid]
-      finish += "uid check, "
-      victims = Victim.where(:uid => params[:uid])
-      finish += "length " + victims.length.to_s + ", "
-      if victims.length > 0
-        finish += "over 1, "
-        v = victims.first()
-        visit = Visit.new()
-        visit.victim_id = v.id
-        if params[:browser_info]
-          finish += "browser info, "
-          visit.browser = params[:browser_info]
-        end
-        if params[:ip_address]
-          finish += "ip address, "
-          visit.ip_address = params[:ip_address]
-        end
-        if params[:extra]
-          finish += "extra, "
-          visit.extra = params[:extra]
-        end
-        visit.save()
-      end
-    end
-
-    render text: finish
   end
 
   def stats_sum
@@ -98,17 +50,18 @@ class ReportsController < ApplicationController
     render json: @jsonToSend
   end
 
-  def victims_list 
+  def victims_list
     jsonToSend = Hash.new()
     jsonToSend["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
     i = 0
     Victim.where(campaign_id: params[:id]).each do |victim|
-      passwordSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
-      imageSeen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
-      emailSent = victim.sent ? "Yes" : "No"
-      emailClicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
-      emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
-      jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen,emailSeen]
+      passwordSeen = Credential.joins(:visit).where(visits: { victim_id: victim.id }).count > 0 ? 'Yes' : 'No'
+      visits = Visit.where(victim_id: victim.id).order(:created_at)
+      imageSeen = visits.empty? ? 'No' : 'Yes'
+      emailSent = victim.sent ? 'Yes' : 'No'
+      emailClicked =  visits.select{ |v| v.extra.nil? }.count > 0 ? 'Yes' : 'No'
+      email_last_seen = visits.count > 0 ? visits.last.created_at : 'N/A'
+      jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen, email_last_seen]
       i += 1
     end
 
@@ -216,7 +169,7 @@ class ReportsController < ApplicationController
   def passwords
     # display all password harvested within campaign
     @campaign = Campaign.find(params[:id])
-    @visits = @campaign.visits.where('extra LIKE ?', "%password%")
+    @visits = Visit.includes(:victim, :credential).joins(:victim, :credential).where(victims: { campaign_id: params[:id] })
   end
 
   def smtp

@@ -5,10 +5,8 @@ PhishingFramework::Application.routes.draw do
 	devise_for :admins
 
 
-	# image tracking routes.
-	get '/reports/image/:uid.png' => 'reports#image'
 
-	# only allow emails to be send from POST request
+	# only allow emails to be sent from POST request
 	post '/email/preview_email/:id' => 'email#preview', as: 'preview_email'
 	post '/email/test_email/:id' =>    'email#test', as: 'test_email'
 	post '/email/launch_email/:id' =>  'email#launch', as: 'launch'
@@ -41,6 +39,14 @@ PhishingFramework::Application.routes.draw do
 			post 'clear_victims'
 		end
 	end
+
+  # Custom Route for viewing Campaigns template files directly...
+  get 'site_delivery/view/:id/:filename', to: 'site_delivery#view', constraints: { filename: /[^\/]+/ }
+  post 'site_delivery/view/:id/:filename', to: 'site_delivery#view', constraints: { filename: /[^\/]+/ }
+
+  # image tracking routes.
+  get 'site_delivery/tracking_image/:id/:uid.png' => 'site_delivery#tracking_image'
+
 
 	resources :blasts, only: [:show], shallow: true
 

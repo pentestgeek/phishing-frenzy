@@ -6,5 +6,19 @@
     DirectoryIndex <%= @directory_index %>
     CustomLog     <%= @approot %>/log/www-campaign-<%= @campaign_id %>-access.log combined
     ErrorLog      <%= @approot %>/log/www-campaign-<%= @campaign_id %>-error.log
+
+<% if GlobalSettings.first.site_url.downcase.include?('https://') %>
+    SSLProxyEngine On
+    SSLProxyCheckPeerCN off
+    SSLProxyCheckPeerExpire off
+<% end %>
+
+    ProxyRequests Off
+    ProxyPreserveHost Off
+    ProxyPass /reports/image <%= GlobalSettings.first.site_url %>/site_delivery/tracking_image/<%= @campaign_id %>
+    ProxyPassReverse /reports/image <%= GlobalSettings.first.site_url %>/site_delivery/tracking_image/<%= @campaign_id %>
+    ProxyPass / <%= GlobalSettings.first.site_url %>/site_delivery/view/<%= @campaign_id %>/
+    ProxyPassReverse / <%= GlobalSettings.first.site_url %>/site_delivery/view/<%= @campaign_id %>/
+
 </VirtualHost>
 #<!--end <%= @campaign_id %>-->
