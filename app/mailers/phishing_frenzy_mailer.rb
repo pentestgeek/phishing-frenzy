@@ -46,7 +46,11 @@ class PhishingFrenzyMailer < ActionMailer::Base
     when ACTIVE
       mail_opts[:delivery_method] = :smtp
       bait = mail(mail_opts) do |format|
-        format.html { render @campaign.template.email_files.first.file.path }
+        format.html { render file: @campaign.template.email_files.first.file.path }
+        # TODO
+        # check if template has uploaded a TXT version of email and if so
+        # use the format.txt method below as well for higher spam scores
+        #
         # format.txt { render file: @campaign.template.email_files.first.file.path }
       end
       # if no authentication is selected send anonymous smtp
