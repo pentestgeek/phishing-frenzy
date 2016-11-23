@@ -61,7 +61,7 @@ class EmailController < ApplicationController
 
       victims.each do |target|
         begin
-          PhishingFrenzyMailer.phish(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE)
+          PhishingFrenzyMailer.phish(campaign.id, target.email_address, blast.id, PhishingFrenzyMailer::ACTIVE).deliver_now
         rescue ::NoMethodError
           flash[:error] = "Template is missing an email file, upload and create new email"
           break
