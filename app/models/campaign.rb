@@ -213,7 +213,9 @@ class Campaign < ActiveRecord::Base
 
     # deploy phishing website files
     FileUtils.mkdir_p(deployment_directory)
+
     template.website_files.each do |page|
+      next unless page.file.present?
       loc = File.join(deployment_directory, page[:file])
       # copy template files to deployment directory
       FileUtils.cp(page.file.current_path, loc)
