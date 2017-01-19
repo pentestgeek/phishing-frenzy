@@ -86,7 +86,7 @@ GEM
     commonjs (0.2.7)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
-    d3-rails (4.2.2)
+    d3-rails (3.5.17)
       railties (>= 3.1)
     database_cleaner (1.5.3)
     devise (4.2.0)
