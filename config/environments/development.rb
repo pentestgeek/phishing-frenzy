@@ -17,6 +17,8 @@ PhishingFramework::Application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
 
+  config.active_record.raise_in_transactional_callbacks = true
+
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
@@ -37,6 +39,9 @@ PhishingFramework::Application.configure do
   config.assets.debug = true
 
   config.eager_load = false
+
+  # Depcrecation notice
+  config.active_record.raise_in_transactional_callbacks = true
 
   config.after_initialize do
     Bullet.enable = true

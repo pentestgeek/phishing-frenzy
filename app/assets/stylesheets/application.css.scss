@@ -8,13 +8,16 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require bootstrap.min
  *= require_self
  *= require dataTables/jquery.dataTables
  *= require codemirror
+ *= require_tree .
  */
 
- @font-face {
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+@font-face {
   font-family: 'Glyphicons Halflings';
   src: url('../assets/glyphicons-halflings-regular.eot');
   src: url('../assets/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), 

@@ -26,6 +26,14 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      # Choose a test framework:
+      with.test_framework :rspec
+      with.library :rails
+    end
+  end
+
   # add factory_girl to replace fixtures
   config.include FactoryGirl::Syntax::Methods
 
@@ -34,7 +42,7 @@ RSpec.configure do |config|
 
   # add devise helpers
   config.include Warden::Test::Helpers
-  config.include Devise::TestHelpers, :type => :controller
+  config.include Devise::TestHelpers, type: :controller
 
   # add devise helpers for authentication
   config.extend ControllerMacros

@@ -17,7 +17,8 @@
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require d3
 //= require jquery_nested_form
-//= require bootstrap.min
+//= require bootstrap-sprockets
+//= require_tree .
 
 $(document).ready(function() {
   $("[rel~='tooltip']").tooltip();

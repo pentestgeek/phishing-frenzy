@@ -1,13 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.7'
+gem 'rails', '4.2.7'
 
 gem 'mysql2'
-gem 'sass-rails'
+gem 'sass-rails', '~> 5.0', '>= 5.0.6'
 gem 'coffee-rails'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', :platforms => :ruby
+gem "libv8"
+gem "therubyracer"
 
 # core rails helpers
 gem 'uglifier'
@@ -54,8 +55,8 @@ gem 'ptools'
 gem 'execjs'
 
 # bootstrap
-gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', :branch => 'bootstrap3'
+gem "less-rails"
+gem 'bootstrap-sass'
 
 # For uploading email attacments
 gem 'carrierwave'
@@ -95,6 +96,11 @@ group :test do
   gem "guard-rspec"
   gem 'database_cleaner'
   gem 'faker'
+  gem 'shoulda-matchers', '~> 3.1'
+end
+
+group :production do
+  gem 'unicorn'
 end
 
 # ruby code style checker
