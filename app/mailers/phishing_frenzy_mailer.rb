@@ -10,8 +10,16 @@ class PhishingFrenzyMailer < ActionMailer::Base
     phishing_url = @campaign.email_settings.phishing_url
     blast = @campaign.blasts.find(blast_id)
 
+    # We use a custom message and content ID to prevent leaking data
+    # about our phishing setup
+    mid = "<#{Mail.random_tag}@#{@campaign.email_settings.domain}.mail>"
+
     @campaign.template.images.each do |image|
       attachments.inline[image[:file]] = File.read(image.file.current_path)
+      # Only inline attachments have cids:
+      # https://github.com/mikel/mail/blob/master/lib/mail/part.rb#L42
+      cid = "<#{Mail.random_tag}@#{@campaign.email_settings.domain}>"
+      attachments[image[:file]].add_content_id(cid)
     end
 
     @campaign.template.file_attachments.each do |attachment|
@@ -34,6 +42,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
     end
 
     mail_opts =  {
+        message_id: mid,
         to: @target.email_address,
         from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
         subject: @campaign.email_settings.subject,
@@ -108,11 +117,12 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
   def campaign_anonymous_smtp_settings
     {
-      :openssl_verify_mode => @campaign.email_settings.openssl_verify_mode_class,
+      openssl_verify_mode: @campaign.email_settings.openssl_verify_mode_class,
       address: @campaign.email_settings.smtp_server_out,
       port: @campaign.email_settings.smtp_port,
       enable_starttls_auto: @campaign.email_settings.enable_starttls_auto,
-      return_response: true
+      return_response: true,
+      domain: @campaign.email_settings.domain
     }
   end
 
