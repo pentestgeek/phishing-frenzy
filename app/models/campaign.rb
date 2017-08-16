@@ -105,6 +105,11 @@ class Campaign < ActiveRecord::Base
     v
   end
 
+  def reload
+    undeploy
+    deploy
+  end
+
   private
 
   def validate_email_addresses
