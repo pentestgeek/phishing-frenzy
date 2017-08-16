@@ -34,11 +34,11 @@ class PhishingFrenzyMailer < ActionMailer::Base
 
     if @campaign.campaign_settings.track_uniq_visitors?
       @url = "#{phishing_url}?uid=#{uid}"
-      @image_url = "#{GlobalSettings.first.site_url}/reports/image/#{uid}.png"
+      @image_url = "#{phishing_url}/reports/image/#{uid}.png"
     else
       @url = phishing_url
       # Don't know a default non-tracking image?
-      @image_url = "#{GlobalSettings.first.site_url}/reports/image/000000.png"
+      @image_url = "#{phishing_url}/reports/image/000000.png"
     end
 
     mail_opts =  {
