@@ -6,7 +6,7 @@
 
 <% unless @victims.empty? %>
   <div id="campaign-buttons">
-    <%= button_to("Delete all", {:controller => 'campaigns', :action => 'clear_victims', :id => params[:id]}, class: "btn btn-danger") %>
+    <%= button_to("Delete all", clear_victims_campaign_path(id: params[:id]), class: "btn btn-danger") %>
   </div>
 
   <% counter = 1 %>

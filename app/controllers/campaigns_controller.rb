@@ -101,18 +101,11 @@ class CampaignsController < ApplicationController
   end
 
   def delete_victim
-    victim = Victim.find_by_id(params[:id])
-    if victim.nil?
-      flash[:notice] = "Victim Does not Exist"
-      redirect_to(:controller => 'campaigns', :action => 'list')
-    end
-
-    victim_id_to_destroy = victim.id
-
-    victim.destroy
+    victim = Victim.find(params[:id])
+    victim.sent ? victim.update_attribute(:archive, true) : victim.destroy!
     flash[:notice] = "Deleted #{victim.email_address}"
     respond_to do |format|
-      format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }
+      format.html { redirect_to victims_campaigns_path(id: victim.campaign_id) }
       format.js
     end
   end
