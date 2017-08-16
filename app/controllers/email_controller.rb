@@ -18,7 +18,7 @@ class EmailController < ApplicationController
       end
     else
       begin
-        PhishingFrenzyMailer.phish(campaign.id, campaign.test_victim.email_address, blast.id, action).deliver_now
+        PhishingFrenzyMailer.phish(campaign.id, campaign.test_victim.email_address, blast.id, action)
         flash[:notice] = sync_success_notice
       rescue::NoMethodError
         flash[:error] = "Template is missing an email file, upload and create new email"
