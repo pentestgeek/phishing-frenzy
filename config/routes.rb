@@ -87,13 +87,6 @@ PhishingFramework::Application.routes.draw do
     end
   end
 
-  resources :clones do
-    member do
-      get 'download'
-      get 'preview'
-    end
-  end
-
   resources :tools
 
   root :to => 'campaigns#home'
