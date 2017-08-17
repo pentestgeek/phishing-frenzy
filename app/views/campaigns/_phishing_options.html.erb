@@ -35,6 +35,18 @@
 
       <div class="row top-buffer">
         <div class="col-xs-3">
+          <p>Require UID?</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='This option will require that the UID parameter must be passed to the phishing site in order to view the contents of the phishing page. If this setting is enabled you will get a 404 error when viewing the page without a UID parameter'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.check_box(:require_uid) %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
           <p>Password Storage?</p>
         </div>
         <div class="col-xs-1">

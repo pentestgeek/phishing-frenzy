@@ -2,6 +2,7 @@
 // Turn off all error reporting
 error_reporting(0);
 
+<% if @campaign_settings.require_uid %>
 if (isset($_GET['uid'])) {
   $uid = $_GET['uid'];
 } else {
@@ -9,22 +10,23 @@ if (isset($_GET['uid'])) {
   echo "404 Page Not Found";
   exit();
 }
+<% end %>
 
 function get_ip() {
-    if (function_exists('apache_request_headers')) {
-      $headers = apache_request_headers();
-    } else {
-      $headers = $_SERVER;
-    }
-    if (array_key_exists('X-Forwarded-For',$headers) && filter_var($headers['X-Forwarded-For'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV4)) {
-      $the_ip = $headers['X-Forwarded-For'];
-    } elseif (array_key_exists('HTTP_X_FORWARDED_FOR',$headers) && filter_var($headers['HTTP_X_FORWARDED_FOR'],FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-      $the_ip = $headers['HTTP_X_FORWARDED_FOR'];
-    } else {
-      $the_ip = filter_var($_SERVER['REMOTE_ADDR'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV4);
-    }
-    return $the_ip;
+  if (function_exists('apache_request_headers')) {
+    $headers = apache_request_headers();
+  } else {
+    $headers = $_SERVER;
   }
+  if (array_key_exists('X-Forwarded-For',$headers) && filter_var($headers['X-Forwarded-For'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV4)) {
+    $the_ip = $headers['X-Forwarded-For'];
+  } elseif (array_key_exists('HTTP_X_FORWARDED_FOR',$headers) && filter_var($headers['HTTP_X_FORWARDED_FOR'],FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+    $the_ip = $headers['HTTP_X_FORWARDED_FOR'];
+  } else {
+    $the_ip = filter_var($_SERVER['REMOTE_ADDR'],FILTER_VALIDATE_IP,FILTER_FLAG_IPV4);
+  }
+  return $the_ip;
+}
 
 $password = htmlspecialchars($_POST['PasswordForm']);
 $username = htmlspecialchars($_POST['UsernameForm']);
