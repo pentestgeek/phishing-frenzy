@@ -254,6 +254,9 @@ class Campaign < ActiveRecord::Base
           # add beef script tags if enabled, other wise add normal tags
           tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
           file.puts tags
+          File.foreach(page.file.current_path) do |li|
+            fo.puts li
+          end
         end
       end
       if inflatable?(loc)
