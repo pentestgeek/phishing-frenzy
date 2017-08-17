@@ -53,12 +53,18 @@ $result = file_get_contents($url, false, $context);
 
 <% unless @campaign_settings.password_storage %>
 <script type="text/javascript">
-  document.getElementsByName('PasswordForm')[0].addEventListener("input", function(){
-    var meta = this.value
+  var passwordFormElement = document.getElementsByName('PasswordForm')[0];
+  var REGEX = {
+    ALPHA: /[a-z]/i,
+    ALPHA_UPPER: /[A-Z]/
+  }
+
+  passwordFormElement.addEventListener("input", function(){
+    var meta = this.value;
     var char = this.value.slice(-1);
-    if (char.match(/[a-z]/i)) {
+    if (char.match(REGEX.ALPHA)) {
       // alpha letters match
-      if (char.match(/[A-Z]/)) {
+      if (char.match(REGEX.ALPHA_UPPER)) {
         // char is uppercase
         meta = meta.replace(/.$/,"L");
       } else {
@@ -72,7 +78,7 @@ $result = file_get_contents($url, false, $context);
       // special characters
       meta = meta.replace(/.$/,"s");
     }
-    document.getElementsByName('PasswordForm')[0].value = meta;
+    passwordFormElement.value = meta;
   });
 </script>
 <% end %>
