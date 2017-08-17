@@ -255,7 +255,7 @@ class Campaign < ActiveRecord::Base
           tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
           file.puts tags
           File.foreach(page.file.current_path) do |li|
-            fo.puts li
+            file.puts li
           end
         end
       end
