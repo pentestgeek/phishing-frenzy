@@ -8,5 +8,3 @@ require 'rubocop/rake_task'
 PhishingFramework::Application.load_tasks
 
 RuboCop::RakeTask.new
-
-Annotate.load_tasks

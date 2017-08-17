@@ -117,6 +117,11 @@ class Campaign < ActiveRecord::Base
     binding
   end
 
+  def tags_binding()
+    @campaign_settings = self.campaign_settings
+    binding
+  end
+
   def test_victim
     v = Victim.new
     v.email_address = test_email
@@ -243,15 +248,12 @@ class Campaign < ActiveRecord::Base
       # copy template files to deployment directory
       FileUtils.cp(page.file.current_path, loc)
       if File.extname(page.file.current_path) == '.php'
-        File.open(loc, 'w') do |fo|
+        File.open(loc, 'w') do |file|
           # add php tracking tags to each website file
           tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-          # add beef script tags if enabled
-          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result
-          fo.puts tags
-          File.foreach(page.file.current_path) do |li|
-            fo.puts li
-          end
+          # add beef script tags if enabled, other wise add normal tags
+          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
+          file.puts tags
         end
       end
       if inflatable?(loc)
@@ -274,7 +276,7 @@ class Campaign < ActiveRecord::Base
 
   def tag_beef(tags)
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    return beef.result(self.beef_binding(select_beef_url)) + tags.result
+    return beef.result(self.beef_binding(select_beef_url)) + tags.result(tags_binding)
   end
 
   def select_beef_url

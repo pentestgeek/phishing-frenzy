@@ -18,6 +18,8 @@
 #  smtp_delay             :integer          default(0)
 #  beef_url               :string(255)
 #  ssl                    :boolean
+#  require_uid            :boolean          default(TRUE)
+#  password_storage       :boolean          default(TRUE)
 #
 
 FactoryGirl.define do

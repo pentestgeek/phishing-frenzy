@@ -50,8 +50,7 @@ class ReportsController < ApplicationController
       if victims.length > 0
         finish += "over 1, "
         v = victims.first()
-        visit = Visit.new()
-        visit.victim_id = v.id
+        visit = v.visits.new()
         if params[:browser_info]
           finish += "browser info, "
           visit.browser = params[:browser_info]
@@ -62,7 +61,8 @@ class ReportsController < ApplicationController
         end
         if params[:extra]
           finish += "extra, "
-          visit.extra = params[:extra]
+          extra = check_password_storage(v.campaign)
+          visit.extra = extra
         end
         visit.save()
       end
@@ -231,5 +231,21 @@ class ReportsController < ApplicationController
     redirect_to :back, notice: "Cleared Campaign Stats and removed Victims"
   end
 
+  private
+
+    def check_password_storage(campaign)
+      # check to make sure we dont store passwords
+      # for campaigns which have password_storage false
+      unless campaign.campaign_settings.password_storage
+        # parse params[:extra] and remove any potential passwords
+        if params[:extra].include?('password')
+          password = params[:extra].split('password:').last
+          if password.strip.match(/[^Llns]/)
+            return "password: MASKED"
+          end
+        end
+      end
+      params[:extra]
+    end
 end
 

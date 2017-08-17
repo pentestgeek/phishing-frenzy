@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150718023513) do
+ActiveRecord::Schema.define(version: 20170817013131) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -104,6 +104,8 @@ ActiveRecord::Schema.define(version: 20150718023513) do
     t.integer  "smtp_delay",             limit: 4,   default: 0
     t.string   "beef_url",               limit: 255
     t.boolean  "ssl"
+    t.boolean  "require_uid",                        default: true
+    t.boolean  "password_storage",                   default: true
   end
 
   add_index "campaign_settings", ["campaign_id"], name: "index_campaign_settings_on_campaign_id", using: :btree
