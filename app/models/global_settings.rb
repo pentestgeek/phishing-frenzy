@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: global_settings
+#
+#  id                     :integer          not null, primary key
+#  command_apache_restart :string(255)
+#  smtp_timeout           :integer          default(5)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  command_apache_status  :string(255)
+#  command_apache_vhosts  :string(255)      default("apache2ctl -S")
+#  asynchronous           :boolean          default(TRUE)
+#  bing_api               :string(255)
+#  beef_url               :string(255)
+#  sites_enabled_path     :string(255)      default("/etc/apache2/sites-enabled")
+#  reports_refresh        :integer          default(15)
+#  site_url               :string(255)      default("https://phishingfrenzy.local")
+#
+
 class GlobalSettings < ActiveRecord::Base
 
   attr_accessible :site_url, :command_apache_restart, :command_apache_vhosts, :command_apache_status, :sites_enabled_path, :smtp_timeout, :asynchronous, :bing_api, :beef_url, :reports_refresh

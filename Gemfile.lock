@@ -41,6 +41,9 @@ GEM
       axlsx (>= 1.0.13)
       i18n (>= 0.4.1)
     addressable (2.4.0)
+    annotate (2.7.2)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 13.0)
     arel (6.0.3)
     ast (2.3.0)
     autoprefixer-rails (6.5.0)
@@ -366,6 +369,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_xlsx
+  annotate
   axlsx
   bootstrap-kaminari-views
   bootstrap-sass

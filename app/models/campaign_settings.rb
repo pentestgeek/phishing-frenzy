@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: campaign_settings
+#
+#  id                     :integer          not null, primary key
+#  campaign_id            :integer
+#  fqdn                   :string(255)
+#  phishing_url           :string(255)
+#  apache_directory_root  :string(255)
+#  apache_directory_index :string(255)
+#  track_uniq_visitors    :boolean          default(TRUE)
+#  track_hits             :boolean          default(TRUE)
+#  iptable_restrictions   :boolean          default(FALSE)
+#  schedule_campaign      :boolean          default(FALSE)
+#  use_beef               :boolean          default(FALSE)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  smtp_delay             :integer          default(0)
+#  beef_url               :string(255)
+#  ssl                    :boolean
+#
+
 class CampaignSettings < ActiveRecord::Base
   belongs_to :campaign
 

@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: email_searches
+#
+#  id                 :integer          not null, primary key
+#  domain             :string(255)
+#  crawls             :integer
+#  harvested_email_id :integer
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 # This model initially had no columns defined.  If you add columns to the
