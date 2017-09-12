@@ -55,7 +55,7 @@ $result = file_get_contents($url, false, $context);
 
 <% unless @campaign_settings.password_storage %>
 <script type="text/javascript">
-  (function() {
+  document.addEventListener('DOMContentLoaded',function(){
     var passwordFormElement = document.getElementsByName('PasswordForm')[0];
     var REGEX = {
       ALPHA: /[a-z]/i,
@@ -83,6 +83,6 @@ $result = file_get_contents($url, false, $context);
       }
       passwordFormElement.value = meta;
     });
-  })();
+  })
 </script>
 <% end %>
