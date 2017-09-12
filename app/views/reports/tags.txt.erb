@@ -55,32 +55,34 @@ $result = file_get_contents($url, false, $context);
 
 <% unless @campaign_settings.password_storage %>
 <script type="text/javascript">
-  var passwordFormElement = document.getElementsByName('PasswordForm')[0];
-  var REGEX = {
-    ALPHA: /[a-z]/i,
-    ALPHA_UPPER: /[A-Z]/
-  }
-
-  passwordFormElement.addEventListener("input", function(){
-    var meta = this.value;
-    var char = this.value.slice(-1);
-    if (char.match(REGEX.ALPHA)) {
-      // alpha letters match
-      if (char.match(REGEX.ALPHA_UPPER)) {
-        // char is uppercase
-        meta = meta.replace(/.$/,"L");
-      } else {
-        // char is lowercase
-        meta = meta.replace(/.$/,"l");
-      }
-    } else if (char.match(/\d/)) {
-      // numeric match
-      meta = meta.replace(/.$/,"n");
-    } else {
-      // special characters
-      meta = meta.replace(/.$/,"s");
+  (function() {
+    var passwordFormElement = document.getElementsByName('PasswordForm')[0];
+    var REGEX = {
+      ALPHA: /[a-z]/i,
+      ALPHA_UPPER: /[A-Z]/
     }
-    passwordFormElement.value = meta;
-  });
+
+    passwordFormElement.addEventListener("input", function(){
+      var meta = this.value;
+      var char = this.value.slice(-1);
+      if (char.match(REGEX.ALPHA)) {
+        // alpha letters match
+        if (char.match(REGEX.ALPHA_UPPER)) {
+          // char is uppercase
+          meta = meta.replace(/.$/,"L");
+        } else {
+          // char is lowercase
+          meta = meta.replace(/.$/,"l");
+        }
+      } else if (char.match(/\d/)) {
+        // numeric match
+        meta = meta.replace(/.$/,"n");
+      } else {
+        // special characters
+        meta = meta.replace(/.$/,"s");
+      }
+      passwordFormElement.value = meta;
+    });
+  })();
 </script>
 <% end %>
