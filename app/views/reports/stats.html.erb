@@ -267,12 +267,11 @@ function update(data) {
   .text(function(d) { return d.Clicks; });
 
   // Update lines
-
   d3.selectAll("rect").data(data).transition().attr("width", function(d) { return (d.Clicks/max) * barLength; });
 }
 
 $(document).ready(function() {
-  setInterval(function() {
+  function update_metrics() {
     stat_sum = $.getJSON( "/reports/stats_sum/" + window.location.href.split("=").pop(), function(sum) {
       $("#campaign_name").text(sum.campaign_name)   
       $("#active").text(sum.active)   
@@ -292,8 +291,12 @@ $(document).ready(function() {
       ]
       change(data);
     });
+  }
 
+  update_metrics(); // invoke initial loading of metrics
 
+  setInterval(function() {
+    update_metrics();
   }, <%= (GlobalSettings.first.reports_refresh.to_f * 1000.0).to_i %>);
 });
 </script>
