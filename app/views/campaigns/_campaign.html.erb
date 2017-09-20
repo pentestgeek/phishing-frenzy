@@ -1,4 +1,4 @@
-<div id="dashboard-campaign" class="col-sm-6">
+<div id="dashboard-campaign" class="col-md-6">
   <div class="thumbnail">
     <div class="caption">
       <h3 class="text-center"><%= campaign.name %></h3>
@@ -6,14 +6,23 @@
           <div class="pie-<%= campaign.id %>"></div>
         </div>
         <%= render partial: "pie", locals: {campaign: campaign} if campaign.sent > 0 %>
-        <p><span class="glyphicon glyphicon-envelope"></span> 
+        <p><span class="glyphicon glyphicon-envelope"></span>
           Sent: <%= campaign.sent %></p> 
-        <p><span class="glyphicon glyphicon-plus-sign"></span> 
+        <p><span class="glyphicon glyphicon-plus-sign"></span>
           Clicks: <%= campaign.clicks %></p>
         <p><span class="glyphicon glyphicon-exclamation-sign"></span> 
           Opened: <%= campaign.opened %></p>
-        <p><span class="glyphicon glyphicon-signal"></span> 
-          Success: <%= campaign.success %>%</p>
+        <p><span class="glyphicon glyphicon-signal"></span>
+          Click Rate: <%= campaign.success %>%</p>
+        <p>
+        <p><span class="glyphicon glyphicon-user"></span>
+          Harvested: <%= campaign.users_password_count %></p>
+        <p>
+        <p><span class="glyphicon glyphicon-qrcode"></span>
+          Passwords: <%= campaign.password_count %></p>
+        <p>
+        <p><span class="glyphicon glyphicon-signal"></span>
+          Harvest Rate: <%= campaign.password_success %>%</p>
         <p>
         <a href="<%= stats_reports_url(id: campaign.id) %>" class="btn btn-primary btn-xs" role="button">Reports</a> 
         <a href="<%= campaign_url(campaign.id) %>" class="btn btn-default btn-xs" role="button">Manage</a>

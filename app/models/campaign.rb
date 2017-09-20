@@ -97,6 +97,18 @@ class Campaign < ActiveRecord::Base
         0 : (self.clicks.to_f / self.sent.to_f * 100.0).round(2)
   end
 
+  def password_count
+    visits.present? ? visits.where('extra LIKE ?', "%password%").size : 0
+  end
+
+  def users_password_count
+    victims.present? ? victims.select {|v| v.password?}.size : 0
+  end
+
+  def password_success
+    sent == 0 ? 0 : (users_password_count.to_f / sent.to_f * 100.0).round(2)
+  end
+
   def self.logfile(campaign)
     Rails.root.to_s + "/log/www-campaign-#{campaign.id}-access.log"
   end

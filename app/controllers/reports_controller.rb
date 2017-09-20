@@ -73,7 +73,7 @@ class ReportsController < ApplicationController
 
   def stats_sum
     # Campaign for the reports
-    @campaign = Campaign.includes(:victims).find(params[:id])
+    @campaign = Campaign.includes(:victims, :visits).find(params[:id])
 
     # Time since campaign was started.
     t = (Time.now - @campaign.created_at)
@@ -94,6 +94,8 @@ class ReportsController < ApplicationController
     @jsonToSend["sent"] = @emails_sent
     @jsonToSend["opened"] = @opened
     @jsonToSend["clicked"] = @visits
+    @jsonToSend["harvested"] = @campaign.users_password_count
+    @jsonToSend["passwords"] = @campaign.password_count
 
     render json: @jsonToSend
   end
