@@ -11,6 +11,9 @@
   <div class="btn-group" role="group">
     <%= link_to("Launch", launch_path(campaign.id), class: 'btn btn-default', data: {confirm: 'Are you sure you want to launch the phishing campaign?'}, method: :post) %>
   </div>
+  <div class="btn-group" role="group">
+    <%= link_to("Reload", reload_campaign_path(campaign.id), class: 'btn btn-default', method: :post) %>
+  </div>
   <% if campaign.template.present? %>
   <div class="btn-group" role="group">
     <%= link_to("Edit Email", edit_template_path(campaign.template, campaign_id: campaign.id), class: 'btn btn-default') %>

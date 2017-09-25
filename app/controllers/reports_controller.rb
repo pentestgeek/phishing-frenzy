@@ -13,18 +13,18 @@ class ReportsController < ApplicationController
 
   def image
     victims = Victim.where(:uid => params[:uid])
-    unless victims.present?
-      render text: "No UID Found"
-      return
+    if victims.present?
+      visit = Visit.new
+      victim = victims.first
+      visit.victim_id = victim.id
+      visit.browser = request.env["HTTP_USER_AGENT"]
+      visit.ip_address = request.remote_ip
+      visit.extra = "SOURCE: EMAIL"
+      visit.save
+    else
+      logger.info  "Image request for unknown UID: #{params[:uid]}"
     end
 
-    visit = Visit.new
-    victim = victims.first
-    visit.victim_id = victim.id
-    visit.browser = request.env["HTTP_USER_AGENT"]
-    visit.ip_address = request.env["REMOTE_ADDR"]
-    visit.extra = "SOURCE: EMAIL"
-    visit.save
     send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
   end
 
@@ -50,8 +50,7 @@ class ReportsController < ApplicationController
       if victims.length > 0
         finish += "over 1, "
         v = victims.first()
-        visit = Visit.new()
-        visit.victim_id = v.id
+        visit = v.visits.new()
         if params[:browser_info]
           finish += "browser info, "
           visit.browser = params[:browser_info]
@@ -62,7 +61,8 @@ class ReportsController < ApplicationController
         end
         if params[:extra]
           finish += "extra, "
-          visit.extra = params[:extra]
+          extra = check_password_storage(v.campaign)
+          visit.extra = extra
         end
         visit.save()
       end
@@ -73,7 +73,7 @@ class ReportsController < ApplicationController
 
   def stats_sum
     # Campaign for the reports
-    @campaign = Campaign.includes(:victims).find(params[:id])
+    @campaign = Campaign.includes(:victims, :visits).find(params[:id])
 
     # Time since campaign was started.
     t = (Time.now - @campaign.created_at)
@@ -94,6 +94,8 @@ class ReportsController < ApplicationController
     @jsonToSend["sent"] = @emails_sent
     @jsonToSend["opened"] = @opened
     @jsonToSend["clicked"] = @visits
+    @jsonToSend["harvested"] = @campaign.users_password_count
+    @jsonToSend["passwords"] = @campaign.password_count
 
     render json: @jsonToSend
   end
@@ -231,5 +233,21 @@ class ReportsController < ApplicationController
     redirect_to :back, notice: "Cleared Campaign Stats and removed Victims"
   end
 
+  private
+
+    def check_password_storage(campaign)
+      # check to make sure we dont store passwords
+      # for campaigns which have password_storage false
+      unless campaign.campaign_settings.password_storage
+        # parse params[:extra] and remove any potential passwords
+        if params[:extra].include?('password')
+          password = params[:extra].split('password:').last
+          if password.strip.match(/[^Llns]/)
+            return "password: MASKED"
+          end
+        end
+      end
+      params[:extra]
+    end
 end
 

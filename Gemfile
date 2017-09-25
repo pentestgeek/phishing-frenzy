@@ -119,3 +119,6 @@ gem 'draper', '~> 1.3'
 
 # foreman helper
 gem 'foreman'
+
+# annotate models
+gem 'annotate', require: false

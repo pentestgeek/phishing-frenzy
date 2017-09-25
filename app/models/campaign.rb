@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: campaigns
+#
+#  id          :integer          not null, primary key
+#  template_id :integer
+#  name        :string(255)
+#  description :string(255)
+#  active      :boolean          default(FALSE)
+#  scope       :integer
+#  emails      :text(65535)
+#  email_sent  :boolean          default(FALSE)
+#  created_at  :datetime
+#  updated_at  :datetime
+#  test_email  :string(255)
+#  admin_id    :integer
+#
+
 require 'fileutils'
 require 'zip'
 
@@ -79,6 +97,18 @@ class Campaign < ActiveRecord::Base
         0 : (self.clicks.to_f / self.sent.to_f * 100.0).round(2)
   end
 
+  def password_count
+    visits.present? ? visits.where('extra LIKE ?', "%password%").size : 0
+  end
+
+  def users_password_count
+    victims.present? ? victims.select {|v| v.password?}.size : 0
+  end
+
+  def password_success
+    sent == 0 ? 0 : (users_password_count.to_f / sent.to_f * 100.0).round(2)
+  end
+
   def self.logfile(campaign)
     Rails.root.to_s + "/log/www-campaign-#{campaign.id}-access.log"
   end
@@ -99,10 +129,20 @@ class Campaign < ActiveRecord::Base
     binding
   end
 
+  def tags_binding()
+    @campaign_settings = self.campaign_settings
+    binding
+  end
+
   def test_victim
     v = Victim.new
     v.email_address = test_email
     v
+  end
+
+  def reload
+    undeploy
+    deploy
   end
 
   private
@@ -220,14 +260,14 @@ class Campaign < ActiveRecord::Base
       # copy template files to deployment directory
       FileUtils.cp(page.file.current_path, loc)
       if File.extname(page.file.current_path) == '.php'
-        File.open(loc, 'w') do |fo|
+        File.open(loc, 'w') do |file|
           # add php tracking tags to each website file
           tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-          # add beef script tags if enabled
-          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result
-          fo.puts tags
+          # add beef script tags if enabled, other wise add normal tags
+          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
+          file.puts tags
           File.foreach(page.file.current_path) do |li|
-            fo.puts li
+            file.puts li
           end
         end
       end
@@ -251,7 +291,7 @@ class Campaign < ActiveRecord::Base
 
   def tag_beef(tags)
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    return beef.result(self.beef_binding(select_beef_url)) + tags.result
+    return beef.result(self.beef_binding(select_beef_url)) + tags.result(tags_binding)
   end
 
   def select_beef_url

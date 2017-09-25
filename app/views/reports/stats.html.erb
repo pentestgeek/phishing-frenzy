@@ -20,24 +20,34 @@
     </div>
     <div id="chartDiv" class='colorBox' style="width:395px;height:320px;top:110px;left:405px;background-color: #FFF;border: 0px">
     </div>
-    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:405px;margin-bottom:20px;background-color: #9edae5">
+    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:0px;margin-bottom:20px;background-color: #9edae5">
       <h3 class='textItems' style="color:grey;">Sent: </h2>
       <h2 id='sent' class='textItems' style="color:black;">-</h2>
     </div>
-    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:607.5px;background-color: #9ecae1">
+    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:202.5px;background-color: #9ecae1">
       <h3 class='textItems' style="color:grey;">Opened: </h2>
       <h2 id='opened' class='textItems' style="color:black;">-</h2>
     </div>
-    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:405px;background-color: #9ecae1">
+    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:0px;background-color: #9ecae1">
       <h3 class='textItems' style="color:grey;">Clicked: </h2>
       <h2 id='clicked' class='textItems' style="color:black;">-</h2>
     </div>
-    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:607.5px;background-color: #9edae5">
-      <h3 class='textItems' style="color:grey;">Success Rate: </h2>
+    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:202.5px;background-color: #9edae5">
+      <h3 class='textItems' style="color:grey;">Click Rate: </h2>
       <h2 id='success_rate' class='textItems' style="color:black;">-</h2>
     </div>
-    <svg id="barChart" class='colorBox' style="width:395px;height:210px;top:440px;left:0px;background-color: #FFF;">
-    </svg>
+    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:405px;background-color: #9edae5">
+      <h3 class='textItems' style="color:grey;">Harvested: </h2>
+      <h2 id='harvested' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:192.5px;height:100px;top:550px;left:405px;background-color: #9ecae1">
+      <h3 class='textItems' style="color:grey;">Passwords: </h2>
+      <h2 id='passwords' class='textItems' style="color:black;">-</h2>
+    </div>
+    <div class='colorBox' style="width:192.5px;height:100px;top:440px;left:607.5px;background-color: #9ecae1">
+      <h3 class='textItems' style="color:grey;">Harvest Rate: </h2>
+      <h2 id='harvest_rate' class='textItems' style="color:black;">-</h2>
+    </div>
     <div>
       <table id="victims-summary-table" class="table-hover table-condense">
         <thead>
@@ -59,7 +69,7 @@
   </div>
 
   <!-- Modal Button -->
-  <div id="report-options">
+  <div id="report-options" class="pull-right">
     <button class="btn btn-default" data-toggle="modal" data-target="#display-report-options">
       More Options
     </button>
@@ -257,12 +267,11 @@ function update(data) {
   .text(function(d) { return d.Clicks; });
 
   // Update lines
-
   d3.selectAll("rect").data(data).transition().attr("width", function(d) { return (d.Clicks/max) * barLength; });
 }
 
 $(document).ready(function() {
-  setInterval(function() {
+  function update_metrics() {
     stat_sum = $.getJSON( "/reports/stats_sum/" + window.location.href.split("=").pop(), function(sum) {
       $("#campaign_name").text(sum.campaign_name)   
       $("#active").text(sum.active)   
@@ -272,6 +281,9 @@ $(document).ready(function() {
       $("#clicked").text(sum.clicked)
       $("#opened").text(sum.opened)   
       $("#success_rate").text(Math.floor((sum.clicked/sum.sent)*100) + "%")
+      $("#harvested").text(sum.harvested)
+      $("#passwords").text(sum.passwords)
+      $("#harvest_rate").text(Math.floor((sum.harvested/sum.sent)*100) + "%")
     
       data = [
         {"label":"Clicked", "value":sum.clicked},
@@ -279,45 +291,12 @@ $(document).ready(function() {
       ]
       change(data);
     });
+  }
 
+  update_metrics(); // invoke initial loading of metrics
 
+  setInterval(function() {
+    update_metrics();
   }, <%= (GlobalSettings.first.reports_refresh.to_f * 1000.0).to_i %>);
 });
-
-/*
-$(document).ready(function() {
-    initBar();
-    data2 = [
-        {"Time":"0h-1h", "Clicks":5},
-        {"Time":"1h-4h", "Clicks":7},
-        {"Time":"4h-10h", "Clicks":5},
-        {"Time":"10h-24h", "Clicks":3},
-        {"Time":"24h-48h", "Clicks":2},
-        {"Time":"48+", "Clicks":1}
-        ]
-
-    // get data every 5 seconds and refresh myDiv
-    var pingAfter = 3000;
-    var refreshId = setInterval(function() {
-        data2[0].Clicks += 1;
-        console.log(data2);
-        update(data2);
-    }, pingAfter);
-});
-
-
-$(document).ready(function() {
-    data = [{"label":"Clicked", "value":23},
-        {"label":"Opened", "value":5}, 
-        {"label":"No Action", "value":8}]
-    // get data every 5 seconds and refresh myDiv
-    var pingAfter = 20000;
-    var refreshId = setInterval(function() {
-        data[0].value += 1;
-        console.log(data);
-        change(data);
-    }, pingAfter);
-
-});
-*/
 </script>

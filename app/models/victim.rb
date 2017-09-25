@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: victims
+#
+#  id            :integer          not null, primary key
+#  email_address :string(255)
+#  campaign_id   :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  uid           :string(255)
+#  firstname     :string(255)
+#  lastname      :string(255)
+#  archive       :boolean          default(FALSE)
+#  sent          :boolean          default(FALSE)
+#
+
 class Victim < ActiveRecord::Base
 	belongs_to :campaign
 	has_many :visits, dependent: :destroy

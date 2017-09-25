@@ -39,6 +39,7 @@ PhishingFramework::Application.routes.draw do
     end
     member do
       post 'clear_victims'
+      post 'reload'
     end
   end
 
@@ -83,13 +84,6 @@ PhishingFramework::Application.routes.draw do
       post 'approve'
       post 'revoke'
       delete 'destroy'
-    end
-  end
-
-  resources :clones do
-    member do
-      get 'download'
-      get 'preview'
     end
   end
 

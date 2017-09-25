@@ -33,6 +33,30 @@
         </div>
       </div>
 
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Require UID?</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='This option will require that the UID parameter must be passed to the phishing site in order to view the contents of the phishing page. If this setting is enabled you will get a 404 error when viewing the page without a UID parameter'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.check_box(:require_uid) %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
+          <p>Password Storage?</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='This will modify if the campaign is able to store raw passwords or not. When password storage is disabled JavaScript will be added to the phishing site which will convert the password into a meta-password in realtime while the user types. If a raw password does end up getting sent to the results API, it will be modified to password: MASKED value to ensure passwords are not stored in the database'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.check_box(:password_storage) %>
+        </div>
+      </div>
+
     <div class="row top-buffer">
       <div class="col-xs-3">
         <p>Use BeeF?</p>
