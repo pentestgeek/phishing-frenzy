@@ -36,7 +36,7 @@ if ($password != '') {
 }
 
 $ip = get_ip();
-$browser = $_SERVER['HTTP_USER_AGENT'];
+$browser = htmlspecialchars($_SERVER['HTTP_USER_AGENT']);
 $host = $_SERVER['HTTP_HOST'];
 $url = "<%= GlobalSettings.first.site_url %>" . '/reports/results/';
 $data = array('uid' => $uid, 'browser_info' => $browser, 'ip_address' => $ip, 'extra' => $creds);
