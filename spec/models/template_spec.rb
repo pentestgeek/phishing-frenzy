@@ -10,6 +10,6 @@ RSpec.describe Template, type: :model do
 
   it 'Template.email_exists?' do
     template = create(:template)
-    expect(template.email_exists?).to be_true
+    expect(template.email_files.present?).to be_falsey
   end
 end
