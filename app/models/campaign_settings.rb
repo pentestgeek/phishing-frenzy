@@ -28,7 +28,7 @@ class CampaignSettings < ActiveRecord::Base
   belongs_to :campaign
 
   attr_accessible :track_uniq_visitors, :track_hits, :iptable_restrictions, :schedule_campaign,
-  	:use_beef, :beef_url, :campaign_id, :fqdn, :smtp_delay, :ssl, :password_storage, :require_uid,
+    :use_beef, :beef_url, :campaign_id, :fqdn, :smtp_delay, :ssl, :password_storage, :require_uid,
     :robots_block, :directory_index
 
   def smtp_delays
