@@ -253,6 +253,8 @@ class Campaign < ActiveRecord::Base
 
     # deploy phishing website files
     FileUtils.mkdir_p(deployment_directory)
+    # add robots.txt disallow if configured
+    deploy_robots_file if self.campaign_settings.robots_block?
 
     template.website_files.each do |page|
       next unless page.file.present?
@@ -275,6 +277,10 @@ class Campaign < ActiveRecord::Base
         inflate(loc, deployment_directory)
       end
     end
+  end
+
+  def deploy_robots_file
+    FileUtils.cp(File.join(Rails.root, "public",'robots.txt'), deployment_directory)
   end
 
   def write_vhost(vhost_type)

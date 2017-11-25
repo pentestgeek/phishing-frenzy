@@ -59,6 +59,18 @@
 
       <div class="row top-buffer">
         <div class="col-xs-3">
+          <p>Robots.txt Disallow?</p>
+        </div>
+        <div class="col-xs-1">
+          <span class="glyphicon glyphicon-question-sign" title='This option will drop a robots.txt file within the root of the phishing site which will disallow / to preven spiders the play nicely'></span>
+        </div>
+        <div class="col-xs-8">
+          <%= ff.check_box(:robots_block) %>
+        </div>
+      </div>
+
+      <div class="row top-buffer">
+        <div class="col-xs-3">
           <p>Password Storage?</p>
         </div>
         <div class="col-xs-1">
