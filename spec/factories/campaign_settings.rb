@@ -20,6 +20,8 @@
 #  ssl                    :boolean
 #  require_uid            :boolean          default(TRUE)
 #  password_storage       :boolean          default(TRUE)
+#  robots_block           :boolean          default(TRUE)
+#  directory_index        :boolean          default(FALSE)
 #
 
 FactoryGirl.define do
