@@ -38,7 +38,8 @@ gem 'geokit'
 gem 'jquery-ui-rails'
 
 # To use rubyzip
-gem 'rubyzip', "~>1.0.0"
+gem 'rubyzip', '>= 1.2.1'
+gem 'zip-zip'
 
 # To use pry for debugging
 gem 'pry'
@@ -83,7 +84,8 @@ gem 'mechanize'
 
 # Gem for xlsx creation
 gem 'acts_as_xlsx'
-gem 'axlsx'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: '776037c0fc799bb09da8c9ea47980bd3bf296874'
+gem 'axlsx_rails'
 
 # code syntax highlighter
 gem 'codemirror-rails'

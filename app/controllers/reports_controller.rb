@@ -156,53 +156,8 @@ class ReportsController < ApplicationController
   def download_excel
     @campaign = Campaign.find(params[:id])
     @victims = @campaign.victims
-
-    package = Axlsx::Package.new
-    wb = package.workbook
-    wb.styles do |s|
-      @heading = s.add_style alignment: {horizontal: :center}, b: true, bg_color: "ca0002", fg_color: "FF", border: {style: :thin, color: "00000000"}
-      @data = s.add_style alignment: {wrap_text: true, horizontal: :left, vertical: :top}, height: 14, border: {style: :thin, color: "00000000"}
-    end
-
-    wb.add_worksheet(name: "Targets") do |sheet|
-      sheet.add_row [
-        "Firstname",
-        "Lastname",
-        "Email",
-        "Email First Viewed",
-        "Email Viewed",
-        "Link First Clicked",
-        "Link Clicked",
-        "Credentials First Entered",
-        "Credentials Entered"
-      ], style: @heading
-      @victims.each do |victim|
-        visits = Visit.where(victim_id: victim.id).order(created_at: :asc)
-        first_email_visit = visits.find {|v| v.extra == 'SOURCE: EMAIL' }
-        first_click_visit = visits.find {|v| v.extra.blank? }
-        first_pass_visit = visits.find {|v| (v.extra && v.extra.include?('password'))}
-        pass_time = first_pass_visit ? first_pass_visit.created_at.to_formatted_s(:db) : nil
-        click_time = first_click_visit ? first_click_visit.created_at.to_formatted_s(:db) : nil
-        email_time = first_email_visit ? first_email_visit.created_at.to_formatted_s(:db) : nil
-
-        sheet.add_row [
-          victim.firstname,
-          victim.lastname,
-          victim.email_address,
-          email_time,
-          victim.opened?,
-          click_time,
-          victim.clicked?,
-          pass_time,
-          victim.password?
-        ], style: @data
-      end
-      sheet.column_widths 20, 20, 20, 20, 20
-    end
-
-    send_data package.to_stream.read, 
-      :filename => "#{@campaign.name}-#{@campaign.id}".parameterize + ".xlsx", 
-      :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
+    response.headers['Content-Disposition'] = "attachment; filename=\"#{@campaign.name}-#{@campaign.id}\".parameterize + \".xlsx\""
+    render "download_excel.xlsx.axlsx"
   end
 
   def apache_logs

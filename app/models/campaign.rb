@@ -17,7 +17,6 @@
 #
 
 require 'fileutils'
-require 'zip'
 
 class Campaign < ActiveRecord::Base
   include PublicActivity::Model
