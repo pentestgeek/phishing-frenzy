@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :attachment, class: "attachment" do
     file "efax.jpg"
     function "website"

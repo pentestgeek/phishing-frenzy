@@ -24,7 +24,7 @@
 #  directory_index        :boolean          default(FALSE)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :campaign_settings, :class => 'CampaignSettings' do
   	campaign
     fqdn { Faker::Internet.domain_name }
