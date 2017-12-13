@@ -124,3 +124,6 @@ gem 'foreman'
 
 # annotate models
 gem 'annotate', require: false
+
+# glone models with associations
+gem 'amoeba'

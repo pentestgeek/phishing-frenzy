@@ -40,6 +40,7 @@ PhishingFramework::Application.routes.draw do
     member do
       post 'clear_victims'
       post 'reload'
+      post 'copy'
     end
   end
 
