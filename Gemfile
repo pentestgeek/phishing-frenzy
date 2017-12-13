@@ -69,7 +69,7 @@ gem 'nested_form'
 gem 'jquery-datatables-rails'
 
 # d3 reports
-gem 'd3-rails'
+gem 'd3-rails', '3.5.17'
 
 # pdf creation
 gem 'prawn', '~> 1.2.1'

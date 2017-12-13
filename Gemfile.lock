@@ -99,7 +99,7 @@ GEM
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crass (1.0.3)
-    d3-rails (4.10.2)
+    d3-rails (3.5.17)
       railties (>= 3.1)
     database_cleaner (1.6.2)
     devise (4.3.0)
@@ -412,7 +412,7 @@ DEPENDENCIES
   carrierwave
   codemirror-rails
   coffee-rails
-  d3-rails
+  d3-rails (= 3.5.17)
   database_cleaner
   devise
   draper (~> 1.3)
@@ -458,4 +458,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   1.13.1
+   1.16.0
