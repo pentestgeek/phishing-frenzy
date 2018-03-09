@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170817013131) do
+ActiveRecord::Schema.define(version: 20171125231254) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -106,6 +106,8 @@ ActiveRecord::Schema.define(version: 20170817013131) do
     t.boolean  "ssl"
     t.boolean  "require_uid",                        default: true
     t.boolean  "password_storage",                   default: true
+    t.boolean  "robots_block",                       default: true
+    t.boolean  "directory_index",                    default: false
   end
 
   add_index "campaign_settings", ["campaign_id"], name: "index_campaign_settings_on_campaign_id", using: :btree

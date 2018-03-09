@@ -35,14 +35,14 @@ RSpec.configure do |config|
   end
 
   # add factory_girl to replace fixtures
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   # add capybara to make actual requests for testing
   config.include Capybara::DSL
 
   # add devise helpers
   config.include Warden::Test::Helpers
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   # add devise helpers for authentication
   config.extend ControllerMacros

@@ -82,6 +82,24 @@ class CampaignsController < ApplicationController
     end
   end
 
+  def copy
+    campaign = Campaign.find(params[:id])
+    random_string = (0...8).map { (65 + rand(26)).chr }.join
+    campaign_copy = campaign.amoeba_dup
+    # campaign inactive, emails_sent false
+    campaign_copy.active = false
+    campaign_copy.email_sent = false
+    campaign_copy.name = "#{campaign.name} #{random_string}"
+    campaign_copy.save
+    campaign_copy.email_settings = campaign.email_settings.dup
+    campaign_copy.email_settings.campaign_id = campaign_copy.id
+    campaign_copy.email_settings.save!
+    campaign_copy.campaign_settings = campaign.campaign_settings.dup
+    campaign_copy.campaign_settings.campaign_id = campaign_copy.id
+    campaign_copy.campaign_settings.save!
+    redirect_to list_campaigns_path, notice: 'Campaign copied successfully'
+  end
+
   def activity
     @activities = PublicActivity::Activity.includes(:trackable, :owner).order('created_at DESC').page(params[:page]).per(30)
   end

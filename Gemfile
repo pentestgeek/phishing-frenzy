@@ -38,7 +38,8 @@ gem 'geokit'
 gem 'jquery-ui-rails'
 
 # To use rubyzip
-gem 'rubyzip', "~>1.0.0"
+gem 'rubyzip', '>= 1.2.1'
+gem 'zip-zip'
 
 # To use pry for debugging
 gem 'pry'
@@ -68,7 +69,7 @@ gem 'nested_form'
 gem 'jquery-datatables-rails'
 
 # d3 reports
-gem 'd3-rails'
+gem 'd3-rails', '3.5.17'
 
 # pdf creation
 gem 'prawn', '~> 1.2.1'
@@ -83,7 +84,8 @@ gem 'mechanize'
 
 # Gem for xlsx creation
 gem 'acts_as_xlsx'
-gem 'axlsx'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: '776037c0fc799bb09da8c9ea47980bd3bf296874'
+gem 'axlsx_rails'
 
 # code syntax highlighter
 gem 'codemirror-rails'
@@ -91,7 +93,7 @@ gem 'codemirror-rails'
 # our test suite
 gem "rspec-rails", :group => [:test, :development]
 group :test do
-  gem "factory_girl_rails"
+  gem "factory_bot_rails"
   gem "capybara"
   gem "guard-rspec"
   gem 'database_cleaner'
@@ -122,3 +124,6 @@ gem 'foreman'
 
 # annotate models
 gem 'annotate', require: false
+
+# glone models with associations
+gem 'amoeba'

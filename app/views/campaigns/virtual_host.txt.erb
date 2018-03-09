@@ -7,6 +7,14 @@
     CustomLog     <%= @approot %>/log/www-campaign-<%= @campaign_id %>-access.log combined
     ErrorLog      <%= @approot %>/log/www-campaign-<%= @campaign_id %>-error.log
 
+<% if @campaign_settings.directory_index == false %>
+    <Directory <%= @template_location %>>
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+<% end %>
+
 <% if GlobalSettings.first.site_url.downcase.include?('https://') %>
     SSLProxyEngine On
     SSLProxyCheckPeerCN off

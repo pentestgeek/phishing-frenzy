@@ -16,7 +16,7 @@
 #  admin_id    :integer
 #
 
-FactoryGirl.define do
+FactoryBot.define do
 	trait :templated do
 		sequence(:template_id) {|n| n }
 	end
