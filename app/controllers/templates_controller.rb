@@ -6,7 +6,7 @@ class TemplatesController < ApplicationController
 	end
 
 	def list
-		@templates = Template.includes(:admin).all
+		@templates = Template.includes(:admin).order(created_at: :desc)
 	end
 
 	def show
