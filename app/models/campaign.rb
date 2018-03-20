@@ -245,11 +245,9 @@ class Campaign < ActiveRecord::Base
   def deploy
     # determine if SSL is enabled on campaign
     virtual_host_type = self.campaign_settings.ssl ? "virtual_host_ssl" : "virtual_host"
-
     # write vhost config and restart apache
     write_vhost(virtual_host_type)
     reload_apache
-
     # deploy phishing website files
     FileUtils.mkdir_p(deployment_directory)
     # add robots.txt disallow if configured
@@ -257,30 +255,46 @@ class Campaign < ActiveRecord::Base
 
     template.website_files.each do |page|
       next unless page.file.present?
-      loc = File.join(deployment_directory, page[:file])
-      # copy template files to deployment directory
-      FileUtils.cp(page.file.current_path, loc)
-      tag_website_file(loc, page)
-      if inflatable?(loc)
-        inflate(loc, deployment_directory, page)
+      deployment_location = File.join(deployment_directory, page[:file])
+      # copy template.website_file to deployment_location
+      FileUtils.cp(page.file.path, deployment_location)
+      if inflatable?(deployment_location)
+        inflate(deployment_location, deployment_directory, page)
       end
+    end
+    # tag website files now that they are all writen too deployment_directory
+    php_files = Dir.glob("#{deployment_directory}/**/*.php")
+    php_files.each do |php_file|
+      tag_website_file(php_file)
     end
   end
 
-  def tag_website_file(loc, page)
-    if File.extname(page.file.current_path) == '.php'
-      File.open(loc, 'w') do |file|
-        # add php tracking tags to each website file
-        tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-        # add beef script tags if enabled, other wise add normal tags
-        tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
-        file.puts tags
-        # append original file now that tags are added
-        File.foreach(page.file.current_path) do |li|
-          file.puts li
-        end
-      end
+  def tag_website_file(php_file)
+    php_contents = File.read(php_file)
+    File.open(php_file, 'w') do |file|
+      # add php tracking tags to each website file
+      tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
+      # add beef script tags if enabled, other wise add normal tags
+      tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
+      # add php tags to the php website_file
+      file.puts tags
+      # append original php_contents now that tags are added
+      file.puts php_contents
     end
+  end
+
+  def inflatable?(file)
+    File.extname(file) == '.zip'
+  end
+
+  def inflate(file, destination, page)
+    Zip::File.open(file) { |zip_file|
+      zip_file.each { |f|
+        f_path=File.join(destination, f.name)
+        FileUtils.mkdir_p(File.dirname(f_path))
+        f.extract(f_path) unless File.exist?(f_path)
+      }
+    }
   end
 
   def deploy_robots_file
@@ -316,21 +330,6 @@ class Campaign < ActiveRecord::Base
 
   def vhost_file
     "#{GlobalSettings.first.sites_enabled_path}/#{self.id}.conf"
-  end
-
-  def inflatable?(file)
-    File.extname(file) == '.zip'
-  end
-
-  def inflate(file, destination, page)
-    Zip::File.open(file) { |zip_file|
-      zip_file.each { |f|
-        f_path=File.join(destination, f.name)
-        FileUtils.mkdir_p(File.dirname(f_path))
-        f.extract(f_path) unless File.exist?(f_path)
-        tag_website_file(file, page)
-      }
-    }
   end
 
   def cleanup_apache
