@@ -2,6 +2,12 @@
 
 <h2>Campaign Options - <%= @campaign.name %></h2>
 
+<% if @campaign.active? %>
+  <small>
+    Phishing site: <%= link_to @campaign.campaign_settings.fqdn, "http://#{@campaign.campaign_settings.fqdn}?uid=0", target: "_blank" %>
+  </small>
+<% end %>
+
 <div class="campaign settings"> 
   <%= nested_form_for(@campaign, :html => {:multipart => true}) do |f| %>
     <%= render partial: "campaigns/options", locals: {f: f} %>
