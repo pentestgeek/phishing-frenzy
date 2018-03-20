@@ -18,6 +18,7 @@
 //= require d3
 //= require jquery_nested_form
 //= require bootstrap-sprockets
+//= require select2
 //= require_tree .
 
 $(document).ready(function() {

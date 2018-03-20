@@ -127,3 +127,6 @@ gem 'annotate', require: false
 
 # glone models with associations
 gem 'amoeba'
+
+# fancy dropdowns
+gem "select2-rails"

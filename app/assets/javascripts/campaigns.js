@@ -57,6 +57,11 @@ $( document ).ready(function() {
   is_stuff_checked();
 
   // click event handler to for checked stuff
-  $( "#campaign_campaign_settings_attributes_use_beef" ).on( "click", is_stuff_checked);
-  $( "#campaign_campaign_settings_attributes_ssl" ).on( "click", is_stuff_checked);
+  $("#campaign_campaign_settings_attributes_use_beef").on( "click", is_stuff_checked);
+  $("#campaign_campaign_settings_attributes_ssl").on( "click", is_stuff_checked);
+
+  // apply select-2 style to dropdown
+  $("#template-select").select2({
+    theme: "bootstrap"
+  });
 });
