@@ -260,20 +260,25 @@ class Campaign < ActiveRecord::Base
       loc = File.join(deployment_directory, page[:file])
       # copy template files to deployment directory
       FileUtils.cp(page.file.current_path, loc)
-      if File.extname(page.file.current_path) == '.php'
-        File.open(loc, 'w') do |file|
-          # add php tracking tags to each website file
-          tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
-          # add beef script tags if enabled, other wise add normal tags
-          tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
-          file.puts tags
-          File.foreach(page.file.current_path) do |li|
-            file.puts li
-          end
-        end
-      end
+      tag_website_file(loc, page)
       if inflatable?(loc)
-        inflate(loc, deployment_directory)
+        inflate(loc, deployment_directory, page)
+      end
+    end
+  end
+
+  def tag_website_file(loc, page)
+    if File.extname(page.file.current_path) == '.php'
+      File.open(loc, 'w') do |file|
+        # add php tracking tags to each website file
+        tags = ERB.new File.read(File.join(Rails.root, "app/views/reports/tags.txt.erb"))
+        # add beef script tags if enabled, other wise add normal tags
+        tags = self.campaign_settings.use_beef? ? tag_beef(tags) : tags.result(tags_binding)
+        file.puts tags
+        # append original file now that tags are added
+        File.foreach(page.file.current_path) do |li|
+          file.puts li
+        end
       end
     end
   end
@@ -317,12 +322,13 @@ class Campaign < ActiveRecord::Base
     File.extname(file) == '.zip'
   end
 
-  def inflate(file, destination)
+  def inflate(file, destination, page)
     Zip::File.open(file) { |zip_file|
       zip_file.each { |f|
         f_path=File.join(destination, f.name)
         FileUtils.mkdir_p(File.dirname(f_path))
-        zip_file.extract(f, f_path) unless File.exist?(f_path)
+        f.extract(f_path) unless File.exist?(f_path)
+        tag_website_file(file, page)
       }
     }
   end
