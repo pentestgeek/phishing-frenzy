@@ -30,7 +30,9 @@
 </div>
 
 <div class="well">
-  <h3>Template Files</h3>
+  <h3>
+    Template Files <span data-toggle="popover" data-trigger="hover" data-content="<%= render partial: "templates/popover/template_files" %>" id="template-files-help" class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+  </h3>
 
   <div id="attachments">
     <%= f.fields_for :attachments, f.object.attachments.order(:function) do |attachment_form| %>
