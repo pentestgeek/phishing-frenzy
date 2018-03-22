@@ -1,0 +1,10 @@
+<p><b>Email Variables</b></p><hr>
+<p><b>Target Email: </b> <%%= @target.email_address %></p>
+<p><b>Target Firstname: </b> <%%= @target.firstname %> if you imported your targets with a firstname attribute</p>
+<p><b>Target Lastname: </b> <%%= @target.lastname %> if you imported your targets with a lastname attribute</p>
+<p><b>Phishing URL: </b> <%%= @url %> used for linking the email body to the campaign phishing site.</p>
+<p><b>Image URL: </b> <%%= @image_url %> used for linking a 1x1 pixcel to the email body to assist in tracking email opened metrics.</p><br>
+
+<p><b>Website Info</b></p><hr>
+<p><b>Username: </b> name='UsernameForm' is required on any input you want PF to harvest</p>
+<p><b>Password: </b> name='PasswordForm' is required on any input you want PF to harvest</p>

@@ -10,7 +10,8 @@
 <%= form_for(:attachment, :url => {:action => 'update_attachment', :format => params[:format]}) do |f| %>
   <div class="form-buttons">
     <h3>
-      Edit Attachment - <%= File.basename(@attachment.file.to_s) %>
+      Edit Attachment - <%= File.basename(@attachment.file.path) %>
+      <span data-toggle="popover" data-trigger="hover" data-content="<%= render partial: "templates/popover/edit_email" %>" class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
       <%= submit_tag("Save", class: 'btn btn-primary') %>
     </h3>
   </div>
