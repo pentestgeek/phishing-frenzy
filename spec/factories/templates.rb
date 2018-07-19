@@ -14,7 +14,7 @@
 #  admin_id        :integer
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :template, :class => 'Template' do
     sequence(:name) {|n| "Template Name #{n}"}
     sequence(:description) {|n| "Template Description #{n}"}

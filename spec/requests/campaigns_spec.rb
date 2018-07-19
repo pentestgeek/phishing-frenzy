@@ -61,6 +61,13 @@ RSpec.describe "Campaigns", :type => :request do
       click_on("Campaign Options")
       expect(page).to have_content("Campaign Options - ")
     end
+
+    it "clone an existing campaign" do
+      create(:campaign)
+      visit list_campaigns_path
+      click_on("Copy Campaign")
+      expect(page).to have_content('Campaign copied successfully')
+    end
   end
 
   describe "GET /campaigns/1" do
@@ -211,5 +218,4 @@ RSpec.describe "Campaigns", :type => :request do
       expect(page).to have_content("Resources")
     end
   end
-
 end

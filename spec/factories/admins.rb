@@ -24,7 +24,7 @@
 #  approved               :boolean          default(FALSE), not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   trait :unapproved do
     approved false
   end
