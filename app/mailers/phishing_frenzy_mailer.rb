@@ -45,9 +45,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
         message_id: mid,
         to: @target.email_address,
         from: "\ #{@campaign.email_settings.display_from}\ \<#{@campaign.email_settings.from}\>",
-        subject: @campaign.email_settings.subject,
-        template_path: @campaign.template.email_template_path,
-        template_name: @campaign.template.email_files.first[:file]
+        subject: @campaign.email_settings.subject
     }
 
     mail_opts[:reply_to] = @campaign.email_settings.reply_to unless @campaign.email_settings.reply_to.blank?
@@ -57,7 +55,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
       bait = mail(mail_opts) do |format|
         format.html { render file: @campaign.template.email_files.first.file.path }
         format.text {
-          # stript HTML tags from HTML email template and send as TEXT
+          # strip HTML tags from HTML email template and send as TEXT
           plain_text = ActionController::Base.helpers.strip_tags(File.read(@campaign.template.email_files.first.file.path))
           render plain: plain_text
         }
