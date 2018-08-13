@@ -101,6 +101,8 @@ GEM
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crass (1.0.3)
+    css_parser (1.6.0)
+      addressable
     d3-rails (3.5.17)
       railties (>= 3.1)
     database_cleaner (1.6.2)
@@ -251,6 +253,13 @@ GEM
       pdf-core (~> 0.2.5)
       ttfunk (~> 1.2.0)
     prawn-table (0.1.2)
+    premailer (1.11.1)
+      addressable
+      css_parser (>= 1.6.0)
+      htmlentities (>= 4.0.0)
+    premailer-rails (1.10.2)
+      actionmailer (>= 3, < 6)
+      premailer (~> 1.7, >= 1.7.9)
     protected_attributes (1.1.4)
       activemodel (>= 4.0.1, < 5.0)
     pry (0.9.12.6)
@@ -443,6 +452,7 @@ DEPENDENCIES
   paper_trail (>= 3.0.0.rc2)
   prawn (~> 1.2.1)
   prawn-table (~> 0.1.0)
+  premailer-rails
   protected_attributes
   pry
   pry-nav

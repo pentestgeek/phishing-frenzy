@@ -130,3 +130,6 @@ gem 'amoeba'
 
 # fancy dropdowns
 gem "select2-rails"
+
+# inline css styles before sending
+gem 'premailer-rails'
