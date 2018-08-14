@@ -155,7 +155,7 @@ RSpec.describe "Campaigns", :type => :request do
     it "preview campaign email with a template assigned" do
       campaign = create(:campaign)
       visit campaign_path(campaign)
-      select("Intel Password Checker", from: "campaign_template_id")
+      select("Intel Password Checker", from: "template-select")
       click_on("Save Settings")
       expect(page).to have_content("Campaign Updated")
       click_on("Preview")
@@ -165,7 +165,7 @@ RSpec.describe "Campaigns", :type => :request do
     it "test campaign email with a template assigned" do
       campaign = create(:campaign)
       visit campaign_path(campaign)
-      select("Intel Password Checker", from: "campaign_template_id")
+      select("Intel Password Checker", from: "template-select")
       click_on("Save Settings")
       click_on("Test")
       expect(page).to have_content("Campaign test email queued for test")
@@ -175,7 +175,7 @@ RSpec.describe "Campaigns", :type => :request do
     it "launch campaign with a template assigned" do
       campaign = create(:campaign)
       visit campaign_path(campaign)
-      select("Intel Password Checker", from: "campaign_template_id")
+      select("Intel Password Checker", from: "template-select")
       fill_in("campaign_campaign_settings_attributes_fqdn", with: Faker::Internet.domain_name)
       click_on("Save Settings")
       click_on("Launch")
@@ -185,7 +185,7 @@ RSpec.describe "Campaigns", :type => :request do
     it "edit email from campaign options" do
       campaign = create(:campaign)
       visit campaign_path(campaign)
-      select("Intel Password Checker", from: "campaign_template_id")
+      select("Intel Password Checker", from: "template-select")
       click_on("Save Settings")
       click_on("Edit Email")
       expect(page).to have_content("Update Phishing Template")
@@ -194,7 +194,7 @@ RSpec.describe "Campaigns", :type => :request do
     it "request blast#show page from campaign options" do
       campaign = create(:campaign)
       visit campaign_path(campaign)
-      select("Intel Password Checker", from: "campaign_template_id")
+      select("Intel Password Checker", from: "template-select")
       click_on("Save Settings")
       click_on("Test")
       page.find("#recentBlasts > div > table > tbody > tr:nth-child(1) > td:nth-child(1) > a").click
