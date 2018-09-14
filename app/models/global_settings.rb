@@ -41,7 +41,7 @@ class GlobalSettings < ActiveRecord::Base
     if vhosts_output.blank?
       []
     else
-      vhosts_output.split("\n")[3..20]
+      vhosts_output.split("\n")[1..20]
     end
   end
 
