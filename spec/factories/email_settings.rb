@@ -36,9 +36,9 @@ FactoryBot.define do
     display_from        { Faker::Internet.email }
     sequence(:subject)  {|n| "Subject #{n}"}
     sequence(:phishing_url) {|n| "sub#{n}.phishingfrenzy.local" }
-    smtp_server "smtp.secureserver.net"
-    smtp_server_out "smtpout.secureserver.net"
-    smtp_port 3535
+    smtp_server {"smtp.secureserver.net"}
+    smtp_server_out {"smtpout.secureserver.net"}
+    smtp_port {3535}
     sequence(:smtp_username) {|n| "from#{n}@phishingfrenzy.local"}
     sequence(:smtp_password) {|n| "SecretPasswd321!"}
   end

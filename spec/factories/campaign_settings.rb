@@ -29,7 +29,7 @@ FactoryBot.define do
   	campaign
     fqdn { Faker::Internet.domain_name }
     beef_url { Faker::Internet.url }
-    ssl false
+    ssl { false }
   end
 
 end

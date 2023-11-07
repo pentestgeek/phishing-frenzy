@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :attachment, class: "attachment" do
-    file "efax.jpg"
-    function "website"
+    file { "efax.jpg" }
+    function { "website" }
   end
 
 end

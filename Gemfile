@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
+ruby '2.3.0'
 
-gem 'rails', '4.2.7'
+gem 'rails', '~> 4.2.7'
 
-gem 'mysql2'
+gem 'mysql2', '0.4.10'
 gem 'sass-rails', '~> 5.0', '>= 5.0.6'
 gem 'coffee-rails'
 
@@ -33,6 +34,8 @@ gem 'googlecharts'
 
 # To use geokit
 gem 'geokit'
+
+# gem 'mimemagic', '0.3.7'
 
 # To use jquery ui
 gem 'jquery-ui-rails'
@@ -99,6 +102,7 @@ group :test do
   gem 'database_cleaner'
   gem 'faker'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'simplecov'
 end
 
 group :production do
@@ -127,3 +131,6 @@ gem 'annotate', require: false
 
 # glone models with associations
 gem 'amoeba'
+
+gem 'rails-html-sanitizer', '1.0.3'
+gem 'loofah', '2.1.1'
