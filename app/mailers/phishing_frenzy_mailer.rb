@@ -33,7 +33,11 @@ class PhishingFrenzyMailer < ActionMailer::Base
     uid = @target.uid.to_s
 
     if @campaign.campaign_settings.track_uniq_visitors?
-      @url = "#{phishing_url}?uid=#{uid}"
+      if not phishing_url.include? "?"
+        @url = "#{phishing_url}?uid=#{uid}"
+      else
+        @url = "#{phishing_url}&uid=#{uid}"
+      end
       @image_url = "#{phishing_url}/reports/image/#{uid}.png"
     else
       @url = phishing_url
